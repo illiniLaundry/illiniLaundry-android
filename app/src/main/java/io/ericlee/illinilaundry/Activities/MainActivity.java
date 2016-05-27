@@ -2,7 +2,6 @@ package io.ericlee.illinilaundry.Activities;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -43,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
-        setData();
+        setData(mSwipeRefreshLayout);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         handleRefresh();
@@ -61,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void refreshItems() {
         // Load items
-        setData(); // TODO: Make this notify, so it's asynchronous
+        setData(mSwipeRefreshLayout);
 
         // Load complete
         onItemsLoadComplete();
@@ -75,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
-    private void setData() {
+    private void setData(SwipeRefreshLayout mSwipeRefreshLayout) {
         laundryData = LaundryData.getInstance().getData();
         mDataset = new ArrayList<>();
 
