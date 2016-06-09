@@ -7,6 +7,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+
 import io.ericlee.illinilaundry.Adapters.ViewPagerAdapter;
 import io.ericlee.illinilaundry.R;
 
@@ -24,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         // Setup Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setNavigationIcon(R.drawable.illini);
 
         setSupportActionBar(toolbar);
 
