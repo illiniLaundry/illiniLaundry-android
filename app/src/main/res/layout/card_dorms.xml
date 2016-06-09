@@ -27,7 +27,8 @@
                 android:minWidth="150dp"
                 android:minHeight="150dp"
                 android:src="@drawable/isr"
-                android:id="@+id/image" />
+                android:id="@+id/image"
+                android:scaleType="fitXY" />
 
             <TextView android:layout_width="match_parent"
                 android:layout_height="wrap_content"

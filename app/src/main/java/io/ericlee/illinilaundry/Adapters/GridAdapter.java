@@ -59,14 +59,15 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-
-
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.getContext(), DormActivity.class);
-                intent.putExtra("Title", mDataset.get(position).getName());
+                intent.putExtra("Name", mDataset.get(position).getName());
+
+                // TODO: Do we need index?
                 intent.putExtra("Index", position);
+
                 intent.putExtra("Wash", mDataset.get(position).getWash());
                 intent.putExtra("Dry", mDataset.get(position).getDry());
                 intent.putExtra("InWash", mDataset.get(position).getInWash());

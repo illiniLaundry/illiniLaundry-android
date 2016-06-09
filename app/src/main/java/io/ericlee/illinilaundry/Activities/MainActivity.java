@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         // Setup Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
+
         setSupportActionBar(toolbar);
 
         // Setup tabs
@@ -32,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         tab_layout.addTab(tab_layout.newTab().setText("Bookmarked"));
 
         final ViewPager view_pager = (ViewPager) findViewById(R.id.pager);
-
         final ViewPagerAdapter adapter = new ViewPagerAdapter
                 (getSupportFragmentManager(), tab_layout.getTabCount());
 
