@@ -40,6 +40,7 @@
                 android:singleLine="true" />
 
             <LinearLayout
+                android:baselineAligned="false"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:orientation="horizontal"
@@ -58,7 +59,8 @@
                         android:id="@+id/imageWasher"
                         android:layout_weight="1"
                         android:src="@drawable/washing"
-                        android:scaleType="fitEnd" />
+                        android:scaleType="fitEnd"
+                        android:padding="4dp" />
 
                     <TextView android:layout_width="fill_parent"
                         android:layout_marginTop="2dp"
@@ -67,7 +69,7 @@
                         android:text="0"
                         android:textSize="14sp"
                         android:layout_weight="1"
-                        android:gravity="left|center"
+                        android:gravity="start|center"
                         android:textColor="@color/white" />
                 </LinearLayout>
 
@@ -85,7 +87,7 @@
                         android:text="0"
                         android:textSize="14sp"
                         android:layout_weight="1"
-                        android:gravity="center|right"
+                        android:gravity="center|end"
                         android:textColor="@color/white" />
 
                     <ImageView
@@ -93,8 +95,9 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/imageDrier"
                         android:layout_weight="1"
-                        android:src="@drawable/washing"
-                        android:scaleType="fitStart" />
+                        android:src="@drawable/drying"
+                        android:scaleType="fitStart"
+                        android:padding="4dp" />
 
                 </LinearLayout>
 
