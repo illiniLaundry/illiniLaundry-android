@@ -83,7 +83,7 @@ public class FragmentAll extends Fragment {
                 Element row = rows.get(i);
                 Elements cols = row.select("td");
 
-                ArrayList<String> temp = new ArrayList<String>();
+                ArrayList<String> temp = new ArrayList<>();
 
                 for(int j = 0; j < cols.size(); j++) {
                     if(j == 1) { temp.add(cols.get(j).text()); }
@@ -134,7 +134,6 @@ public class FragmentAll extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             setData();
-
             return null;
         }
 
