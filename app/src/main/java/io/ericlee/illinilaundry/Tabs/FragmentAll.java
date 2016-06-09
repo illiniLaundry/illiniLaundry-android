@@ -52,7 +52,7 @@ public class FragmentAll extends Fragment {
 
         setData();
 
-        GridLayoutManager glm = new GridLayoutManager(this.getContext(), 2);
+        GridLayoutManager glm = new GridLayoutManager(this.getContext(), 3);
         mRecyclerView.setLayoutManager(glm);
         mAdapter = new GridAdapter(mDataset);
 

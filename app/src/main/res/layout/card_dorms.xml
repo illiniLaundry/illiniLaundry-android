@@ -5,6 +5,7 @@
     android:id="@+id/card_view"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_margin="0dp"
     android:clickable="true"
     android:foreground="?android:attr/selectableItemBackground"
     card_view:cardUseCompatPadding="true"
@@ -27,7 +28,7 @@
                 android:adjustViewBounds="true"
                 android:background="#d3d3d3"
                 android:minWidth="150dp"
-                android:minHeight="150dp"
+                android:minHeight="75dp"
                 android:src="@drawable/isr"
                 android:id="@+id/image"
                 android:scaleType="fitXY" />
@@ -36,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/txtTitle"
                 android:text="placeholder"
-                android:textSize="16sp"
+                android:textSize="12sp"
                 android:textColor="@color/white"
                 android:gravity="center_horizontal"
                 android:singleLine="true" />
@@ -46,14 +47,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:orientation="horizontal"
-                android:weightSum="2">
+                android:weightSum="4">
 
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:weightSum="2">
+
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -69,25 +65,19 @@
                         android:layout_height="fill_parent"
                         android:id="@+id/txtWasher"
                         android:text="0"
-                        android:textSize="14sp"
+                        android:textSize="12sp"
                         android:layout_weight="1"
                         android:gravity="start|center"
                         android:textColor="@color/white" />
-                </LinearLayout>
 
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:weightSum="2">
+
 
                     <TextView android:layout_width="fill_parent"
                         android:layout_marginTop="2dp"
                         android:layout_height="fill_parent"
                         android:id="@+id/txtDrier"
                         android:text="0"
-                        android:textSize="14sp"
+                        android:textSize="12sp"
                         android:layout_weight="1"
                         android:gravity="center|end"
                         android:textColor="@color/white" />
@@ -98,10 +88,9 @@
                         android:id="@+id/imageDrier"
                         android:layout_weight="1"
                         android:src="@drawable/drying"
-                        android:scaleType="fitStart"
+                        android:scaleType="fitEnd"
                         android:padding="4dp" />
 
-                </LinearLayout>
 
             </LinearLayout>
 
