@@ -1,5 +1,7 @@
 package io.ericlee.illinilaundry.Model;
 
+import android.widget.ImageView;
+
 /**
  * Created by Eric on 5/27/2016.
  */

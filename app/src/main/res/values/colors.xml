@@ -6,4 +6,8 @@
 
     <color name="softRed">#ec644b</color>
     <color name="softGreen">#87d37c</color>
+
+    <color name="lightGray">#fafafa</color>
+
+    <color name="white">#ffffff</color>
 </resources>

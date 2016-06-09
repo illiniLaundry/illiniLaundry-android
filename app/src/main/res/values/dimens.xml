@@ -8,4 +8,5 @@
     <dimen name="fab_margin">16dp</dimen>
 
     <dimen name="toolbar_height">56dp</dimen>
+    <dimen name="toolbar_tab_height">104dp</dimen>
 </resources>

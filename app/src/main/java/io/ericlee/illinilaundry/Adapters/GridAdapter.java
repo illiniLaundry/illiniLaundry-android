@@ -4,13 +4,14 @@ package io.ericlee.illinilaundry.Adapters;
  * Created by Eric on 11/10/2015.
  */
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,7 +54,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
     @Override
     public GridAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.grill_card, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_dorms, parent, false);
         // set the view's size, margins, paddings and layout parameters
 
         return new ViewHolder(v);
@@ -63,7 +64,8 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
-        holder.image.setOnClickListener(new View.OnClickListener() {
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.getContext(), DormActivity.class);
@@ -82,22 +84,12 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
         holder.txtTitle.setText(mDataset.get(position).getName());
         holder.txtAvailable.setText(mDataset.get(position).getAvailable() + "");
         holder.txtInUse.setText(mDataset.get(position).getInUse() + "");
-
-        setFadeAnimation(holder.itemView);
+        holder.image.setImageResource(R.drawable.isr);
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return mDataset.size();
-    }
-
-    private void setFadeAnimation(View view) {
-        view.setAlpha(0f);
-        view.animate()
-                .setDuration(200)
-                .alpha(1f)
-                .setInterpolator(new AccelerateDecelerateInterpolator())
-                .start();
     }
 }

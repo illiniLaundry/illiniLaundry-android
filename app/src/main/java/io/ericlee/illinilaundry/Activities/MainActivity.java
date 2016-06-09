@@ -2,6 +2,8 @@ package io.ericlee.illinilaundry.Activities;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.util.Log;
 import java.util.ArrayList;
 
 import io.ericlee.illinilaundry.Adapters.GridAdapter;
+import io.ericlee.illinilaundry.Adapters.ViewPagerAdapter;
 import io.ericlee.illinilaundry.Model.Dorm;
 import io.ericlee.illinilaundry.Model.LaundryData;
 import io.ericlee.illinilaundry.R;
@@ -21,13 +24,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static Context context;
 
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private ArrayList<Dorm> mDataset;
-
-    private ArrayList<ArrayList<String>> laundryData;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,68 +31,42 @@ public class MainActivity extends AppCompatActivity {
 
         context = this;
 
-        //Setup Toolbar
+        // Setup Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
-
         setSupportActionBar(toolbar);
 
-        setData(mSwipeRefreshLayout);
+        // Setup tabs
+        TabLayout tab_layout = (TabLayout) findViewById(R.id.tab_layout);
+        tab_layout.addTab(tab_layout.newTab().setText("All Dorms"));
+        tab_layout.addTab(tab_layout.newTab().setText("Bookmarked"));
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-        handleRefresh();
-    }
+        final ViewPager view_pager = (ViewPager) findViewById(R.id.pager);
 
-    private void handleRefresh() {
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        final ViewPagerAdapter adapter = new ViewPagerAdapter
+                (getSupportFragmentManager(), tab_layout.getTabCount());
+
+        view_pager.setAdapter(adapter);
+
+        view_pager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tab_layout));
+
+        tab_layout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+
             @Override
-            public void onRefresh() {
-                // Refresh items
-                refreshItems();
+            public void onTabSelected(TabLayout.Tab tab) {
+                view_pager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
             }
         });
-    }
-
-    private void refreshItems() {
-        // Load items
-        setData(mSwipeRefreshLayout);
-
-        // Load complete
-        onItemsLoadComplete();
-    }
-
-    private void onItemsLoadComplete() {
-        // Update the adapter and notify data set changed
-        // ...
-
-        // Stop refresh animation
-        mSwipeRefreshLayout.setRefreshing(false);
-    }
-
-    private void setData(SwipeRefreshLayout mSwipeRefreshLayout) {
-        laundryData = LaundryData.getInstance().getData();
-        mDataset = new ArrayList<>();
-
-        for(int i = 0; i < laundryData.size(); i++) {
-
-            ArrayList<String> temp = laundryData.get(i);
-            Log.i("temp", temp.toString());
-            mDataset.add(new Dorm(temp.get(0),
-                    Integer.parseInt(temp.get(1)),
-                    Integer.parseInt(temp.get(2)),
-                    Integer.parseInt(temp.get(3)),
-                    Integer.parseInt(temp.get(4))));
-        }
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        mRecyclerView.setHasFixedSize(true);
-
-        GridLayoutManager glm = new GridLayoutManager(this, 2);
-
-        mAdapter = new GridAdapter(mDataset);
-
-        mRecyclerView.setLayoutManager(glm);
-        mRecyclerView.setAdapter(mAdapter);
     }
 
     public static Context getContext() {
