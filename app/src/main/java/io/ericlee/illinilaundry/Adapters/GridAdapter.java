@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import io.ericlee.illinilaundry.Activities.DormActivity;
 import io.ericlee.illinilaundry.Activities.MainActivity;
 import io.ericlee.illinilaundry.Model.Dorm;
+import io.ericlee.illinilaundry.Model.DormImages;
 import io.ericlee.illinilaundry.R;
 
 public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
@@ -72,16 +73,19 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
                 intent.putExtra("Dry", mDataset.get(position).getDry());
                 intent.putExtra("InWash", mDataset.get(position).getInWash());
                 intent.putExtra("InDry", mDataset.get(position).getInDry());
+
                 MainActivity.getContext().startActivity(intent);
             }
         });
+
+        DormImages dormImages = DormImages.getInstance();
 
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.txtTitle.setText(mDataset.get(position).getName());
         holder.txtWash.setText(mDataset.get(position).getWash() + "");
         holder.txtDry.setText(mDataset.get(position).getDry() + "");
-        holder.image.setImageResource(R.drawable.isr);
+        holder.image.setImageResource(dormImages.getImages().get(mDataset.get(position).getName()));
     }
 
     // Return the size of your dataset (invoked by the layout manager)

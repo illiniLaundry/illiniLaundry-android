@@ -20,6 +20,7 @@ public class DormActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.slide_left, R.anim.slide_left_out);
         setContentView(R.layout.activity_dorm);
 
         Intent intent = getIntent();
