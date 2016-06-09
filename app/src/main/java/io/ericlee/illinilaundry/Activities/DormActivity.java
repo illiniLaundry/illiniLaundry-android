@@ -33,7 +33,6 @@ public class DormActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar_dorm);
         toolbar.setTitle(name);
         toolbar.setTitleTextColor(Color.WHITE);
-        setSupportActionBar(toolbar);
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -42,5 +41,7 @@ public class DormActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+        setSupportActionBar(toolbar);
     }
 }

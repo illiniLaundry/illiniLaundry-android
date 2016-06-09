@@ -5,15 +5,17 @@
     android:id="@+id/card_view"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
     card_view:cardUseCompatPadding="true"
-    card_view:cardCornerRadius="8dp">
+    card_view:cardCornerRadius="8dp"
+    card_view:cardElevation="2dp">
 
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:elevation="5dp"
             android:layout_margin="0dp"
             android:background="@color/colorAccent">
 
@@ -34,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/txtTitle"
                 android:text="placeholder"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textColor="@color/white"
                 android:gravity="center_horizontal"
                 android:singleLine="true" />
