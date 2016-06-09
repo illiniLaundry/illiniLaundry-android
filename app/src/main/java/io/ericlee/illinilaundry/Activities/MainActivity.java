@@ -4,20 +4,10 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-
-import java.util.ArrayList;
-
-import io.ericlee.illinilaundry.Adapters.GridAdapter;
 import io.ericlee.illinilaundry.Adapters.ViewPagerAdapter;
-import io.ericlee.illinilaundry.Model.Dorm;
-import io.ericlee.illinilaundry.Model.LaundryData;
 import io.ericlee.illinilaundry.R;
 
 public class MainActivity extends AppCompatActivity {
