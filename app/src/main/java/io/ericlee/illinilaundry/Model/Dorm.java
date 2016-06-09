@@ -7,22 +7,22 @@ import android.widget.ImageView;
  */
 public class Dorm {
     private String name;
-    private int available;
-    private int inUse;
+    private int wash;
+    private int dry;
     private int inWash;
     private int inDry;
 
-    public Dorm(String name, int available, int inUse, int inWash, int inDry) {
+    public Dorm(String name, int wash, int dry, int inWash, int inDry) {
         this.name = name;
-        this.available = available;
-        this.inUse = inUse;
+        this.wash = wash;
+        this.dry = dry;
         this.inWash = inWash;
         this.inDry = inDry;
     }
 
     public String getName() { return name; }
-    public int getAvailable() { return available; }
-    public int getInUse() { return inUse; }
+    public int getWash() { return wash; }
+    public int getDry() { return dry; }
     public int getInWash() { return inWash; }
     public int getInDry() {return inDry; }
 }

@@ -4,17 +4,13 @@ package io.ericlee.illinilaundry.Adapters;
  * Created by Eric on 11/10/2015.
  */
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -33,15 +29,15 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
         // each data item is just a string in this case
         public ImageView image;
         public TextView txtTitle;
-        public TextView txtAvailable;
-        public TextView txtInUse;
+        public TextView txtWash;
+        public TextView txtDry;
 
         public ViewHolder(View v) {
             super(v);
             image = (ImageView) v.findViewById(R.id.image);
             txtTitle = (TextView) v.findViewById(R.id.txtTitle);
-            txtAvailable = (TextView) v.findViewById(R.id.txtAvailable);
-            txtInUse = (TextView) v.findViewById(R.id.txtInUse);
+            txtWash = (TextView) v.findViewById(R.id.txtWasher);
+            txtDry = (TextView) v.findViewById(R.id.txtDrier);
         }
     }
 
@@ -71,8 +67,8 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
                 Intent intent = new Intent(MainActivity.getContext(), DormActivity.class);
                 intent.putExtra("Title", mDataset.get(position).getName());
                 intent.putExtra("Index", position);
-                intent.putExtra("Available", mDataset.get(position).getAvailable());
-                intent.putExtra("InUse", mDataset.get(position).getInUse());
+                intent.putExtra("Wash", mDataset.get(position).getWash());
+                intent.putExtra("Dry", mDataset.get(position).getDry());
                 intent.putExtra("InWash", mDataset.get(position).getInWash());
                 intent.putExtra("InDry", mDataset.get(position).getInDry());
                 MainActivity.getContext().startActivity(intent);
@@ -82,8 +78,8 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.txtTitle.setText(mDataset.get(position).getName());
-        holder.txtAvailable.setText(mDataset.get(position).getAvailable() + "");
-        holder.txtInUse.setText(mDataset.get(position).getInUse() + "");
+        holder.txtWash.setText(mDataset.get(position).getWash() + "");
+        holder.txtDry.setText(mDataset.get(position).getDry() + "");
         holder.image.setImageResource(R.drawable.isr);
     }
 
