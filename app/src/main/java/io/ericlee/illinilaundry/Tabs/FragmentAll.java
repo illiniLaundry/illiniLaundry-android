@@ -34,8 +34,8 @@ public class FragmentAll extends Fragment {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
-    private ArrayList<Dorm> mDataset;
-    private String statusAnnouncement="";
+    private static ArrayList<Dorm> mDataset;
+    private String statusAnnouncement = "";
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -96,6 +96,8 @@ public class FragmentAll extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public static ArrayList<Dorm> getDorms() { return mDataset; }
 
     public class SetData extends AsyncTask<Void, Void, Void> {
         @Override

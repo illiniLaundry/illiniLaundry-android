@@ -20,7 +20,7 @@ import io.ericlee.illinilaundry.Model.Dorm;
 import io.ericlee.illinilaundry.Model.DormImages;
 import io.ericlee.illinilaundry.R;
 
-public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
+public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHolder> {
     private ArrayList<Dorm> mDataset;
 
     // Provide a reference to the views for each data item
@@ -43,15 +43,15 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public GridAdapter(ArrayList<Dorm> myDataset) {
+    public BookmarkAdapter(ArrayList<Dorm> myDataset) {
         mDataset = myDataset;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public GridAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BookmarkAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_dorms, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_dorms_bookmark, parent, false);
 
         return new ViewHolder(v);
     }

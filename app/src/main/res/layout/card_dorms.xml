@@ -3,7 +3,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/card_view"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="0dp"
     android:clickable="true"
@@ -61,7 +61,8 @@
                         android:scaleType="fitEnd"
                         android:padding="4dp" />
 
-                    <TextView android:layout_width="fill_parent"
+                    <TextView
+                        android:layout_width="match_parent"
                         android:layout_marginTop="2dp"
                         android:layout_height="fill_parent"
                         android:id="@+id/txtWasher"
@@ -71,9 +72,7 @@
                         android:gravity="start|center"
                         android:textColor="@color/white" />
 
-
-
-                    <TextView android:layout_width="fill_parent"
+                    <TextView android:layout_width="match_parent"
                         android:layout_marginTop="2dp"
                         android:layout_height="fill_parent"
                         android:id="@+id/txtDrier"
