@@ -23,12 +23,14 @@ public class DormAdapter extends RecyclerView.Adapter<DormAdapter.ViewHolder> {
         public TextView machineNumber;
         public TextView machineType;
         public TextView machineAvailable;
+        public TextView machineTimeRemaining;
 
         public ViewHolder(View v) {
             super(v);
             machineNumber = (TextView) v.findViewById(R.id.textMachineNumber);
             machineType = (TextView) v.findViewById(R.id.textMachineType);
             machineAvailable = (TextView) v.findViewById(R.id.textMachineStatus);
+            machineTimeRemaining = (TextView) v.findViewById(R.id.textMachineTimeRemaining);
         }
     }
 
@@ -47,6 +49,7 @@ public class DormAdapter extends RecyclerView.Adapter<DormAdapter.ViewHolder> {
         holder.machineAvailable.setText(mDataset.get(position).getMachineStatus());
         holder.machineType.setText(mDataset.get(position).getMachineType());
         holder.machineNumber.setText(mDataset.get(position).getMachineNumber());
+        holder.machineTimeRemaining.setText(mDataset.get(position).getMachineTimeRemaining());
     }
 
     @Override
