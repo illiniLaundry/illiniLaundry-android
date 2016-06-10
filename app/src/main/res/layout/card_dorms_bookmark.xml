@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/imageWasher"
                 android:layout_weight="1"
-                android:src="@drawable/washing"
+                android:src="@drawable/washer"
                 android:scaleType="fitEnd"
                 android:padding="4dp" />
 
@@ -70,8 +70,6 @@
                 android:layout_weight="1"
                 android:gravity="start|center"
                 android:textColor="@color/white" />
-
-
 
             <TextView android:layout_width="fill_parent"
                 android:layout_marginTop="2dp"
@@ -88,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/imageDrier"
                 android:layout_weight="1"
-                android:src="@drawable/drying"
+                android:src="@drawable/dryer"
                 android:scaleType="fitEnd"
                 android:padding="4dp" />
 

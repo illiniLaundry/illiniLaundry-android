@@ -50,21 +50,19 @@
                 android:orientation="horizontal"
                 android:weightSum="4">
 
-
-
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="24dp"
+                        android:layout_height="match_parent"
                         android:id="@+id/imageWasher"
                         android:layout_weight="1"
-                        android:src="@drawable/washing"
-                        android:scaleType="fitEnd"
+                        android:src="@drawable/washer"
+                        android:scaleType="fitStart"
                         android:padding="4dp" />
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:layout_height="fill_parent"
+                        android:layout_height="match_parent"
                         android:id="@+id/txtWasher"
                         android:text="0"
                         android:textSize="12sp"
@@ -72,7 +70,7 @@
                         android:gravity="start|center"
                         android:textColor="@color/white" />
 
-                    <TextView android:layout_width="match_parent"
+                    <TextView android:layout_width="wrap_content"
                         android:layout_marginTop="2dp"
                         android:layout_height="fill_parent"
                         android:id="@+id/txtDrier"
@@ -83,14 +81,13 @@
                         android:textColor="@color/white" />
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="24dp"
+                        android:layout_height="match_parent"
                         android:id="@+id/imageDrier"
                         android:layout_weight="1"
-                        android:src="@drawable/drying"
+                        android:src="@drawable/dryer"
                         android:scaleType="fitEnd"
                         android:padding="4dp" />
-
 
             </LinearLayout>
 
