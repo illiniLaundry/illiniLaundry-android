@@ -145,6 +145,7 @@ public class FragmentAll extends Fragment {
                     for (int j = 0; j < cols.size(); j++) {
                         if (j == 1) {
                             temp.add(cols.get(j).text());
+                            temp.add("https://www.laundryalert.com/cgi-bin/urba7723/"+cols.get(j).attr("onclick").split("href=")[1].replace("'",""));
                         }
                         if (j == 2) {
                             temp.add(cols.get(j).text());
@@ -180,20 +181,22 @@ public class FragmentAll extends Fragment {
                     ArrayList<String> temp = laundryData.get(i);
                     Log.i("temp", temp.toString());
                     mDataset.add(new Dorm(temp.get(0),
-                            Integer.parseInt(temp.get(1)),
+                            temp.get(1),
                             Integer.parseInt(temp.get(2)),
                             Integer.parseInt(temp.get(3)),
-                            Integer.parseInt(temp.get(4))));
+                            Integer.parseInt(temp.get(4)),
+                            Integer.parseInt(temp.get(5))));
                 }
             } else {
                 for (int i = 0; i < laundryData.size(); i++) {
                     ArrayList<String> temp = laundryData.get(i);
                     Log.i("temp", temp.toString());
                     mDataset.set(i, new Dorm(temp.get(0),
-                            Integer.parseInt(temp.get(1)),
+                            temp.get(1),
                             Integer.parseInt(temp.get(2)),
                             Integer.parseInt(temp.get(3)),
-                            Integer.parseInt(temp.get(4))));
+                            Integer.parseInt(temp.get(4)),
+                            Integer.parseInt(temp.get(5))));
                 }
             }
         }

@@ -65,6 +65,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.getContext(), DormActivity.class);
                 intent.putExtra("Name", mDataset.get(position).getName());
+                intent.putExtra("URL", mDataset.get(position).getPageUrl());
 
                 // TODO: Do we need index?
                 intent.putExtra("Index", position);

@@ -1,7 +1,5 @@
 package io.ericlee.illinilaundry.Model;
 
-import android.widget.ImageView;
-
 /**
  * Created by Eric on 5/27/2016.
  */
@@ -11,13 +9,15 @@ public class Dorm {
     private int dry;
     private int inWash;
     private int inDry;
+    private String pageUrl;
 
-    public Dorm(String name, int wash, int dry, int inWash, int inDry) {
+    public Dorm(String name, String pageUrl, int wash, int dry, int inWash, int inDry) {
         this.name = name;
         this.wash = wash;
         this.dry = dry;
         this.inWash = inWash;
         this.inDry = inDry;
+        this.pageUrl = pageUrl;
     }
 
     public String getName() { return name; }
@@ -25,4 +25,5 @@ public class Dorm {
     public int getDry() { return dry; }
     public int getInWash() { return inWash; }
     public int getInDry() {return inDry; }
+    public String getPageUrl() {return pageUrl; }
 }
