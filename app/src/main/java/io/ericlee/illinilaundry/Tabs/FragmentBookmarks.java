@@ -133,7 +133,6 @@ public class FragmentBookmarks extends Fragment {
                         bookmarkedDorms.add(temp.get(i));
                     }
 
-                    // TODO: TRYING TO MAKE THIS TOGGLE OAJDOLKWIJDOLAIWKEJDO:LAWE THIS DOESNN'T WORK
                     if(!bookmarks.contains(tempDorm.getName())) {
                         bookmarkedDorms.remove(tempDorm);
                     }
