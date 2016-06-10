@@ -60,20 +60,12 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
+        final Dorm dorm = mDataset.get(position);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.getContext(), DormActivity.class);
-                intent.putExtra("Name", mDataset.get(position).getName());
-
-                // TODO: Do we need index?
-                intent.putExtra("Index", position);
-
-                intent.putExtra("Wash", mDataset.get(position).getWash());
-                intent.putExtra("Dry", mDataset.get(position).getDry());
-                intent.putExtra("InWash", mDataset.get(position).getInWash());
-                intent.putExtra("InDry", mDataset.get(position).getInDry());
-
+                intent.putExtra("Dorm", dorm);
                 MainActivity.getContext().startActivity(intent);
             }
         });
@@ -82,10 +74,10 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
 
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.txtTitle.setText(mDataset.get(position).getName());
-        holder.txtWash.setText(mDataset.get(position).getWash() + "");
-        holder.txtDry.setText(mDataset.get(position).getDry() + "");
-        holder.image.setImageResource(dormImages.getImages().get(mDataset.get(position).getName()));
+        holder.txtTitle.setText(dorm.getName());
+        holder.txtWash.setText(dorm.getWash() + "");
+        holder.txtDry.setText(dorm.getDry() + "");
+        holder.image.setImageResource(dormImages.getImages().get(dorm.getName()));
     }
 
     // Return the size of your dataset (invoked by the layout manager)

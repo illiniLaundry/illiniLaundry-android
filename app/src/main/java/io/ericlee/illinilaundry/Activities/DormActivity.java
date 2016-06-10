@@ -1,22 +1,20 @@
 package io.ericlee.illinilaundry.Activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import org.jsoup.Jsoup;
@@ -25,23 +23,18 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import io.ericlee.illinilaundry.Adapters.DormAdapter;
-import io.ericlee.illinilaundry.Adapters.GridAdapter;
 import io.ericlee.illinilaundry.Model.Dorm;
 import io.ericlee.illinilaundry.Model.DormImages;
 import io.ericlee.illinilaundry.Model.Machine;
 import io.ericlee.illinilaundry.R;
 
 public class DormActivity extends AppCompatActivity {
-
-    private String name;
-    private int wash;
-    private int dry;
-    private int inWash;
-    private int inDry;
+    private Dorm dorm;
+    private String statusAnnouncement;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -49,27 +42,26 @@ public class DormActivity extends AppCompatActivity {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
+    private DormActivity instance;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        instance = this;
         overridePendingTransition(R.anim.slide_left, R.anim.slide_left_out);
         setContentView(R.layout.activity_dorm);
 
         Intent intent = getIntent();
-        name = intent.getStringExtra("Name");
-        wash = intent.getIntExtra("Wash", 99);
-        dry = intent.getIntExtra("Dry", 99);
-        inWash = intent.getIntExtra("InWash", 99);
-        inDry = intent.getIntExtra("InDry", 99);
-
+        dorm = (Dorm) intent.getSerializableExtra("Dorm");
         mDataset = new ArrayList<>();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_dorm);
         setSupportActionBar(toolbar);
 
+
         CollapsingToolbarLayout mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         mCollapsingToolbarLayout.setTitleEnabled(true);
-        mCollapsingToolbarLayout.setTitle(name);
+        mCollapsingToolbarLayout.setTitle(dorm.getName());
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -80,7 +72,7 @@ public class DormActivity extends AppCompatActivity {
         });
 
         ImageView image = (ImageView) findViewById(R.id.imageDorm);
-        image.setImageResource(DormImages.getInstance().getImages().get(name));
+        image.setImageResource(DormImages.getInstance().getImages().get(dorm.getName()));
 
         mRecyclerView = (RecyclerView) findViewById(R.id.dormRecyclerView);
 
@@ -105,6 +97,36 @@ public class DormActivity extends AppCompatActivity {
         if (mDataset.isEmpty()) {
             new SetData().execute();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.bookmark, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_bookmark) {
+
+            //TODO clean this code up...
+            SharedPreferences settings = getSharedPreferences("BOOKMARKS", 0);
+            Set<String> bookmarks = settings.getStringSet("bookmarks", null);
+
+            if(!bookmarks.contains(dorm.getName())) {
+                Set<String> newBookmarks = new HashSet<>(bookmarks);
+                newBookmarks.add (dorm.getName());
+                settings.edit().putStringSet("bookmarks",newBookmarks).commit();
+            }
+            else {
+                Set<String> newBookmarks = new HashSet<>(bookmarks);
+                newBookmarks.remove(dorm.getName());
+                settings.edit().putStringSet("bookmarks",newBookmarks).commit();
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public class SetData extends AsyncTask<Void, Void, Void> {
@@ -143,15 +165,32 @@ public class DormActivity extends AppCompatActivity {
             ArrayList<ArrayList<String>> machineData = new ArrayList<>();
 
             try {
-                String url = getURL();
-                Document illini = Jsoup.connect(url).get();
+                Document illini = Jsoup.connect(dorm.getPageUrl()).get();
 
                 Element table = illini.select("tbody").last();
                 Elements rows = table.select("tr");
-                rows.remove(0);
-                rows.remove(rows.size() - 1);
 
-                for (int i = 0; i < rows.size() - 1; i++) {
+
+                int i=1;
+                //check for announcement
+                Element firstRow = rows.get(0);
+                Elements firstRowCols = firstRow.select("td");
+                if(firstRowCols.size()==3) {
+                    statusAnnouncement = firstRowCols.get(2).text();
+                    Log.i("announcement", statusAnnouncement);
+                    i++;
+
+                    //TODO get rid of this toast and display announcement as a textview or something instead
+                    instance.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(instance,
+                                    statusAnnouncement, Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+
+                for (; i < rows.size() - 2; i++) {
                     Element row = rows.get(i);
                     Elements cols = row.select("td");
 
@@ -201,73 +240,6 @@ public class DormActivity extends AppCompatActivity {
                             temp.get(1),
                             temp.get(2)));
                 }
-            }
-        }
-
-        private String getURL() {
-            switch (name) {
-                case "Allen":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=0&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                case "Barton-Lundgren":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=1&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                case "Bousfield Rm 103":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=2&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                case "Busey-Evans":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=3&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                case "Daniels North":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=4&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                case "Daniels South":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=5&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                case "FAR: Oglesby":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=6&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                case "FAR: Trelease":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=7&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                case "300 South Goodwin":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=8&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                case "1107 West Green":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=9&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                case "Hopkins":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=10&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                case "ISR: Townsend":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=11&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                case "ISR: Wardall":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=12&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                case "LAR: Leonard":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=13&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                case "LAR: Shelden":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=14&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                case "Nugent":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=15&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                case "Nugent Rm 126":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=16&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                case "Orchard Downs North":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=17&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                case "Orchard Downs South":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=18&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                case "PAR: Babcock":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=19&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                case "PAR: Blaisdell":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=20&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                case "PAR: Carr":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=21&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                case "PAR: Saunders":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=22&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                case "Scott":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=23&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                case "Sherman Short":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=24&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                case "Sherman Tall":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=25&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                case "Snyder":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=26&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                case "TVD: Taft":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=27&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                case "TVD: Van Doren":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=28&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                case "Weston":
-                    return "https://www.laundryalert.com/cgi-bin/urba7723/LMRoom?XallingPage=LMPage&Halls=29&PreviousHalls=&RoomPersistence=&MachinePersistenceA=&MachinePersistenceB=";
-                default:
-                    return "";
             }
         }
     }
