@@ -1,5 +1,6 @@
 package io.ericlee.illinilaundry.Adapters;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,9 +38,15 @@ public class DormAdapter extends RecyclerView.Adapter<DormAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
+        if(mDataset.get(position).getMachineStatus().equals("In Use")) {
+            holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.softRed));
+        } else if(mDataset.get(position).getMachineStatus().equals("Available")) {
+            holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.softGreen));
+        } else { holder.itemView.setBackgroundColor(Color.WHITE); }
+
         holder.machineAvailable.setText(mDataset.get(position).getMachineStatus());
         holder.machineType.setText(mDataset.get(position).getMachineType());
-        holder.machineNumber.setText(mDataset.get(position).getMachineNumber() + "");
+        holder.machineNumber.setText(mDataset.get(position).getMachineNumber());
     }
 
     @Override
