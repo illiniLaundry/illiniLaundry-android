@@ -35,6 +35,7 @@ public class FragmentAll extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private ArrayList<Dorm> mDataset;
+    private String statusAnnouncement="";
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -133,10 +134,28 @@ public class FragmentAll extends Fragment {
                 Element table = illini.select("tbody").get(2);
                 Elements rows = table.select("tr");
 
-                rows.remove(0);
-                rows.remove(0);
 
-                for (int i = 0; i < rows.size() - 1; i++) {
+                int i=1;
+                //check for announcement
+                Element firstRow = rows.get(0);
+                Elements firstRowCols = firstRow.select("td");
+                if(firstRowCols.size()==2) {
+                    statusAnnouncement = firstRowCols.get(1).text();
+                    Log.i("announcement", statusAnnouncement);
+                    i++;
+
+                    //TODO get rid of this toast and display announcement as a textview or something instead
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast toast = Toast.makeText(getContext(),
+                                    statusAnnouncement, Toast.LENGTH_LONG);
+                            toast.show();
+                        }
+                    });
+                }
+
+                for (; i < rows.size() - 1; i++) {
                     Element row = rows.get(i);
                     Elements cols = row.select("td");
 
@@ -178,19 +197,19 @@ public class FragmentAll extends Fragment {
             if (mDataset.size() == 0) {
                 for (int i = 0; i < laundryData.size(); i++) {
 
-                    ArrayList<String> temp = laundryData.get(i);
-                    Log.i("temp", temp.toString());
-                    mDataset.add(new Dorm(temp.get(0),
-                            temp.get(1),
-                            Integer.parseInt(temp.get(2)),
-                            Integer.parseInt(temp.get(3)),
-                            Integer.parseInt(temp.get(4)),
-                            Integer.parseInt(temp.get(5))));
+                    ArrayList<String> dormData = laundryData.get(i);
+                    Log.i("dormData", dormData.toString());
+                    mDataset.add(new Dorm(dormData.get(0),
+                            dormData.get(1),
+                            Integer.parseInt(dormData.get(2)),
+                            Integer.parseInt(dormData.get(3)),
+                            Integer.parseInt(dormData.get(4)),
+                            Integer.parseInt(dormData.get(5))));
                 }
             } else {
                 for (int i = 0; i < laundryData.size(); i++) {
                     ArrayList<String> temp = laundryData.get(i);
-                    Log.i("temp", temp.toString());
+                    Log.i("dormData", temp.toString());
                     mDataset.set(i, new Dorm(temp.get(0),
                             temp.get(1),
                             Integer.parseInt(temp.get(2)),

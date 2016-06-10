@@ -30,6 +30,7 @@ import io.ericlee.illinilaundry.R;
 public class DormActivity extends AppCompatActivity {
 
     private Dorm dorm;
+    private String statusAnnouncement;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -37,9 +38,12 @@ public class DormActivity extends AppCompatActivity {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
+    private DormActivity instance;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        instance = this;
         overridePendingTransition(R.anim.slide_left, R.anim.slide_left_out);
         setContentView(R.layout.activity_dorm);
 
@@ -130,10 +134,28 @@ public class DormActivity extends AppCompatActivity {
 
                 Element table = illini.select("tbody").last();
                 Elements rows = table.select("tr");
-                rows.remove(0);
-                rows.remove(rows.size() - 1);
 
-                for (int i = 0; i < rows.size() - 1; i++) {
+
+                int i=1;
+                //check for announcement
+                Element firstRow = rows.get(0);
+                Elements firstRowCols = firstRow.select("td");
+                if(firstRowCols.size()==3) {
+                    statusAnnouncement = firstRowCols.get(2).text();
+                    Log.i("announcement", statusAnnouncement);
+                    i++;
+
+                    //TODO get rid of this toast and display announcement as a textview or something instead
+                    instance.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(instance,
+                                    statusAnnouncement, Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+
+                for (; i < rows.size() - 2; i++) {
                     Element row = rows.get(i);
                     Elements cols = row.select("td");
 
