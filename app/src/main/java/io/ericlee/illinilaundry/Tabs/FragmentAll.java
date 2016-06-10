@@ -36,8 +36,6 @@ public class FragmentAll extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private ArrayList<Dorm> mDataset;
 
-    private ArrayList<ArrayList<String>> laundryData;
-
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
@@ -54,13 +52,16 @@ public class FragmentAll extends Fragment {
             }
         });
 
+        if(mDataset.isEmpty()) {
+            new SetData().execute();
+        }
+
         GridLayoutManager glm = new GridLayoutManager(this.getContext(), 3);
         mRecyclerView.setLayoutManager(glm);
         mAdapter = new GridAdapter(mDataset);
 
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setHasFixedSize(true);
-        new SetData().execute();
 
         super.onStart();
     }
@@ -123,7 +124,8 @@ public class FragmentAll extends Fragment {
         }
 
         private void setData() {
-            laundryData = new ArrayList<>();
+            ArrayList<ArrayList<String>> laundryData = new ArrayList<>();
+
             try {
                 String url = "https://www.laundryalert.com/cgi-bin/urba7723/LMPage?Login=True";
                 Document illini = Jsoup.connect(url).get();
