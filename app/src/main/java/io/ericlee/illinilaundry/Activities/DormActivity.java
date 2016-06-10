@@ -1,6 +1,7 @@
 package io.ericlee.illinilaundry.Activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -10,6 +11,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -20,6 +23,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import io.ericlee.illinilaundry.Adapters.DormAdapter;
 import io.ericlee.illinilaundry.Model.Dorm;
@@ -28,7 +33,6 @@ import io.ericlee.illinilaundry.Model.Machine;
 import io.ericlee.illinilaundry.R;
 
 public class DormActivity extends AppCompatActivity {
-
     private Dorm dorm;
     private String statusAnnouncement;
 
@@ -53,6 +57,7 @@ public class DormActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_dorm);
         setSupportActionBar(toolbar);
+
 
         CollapsingToolbarLayout mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         mCollapsingToolbarLayout.setTitleEnabled(true);
@@ -92,6 +97,36 @@ public class DormActivity extends AppCompatActivity {
         if (mDataset.isEmpty()) {
             new SetData().execute();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.bookmark, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_bookmark) {
+
+            //TODO clean this code up...
+            SharedPreferences settings = getSharedPreferences("BOOKMARKS", 0);
+            Set<String> bookmarks = settings.getStringSet("bookmarks", null);
+
+            if(!bookmarks.contains(dorm.getName())) {
+                Set<String> newBookmarks = new HashSet<>(bookmarks);
+                newBookmarks.add (dorm.getName());
+                settings.edit().putStringSet("bookmarks",newBookmarks).commit();
+            }
+            else {
+                Set<String> newBookmarks = new HashSet<>(bookmarks);
+                newBookmarks.remove(dorm.getName());
+                settings.edit().putStringSet("bookmarks",newBookmarks).commit();
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public class SetData extends AsyncTask<Void, Void, Void> {
