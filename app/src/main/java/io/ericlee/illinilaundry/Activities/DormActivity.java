@@ -22,18 +22,14 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 
 import io.ericlee.illinilaundry.Adapters.DormAdapter;
+import io.ericlee.illinilaundry.Model.Dorm;
 import io.ericlee.illinilaundry.Model.DormImages;
 import io.ericlee.illinilaundry.Model.Machine;
 import io.ericlee.illinilaundry.R;
 
 public class DormActivity extends AppCompatActivity {
 
-    private String name;
-    private String url;
-    private int wash;
-    private int dry;
-    private int inWash;
-    private int inDry;
+    private Dorm dorm;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -48,13 +44,7 @@ public class DormActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dorm);
 
         Intent intent = getIntent();
-        name = intent.getStringExtra("Name");
-        url = intent.getStringExtra("URL");
-        wash = intent.getIntExtra("Wash", 99);
-        dry = intent.getIntExtra("Dry", 99);
-        inWash = intent.getIntExtra("InWash", 99);
-        inDry = intent.getIntExtra("InDry", 99);
-
+        dorm = (Dorm) intent.getSerializableExtra("Dorm");
         mDataset = new ArrayList<>();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_dorm);
@@ -62,7 +52,7 @@ public class DormActivity extends AppCompatActivity {
 
         CollapsingToolbarLayout mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         mCollapsingToolbarLayout.setTitleEnabled(true);
-        mCollapsingToolbarLayout.setTitle(name);
+        mCollapsingToolbarLayout.setTitle(dorm.getName());
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -73,7 +63,7 @@ public class DormActivity extends AppCompatActivity {
         });
 
         ImageView image = (ImageView) findViewById(R.id.imageDorm);
-        image.setImageResource(DormImages.getInstance().getImages().get(name));
+        image.setImageResource(DormImages.getInstance().getImages().get(dorm.getName()));
 
         mRecyclerView = (RecyclerView) findViewById(R.id.dormRecyclerView);
 
@@ -136,7 +126,7 @@ public class DormActivity extends AppCompatActivity {
             ArrayList<ArrayList<String>> machineData = new ArrayList<>();
 
             try {
-                Document illini = Jsoup.connect(url).get();
+                Document illini = Jsoup.connect(dorm.getPageUrl()).get();
 
                 Element table = illini.select("tbody").last();
                 Elements rows = table.select("tr");

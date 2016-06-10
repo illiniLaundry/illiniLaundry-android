@@ -1,9 +1,11 @@
 package io.ericlee.illinilaundry.Model;
 
+import java.io.Serializable;
+
 /**
  * Created by Eric on 5/27/2016.
  */
-public class Dorm {
+public class Dorm implements Serializable {
     private String name;
     private int wash;
     private int dry;
@@ -20,10 +22,51 @@ public class Dorm {
         this.pageUrl = pageUrl;
     }
 
-    public String getName() { return name; }
-    public int getWash() { return wash; }
-    public int getDry() { return dry; }
-    public int getInWash() { return inWash; }
-    public int getInDry() {return inDry; }
-    public String getPageUrl() {return pageUrl; }
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getWash() {
+        return wash;
+    }
+
+    public void setWash(int wash) {
+        this.wash = wash;
+    }
+
+    public int getDry() {
+        return dry;
+    }
+
+    public void setDry(int dry) {
+        this.dry = dry;
+    }
+
+    public int getInWash() {
+        return inWash;
+    }
+
+    public void setInWash(int inWash) {
+        this.inWash = inWash;
+    }
+
+    public int getInDry() {
+        return inDry;
+    }
+
+    public void setInDry(int inDry) {
+        this.inDry = inDry;
+    }
+
+    public String getPageUrl() {
+        return pageUrl;
+    }
+
+    public void setPageUrl(String pageUrl) {
+        this.pageUrl = pageUrl;
+    }
 }
