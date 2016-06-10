@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -112,6 +113,12 @@ public class FragmentBookmarks extends Fragment {
             Set<String> bookmarks = sharedPreferences.getStringSet("bookmarks", new HashSet<String>());
             Iterator<String> iterator = bookmarks.iterator();
 
+            Log.i("temp", iterator.hasNext() + "");
+
+            if(!iterator.hasNext()) {
+                bookmarkedDorms.clear();
+            }
+
             while (iterator.hasNext()) {
                 String dormName = iterator.next();
 
@@ -124,6 +131,11 @@ public class FragmentBookmarks extends Fragment {
 
                     if (tempDorm.getName().equals(dormName) && !bookmarkedDorms.contains(tempDorm)) {
                         bookmarkedDorms.add(temp.get(i));
+                    }
+
+                    // TODO: TRYING TO MAKE THIS TOGGLE OAJDOLKWIJDOLAIWKEJDO:LAWE THIS DOESNN'T WORK
+                    if(!bookmarks.contains(tempDorm.getName())) {
+                        bookmarkedDorms.remove(tempDorm);
                     }
                 }
             }

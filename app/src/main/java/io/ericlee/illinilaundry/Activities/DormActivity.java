@@ -109,7 +109,6 @@ public class DormActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_bookmark) {
-
             //TODO clean this code up...
             SharedPreferences settings = getSharedPreferences("BOOKMARKS", 0);
             Set<String> bookmarks = settings.getStringSet("bookmarks", new HashSet<String>());
