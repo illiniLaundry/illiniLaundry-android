@@ -112,18 +112,16 @@ public class DormActivity extends AppCompatActivity {
 
             //TODO clean this code up...
             SharedPreferences settings = getSharedPreferences("BOOKMARKS", 0);
-            Set<String> bookmarks = settings.getStringSet("bookmarks", null);
+            Set<String> bookmarks = settings.getStringSet("bookmarks", new HashSet<String>());
 
+            Set<String> newBookmarks = new HashSet<>(bookmarks);
             if(!bookmarks.contains(dorm.getName())) {
-                Set<String> newBookmarks = new HashSet<>(bookmarks);
                 newBookmarks.add (dorm.getName());
-                settings.edit().putStringSet("bookmarks",newBookmarks).commit();
             }
             else {
-                Set<String> newBookmarks = new HashSet<>(bookmarks);
                 newBookmarks.remove(dorm.getName());
-                settings.edit().putStringSet("bookmarks",newBookmarks).commit();
             }
+            settings.edit().putStringSet("bookmarks",newBookmarks).commit();
             return true;
         }
         return super.onOptionsItemSelected(item);
