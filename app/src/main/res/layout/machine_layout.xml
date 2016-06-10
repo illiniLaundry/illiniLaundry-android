@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:weightSum="3">
+    android:weightSum="4">
 
     <LinearLayout
         android:orientation="vertical"
@@ -48,6 +48,21 @@
             android:layout_gravity="center"
             android:text="New Text"
             android:id="@+id/textMachineStatus"
+            android:gravity="center_vertical|center_horizontal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="New Text"
+            android:id="@+id/textMachineTimeRemaining"
+            android:layout_gravity="center"
             android:gravity="center_vertical|center_horizontal" />
     </LinearLayout>
 

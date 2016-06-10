@@ -171,11 +171,11 @@ public class DormActivity extends AppCompatActivity {
                 Elements rows = table.select("tr");
 
 
-                int i=1;
+                int i = 1;
                 //check for announcement
                 Element firstRow = rows.get(0);
                 Elements firstRowCols = firstRow.select("td");
-                if(firstRowCols.size()==3) {
+                if(firstRowCols.size() == 3) {
                     statusAnnouncement = firstRowCols.get(2).text();
                     Log.i("announcement", statusAnnouncement);
                     i++;
@@ -198,13 +198,16 @@ public class DormActivity extends AppCompatActivity {
 
                     for (int j = 0; j < cols.size(); j++) {
                         if (j == 2) {
-                            temp.add(cols.get(j).text());
+                            temp.add(cols.get(j).text());   // Machine Number
                         }
                         if (j == 3) {
-                            temp.add(cols.get(j).text());
+                            temp.add(cols.get(j).text());   // Machine Type
                         }
                         if (j == 4) {
-                            temp.add(cols.get(j).text());
+                            temp.add(cols.get(j).text());   // Machine Status
+                        }
+                        if (j == 5) {
+                            temp.add(cols.get(j).text());   // Time Remaining for the Machine
                         }
                     }
                     machineData.add(temp);
@@ -224,13 +227,14 @@ public class DormActivity extends AppCompatActivity {
 
             Log.i("temp", machineData.toString());
             if (mDataset.size() == 0) {
-                mDataset.add(new Machine("#", "Machine Type", "Machine Status"));
+                mDataset.add(new Machine("#", "Machine Type", "Machine Status", "Time Remaining"));
                 for (int i = 0; i < machineData.size(); i++) {
                     ArrayList<String> temp = machineData.get(i);
                     Log.i("temp", temp.toString());
                     mDataset.add(new Machine(temp.get(0),
                             temp.get(1),
-                            temp.get(2)));
+                            temp.get(2),
+                            temp.get(3)));
                 }
             } else {
                 for (int i = 0; i < machineData.size(); i++) {
@@ -238,7 +242,8 @@ public class DormActivity extends AppCompatActivity {
                     Log.i("temp", temp.toString());
                     mDataset.set(i + 1, new Machine(temp.get(0),
                             temp.get(1),
-                            temp.get(2)));
+                            temp.get(2),
+                            temp.get(3)));
                 }
             }
         }
