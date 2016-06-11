@@ -20,7 +20,6 @@
         android:layout_weight="3"
         android:textSize="36sp" />
 
-
     <TextView
         android:id="@+id/textMachineType"
         android:layout_width="0dp"
@@ -29,7 +28,6 @@
         android:gravity="center"
         android:layout_weight="4"
         android:text="New Text" />
-
 
     <TextView
         android:id="@+id/textMachineStatus"
