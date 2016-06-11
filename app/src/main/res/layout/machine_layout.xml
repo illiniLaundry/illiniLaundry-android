@@ -1,69 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:weightSum="4">
+    android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp">
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:weightSum="15">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textSize="36sp"
-            android:text="0"
-            android:id="@+id/textMachineNumber" />
+    <TextView
+        android:id="@+id/textMachineNumber"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="0"
+        android:layout_weight="3"
+        android:textSize="36sp" />
+
+
+    <TextView
+        android:id="@+id/textMachineType"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_weight="4"
+        android:text="New Text" />
+
+
+    <TextView
+        android:id="@+id/textMachineStatus"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_weight="4"
+        android:text="New Text" />
+
+    <TextView
+        android:id="@+id/textMachineTimeRemaining"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_weight="4"
+        android:text="New Text" />
+
     </LinearLayout>
 
-    <LinearLayout
-        android:orientation="vertical"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:text="New Text"
-            android:id="@+id/textMachineType"
-            android:gravity="center_vertical|center_horizontal" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:text="New Text"
-            android:id="@+id/textMachineStatus"
-            android:gravity="center_vertical|center_horizontal" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="New Text"
-            android:id="@+id/textMachineTimeRemaining"
-            android:layout_gravity="center"
-            android:gravity="center_vertical|center_horizontal" />
-    </LinearLayout>
-
+        android:layout_height="1dp"
+        android:background="@android:color/black"/>
 </LinearLayout>

@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.jsoup.Jsoup;
@@ -44,6 +45,9 @@ public class DormActivity extends AppCompatActivity {
 
     private DormActivity instance;
 
+    private TextView availableWash;
+    private TextView availableDry;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,13 +55,18 @@ public class DormActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_left, R.anim.slide_left_out);
         setContentView(R.layout.activity_dorm);
 
+        availableWash = (TextView) findViewById(R.id.dormWasherAvailable);
+        availableDry = (TextView) findViewById(R.id.dormDryerAvailable);
+
         Intent intent = getIntent();
         dorm = (Dorm) intent.getSerializableExtra("Dorm");
+
+        setAvailabilityText();
+
         mDataset = new ArrayList<>();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_dorm);
         setSupportActionBar(toolbar);
-
 
         CollapsingToolbarLayout mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         mCollapsingToolbarLayout.setTitleEnabled(true);
@@ -123,7 +132,13 @@ public class DormActivity extends AppCompatActivity {
             settings.edit().putStringSet("bookmarks",newBookmarks).commit();
             return true;
         }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setAvailabilityText() {
+        availableDry.setText("Dryers Available: " + dorm.getDry());
+        availableWash.setText(" Washers Available: " + dorm.getWash());
     }
 
     public class SetData extends AsyncTask<Void, Void, Void> {
@@ -149,6 +164,8 @@ public class DormActivity extends AppCompatActivity {
             super.onPostExecute(result);
             mAdapter.notifyDataSetChanged();
 
+            setAvailabilityText();
+
             // Notify swipeRefreshLayout that the refresh has finished
             mSwipeRefreshLayout.post(new Runnable() {
                 @Override
@@ -164,14 +181,22 @@ public class DormActivity extends AppCompatActivity {
             try {
                 Document illini = Jsoup.connect(dorm.getPageUrl()).get();
 
+                // Parse availability information
+                Element availability = illini.select("tbody").get(1);
+                Elements availabilityRows = availability.select("tr");
+                String[] availabilityString = availabilityRows.get(2).text().split(" ");
+                dorm.setWash(Integer.parseInt(availabilityString[0]));
+                dorm.setDry(Integer.parseInt(availabilityString[3]));
+
+                // Parse general information
                 Element table = illini.select("tbody").last();
                 Elements rows = table.select("tr");
 
-
                 int i = 1;
-                //check for announcement
+                // check for announcement
                 Element firstRow = rows.get(0);
                 Elements firstRowCols = firstRow.select("td");
+
                 if(firstRowCols.size() == 3) {
                     statusAnnouncement = firstRowCols.get(2).text();
                     Log.i("announcement", statusAnnouncement);
@@ -222,12 +247,11 @@ public class DormActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            Log.i("temp", machineData.toString());
+            Log.i("Machine Data", machineData.toString());
             if (mDataset.size() == 0) {
                 mDataset.add(new Machine("#", "Machine Type", "Machine Status", "Time Remaining"));
                 for (int i = 0; i < machineData.size(); i++) {
                     ArrayList<String> temp = machineData.get(i);
-                    Log.i("temp", temp.toString());
                     mDataset.add(new Machine(temp.get(0),
                             temp.get(1),
                             temp.get(2),
@@ -236,7 +260,6 @@ public class DormActivity extends AppCompatActivity {
             } else {
                 for (int i = 0; i < machineData.size(); i++) {
                     ArrayList<String> temp = machineData.get(i);
-                    Log.i("temp", temp.toString());
                     mDataset.set(i + 1, new Machine(temp.get(0),
                             temp.get(1),
                             temp.get(2),
