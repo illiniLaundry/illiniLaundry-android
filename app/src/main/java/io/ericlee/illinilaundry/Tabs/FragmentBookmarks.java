@@ -89,7 +89,8 @@ public class FragmentBookmarks extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                // TODO: do something
+                mSwipeRefreshLayout.setRefreshing(true);
+                new SetData().execute();
                 return true;
         }
         return super.onOptionsItemSelected(item);
