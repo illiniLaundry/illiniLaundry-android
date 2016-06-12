@@ -48,6 +48,9 @@ public class DormActivity extends AppCompatActivity {
     private TextView availableWash;
     private TextView availableDry;
 
+    SharedPreferences settings;
+    Set<String> bookmarks;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +67,8 @@ public class DormActivity extends AppCompatActivity {
         setAvailabilityText();
 
         mDataset = new ArrayList<>();
+
+        settings = getSharedPreferences("BOOKMARKS", 0);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_dorm);
         setSupportActionBar(toolbar);
@@ -111,6 +116,15 @@ public class DormActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.bookmark, menu);
+
+        bookmarks = settings.getStringSet("bookmarks", new HashSet<String>());
+
+        if(bookmarks.contains(dorm.getName())) {
+            menu.getItem(0).setIcon(R.drawable.ic_star_yellow_24dp);
+        } else {
+            menu.getItem(0).setIcon(R.drawable.ic_star_border_white_24dp);
+        }
+
         return true;
     }
 
@@ -119,17 +133,27 @@ public class DormActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.action_bookmark) {
             //TODO clean this code up...
-            SharedPreferences settings = getSharedPreferences("BOOKMARKS", 0);
-            Set<String> bookmarks = settings.getStringSet("bookmarks", new HashSet<String>());
-
             Set<String> newBookmarks = new HashSet<>(bookmarks);
+            bookmarks = settings.getStringSet("bookmarks", new HashSet<String>());
+
             if(!bookmarks.contains(dorm.getName())) {
-                newBookmarks.add (dorm.getName());
+                newBookmarks.add(dorm.getName());
+
+                item.setIcon(R.drawable.ic_star_yellow_24dp);
+
+                Toast.makeText(this, dorm.getName() + " has been added to your bookmarks.",
+                        Toast.LENGTH_SHORT).show();
             }
             else {
                 newBookmarks.remove(dorm.getName());
+
+                item.setIcon(R.drawable.ic_star_border_white_24dp);
+
+                Toast.makeText(this, dorm.getName() + " has been removed from your bookmarks.",
+                        Toast.LENGTH_SHORT).show();
             }
-            settings.edit().putStringSet("bookmarks",newBookmarks).commit();
+
+            settings.edit().putStringSet("bookmarks", newBookmarks).commit();
             return true;
         }
 

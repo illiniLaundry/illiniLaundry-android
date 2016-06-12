@@ -18,7 +18,7 @@
         android:gravity="center"
         android:text="10W"
         android:layout_weight="4"
-        android:textSize="36sp" />
+        android:textSize="30sp" />
 
     <TextView
         android:id="@+id/textMachineType"
