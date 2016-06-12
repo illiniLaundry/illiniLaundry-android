@@ -283,7 +283,7 @@ public class DormActivity extends AppCompatActivity {
             } else {
                 for (int i = 0; i < machineData.size(); i++) {
                     ArrayList<String> temp = machineData.get(i);
-                    mDataset.set(i + 1, new Machine(temp.get(0),
+                    mDataset.set(i, new Machine(temp.get(0),
                             temp.get(1),
                             temp.get(2),
                             temp.get(3)));
