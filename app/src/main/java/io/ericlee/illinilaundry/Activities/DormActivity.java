@@ -273,7 +273,6 @@ public class DormActivity extends AppCompatActivity {
 
             Log.i("Machine Data", machineData.toString());
             if (mDataset.size() == 0) {
-                mDataset.add(new Machine("#", "Machine Type", "Machine Status", "Time Remaining"));
                 for (int i = 0; i < machineData.size(); i++) {
                     ArrayList<String> temp = machineData.get(i);
                     mDataset.add(new Machine(temp.get(0),

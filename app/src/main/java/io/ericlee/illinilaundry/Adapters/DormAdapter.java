@@ -43,7 +43,16 @@ public class DormAdapter extends RecyclerView.Adapter<DormAdapter.ViewHolder> {
         if(mDataset.get(position).getMachineStatus().contains("In Use")) {
             holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.softRed));
         } else if(mDataset.get(position).getMachineStatus().equals("Available")) {
-            holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.softGreen));
+            //holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.softGreen));
+            holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.colorPrimary));
+            TextView machineNumber = (TextView) holder.itemView.findViewById(R.id.textMachineNumber);
+            machineNumber.setTextColor(Color.WHITE);
+            TextView machineStatus = (TextView) holder.itemView.findViewById(R.id.textMachineStatus);
+            machineStatus.setTextColor(Color.GREEN);
+            TextView machineTimeRemaining = (TextView) holder.itemView.findViewById(R.id.textMachineTimeRemaining);
+            machineTimeRemaining.setTextColor(Color.WHITE);
+            TextView machineType = (TextView) holder.itemView.findViewById(R.id.textMachineType);
+            machineType.setTextColor(Color.WHITE);
         } else { holder.itemView.setBackgroundColor(Color.WHITE); }
 
         holder.machineAvailable.setText(mDataset.get(position).getMachineStatus());
