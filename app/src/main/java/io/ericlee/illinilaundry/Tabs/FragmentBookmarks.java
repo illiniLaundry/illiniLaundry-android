@@ -59,6 +59,7 @@ public class FragmentBookmarks extends Fragment {
         View view = inflater.inflate(R.layout.fragment_bookmarks, container, false);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.bookmarkSwipeRefresh);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.bookmarkRecyclerView);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

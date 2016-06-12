@@ -98,7 +98,7 @@ public class DormActivity extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.dormSwipeRefresh);
-
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
             @Override

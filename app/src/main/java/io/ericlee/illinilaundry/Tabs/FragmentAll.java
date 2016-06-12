@@ -43,6 +43,7 @@ public class FragmentAll extends Fragment {
     public void onStart() {
         mRecyclerView = (RecyclerView) getView().findViewById(R.id.recyclerView);
         mSwipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
