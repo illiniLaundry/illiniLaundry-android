@@ -40,7 +40,7 @@ public class DormAdapter extends RecyclerView.Adapter<DormAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        if(mDataset.get(position).getMachineStatus().equals("In Use")) {
+        if(mDataset.get(position).getMachineStatus().contains("In Use")) {
             holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.softRed));
         } else if(mDataset.get(position).getMachineStatus().equals("Available")) {
             holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.softGreen));

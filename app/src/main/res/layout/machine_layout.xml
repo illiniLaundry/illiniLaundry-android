@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:weightSum="15">
+        android:weightSum="19">
 
     <TextView
         android:id="@+id/textMachineNumber"
@@ -16,8 +16,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:text="0"
-        android:layout_weight="3"
+        android:text="10W"
+        android:layout_weight="4"
         android:textSize="36sp" />
 
     <TextView
@@ -26,7 +26,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:gravity="center"
-        android:layout_weight="4"
+        android:layout_weight="5"
         android:text="New Text" />
 
     <TextView
@@ -35,7 +35,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:gravity="center"
-        android:layout_weight="4"
+        android:layout_weight="5"
         android:text="New Text" />
 
     <TextView
@@ -44,7 +44,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:gravity="center"
-        android:layout_weight="4"
+        android:layout_weight="5"
         android:text="New Text" />
 
     </LinearLayout>
