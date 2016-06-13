@@ -11,4 +11,6 @@
 
     <color name="white">#ffffff</color>
     <color name="red">#E50000</color>
+
+    <color name="textColor">#8a000000</color>
 </resources>

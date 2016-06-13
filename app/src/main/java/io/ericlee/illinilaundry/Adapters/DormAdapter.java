@@ -1,6 +1,8 @@
 package io.ericlee.illinilaundry.Adapters;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,20 +42,28 @@ public class DormAdapter extends RecyclerView.Adapter<DormAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
+        TextView machineNumber = (TextView) holder.itemView.findViewById(R.id.textMachineNumber);
+        TextView machineStatus = (TextView) holder.itemView.findViewById(R.id.textMachineStatus);
+        TextView machineTimeRemaining = (TextView) holder.itemView.findViewById(R.id.textMachineTimeRemaining);
+        TextView machineType = (TextView) holder.itemView.findViewById(R.id.textMachineType);
+
+        Context context = holder.itemView.getContext();
+
         if(mDataset.get(position).getMachineStatus().contains("In Use")) {
-            holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.softRed));
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.softRed));
+            machineNumber.setTextColor(ContextCompat.getColor(context, R.color.textColor));
+            machineStatus.setTextColor(ContextCompat.getColor(context, R.color.textColor));
+            machineTimeRemaining.setTextColor(ContextCompat.getColor(context, R.color.textColor));
+            machineType.setTextColor(ContextCompat.getColor(context, R.color.textColor));
+
         } else if(mDataset.get(position).getMachineStatus().equals("Available")) {
             //holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.softGreen));
-            holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.colorPrimary));
-            TextView machineNumber = (TextView) holder.itemView.findViewById(R.id.textMachineNumber);
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorPrimary));
             machineNumber.setTextColor(Color.WHITE);
-            TextView machineStatus = (TextView) holder.itemView.findViewById(R.id.textMachineStatus);
             machineStatus.setTextColor(Color.GREEN);
-            TextView machineTimeRemaining = (TextView) holder.itemView.findViewById(R.id.textMachineTimeRemaining);
             machineTimeRemaining.setTextColor(Color.WHITE);
-            TextView machineType = (TextView) holder.itemView.findViewById(R.id.textMachineType);
             machineType.setTextColor(Color.WHITE);
-        } else { holder.itemView.setBackgroundColor(Color.WHITE); }
+        }
 
         holder.machineAvailable.setText(mDataset.get(position).getMachineStatus());
         holder.machineType.setText(mDataset.get(position).getMachineType());
