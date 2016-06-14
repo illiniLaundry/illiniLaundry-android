@@ -64,6 +64,7 @@ public class DormActivity extends AppCompatActivity {
 
         availableWash = (TextView) findViewById(R.id.dormWasherAvailable);
         availableDry = (TextView) findViewById(R.id.dormDryerAvailable);
+        CollapsingToolbarLayout mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.dorm_collapsing_toolbar);
 
         Intent intent = getIntent();
         dorm = (Dorm) intent.getSerializableExtra("Dorm");
@@ -76,8 +77,6 @@ public class DormActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_dorm);
         setSupportActionBar(toolbar);
-
-        CollapsingToolbarLayout mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.dorm_collapsing_toolbar);
 
         // Check if the version of Android is Lollipop or higher
         if (Build.VERSION.SDK_INT >= 21) {
