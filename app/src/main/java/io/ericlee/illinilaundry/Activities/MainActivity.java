@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         // Setup Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
-        toolbar.setNavigationIcon(R.drawable.illini);
+        toolbar.setNavigationIcon(R.drawable.icon);
 
         setSupportActionBar(toolbar);
 
