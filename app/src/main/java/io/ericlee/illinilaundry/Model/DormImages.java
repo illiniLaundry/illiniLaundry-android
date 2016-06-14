@@ -7,7 +7,7 @@ import io.ericlee.illinilaundry.R;
 
 public class DormImages {
 
-    public static DormImages instance;
+    private static DormImages instance;
 
     private Dictionary<String, Integer> images;
 
