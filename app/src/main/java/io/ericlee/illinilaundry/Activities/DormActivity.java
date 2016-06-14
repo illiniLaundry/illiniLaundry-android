@@ -77,6 +77,8 @@ public class DormActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_dorm);
         setSupportActionBar(toolbar);
 
+        CollapsingToolbarLayout mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.dorm_collapsing_toolbar);
+
         // Check if the version of Android is Lollipop or higher
         if (Build.VERSION.SDK_INT >= 21) {
 
@@ -86,11 +88,9 @@ public class DormActivity extends AppCompatActivity {
 
             // Set paddingTop of toolbar to height of status bar.
             // Fixes statusbar covers toolbar issue
-            CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.dorm_collapsing_toolbar);
-            collapsingToolbarLayout.setPadding(0, getStatusBarHeight(), 0, 0);
+            mCollapsingToolbarLayout.setPadding(0, getStatusBarHeight(), 0, 0);
         }
 
-        CollapsingToolbarLayout mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.dorm_collapsing_toolbar);
         mCollapsingToolbarLayout.setTitleEnabled(true);
         mCollapsingToolbarLayout.setTitle(dorm.getName());
 
