@@ -189,7 +189,7 @@ public class DormActivity extends AppCompatActivity {
 
     private void setAvailabilityText() {
         availableDry.setText("Dryers Available: " + dorm.getDry());
-        availableWash.setText(" Washers Available: " + dorm.getWash());
+        availableWash.setText("Washers Available: " + dorm.getWash());
     }
 
     public class SetData extends AsyncTask<Void, Void, Void> {
