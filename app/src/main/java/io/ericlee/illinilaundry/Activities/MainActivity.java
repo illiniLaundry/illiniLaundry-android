@@ -35,21 +35,6 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
-        // Check if the version of Android is Lollipop or higher
-        if (Build.VERSION.SDK_INT >= 21) {
-            // Set the status bar to dark-semi-transparentish
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-            // Set paddingTop of toolbar to height of status bar.
-            // Fixes statusbar covers toolbar issue
-            //DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.main_drawer_layout);
-            //drawerLayout.setPadding(0, getStatusBarHeight(), 0, 0);
-//            LinearLayout linearLayout = (LinearLayout) findViewById(R.id.main_baseLinearLayout);
-//            linearLayout.setPadding(0, getStatusBarHeight(), 0, 0);
-            toolbar.setPadding(0, getStatusBarHeight(), 0, 0);
-        }
-
         // Setup tabs
         TabLayout tab_layout = (TabLayout) findViewById(R.id.main_tab_layout);
         tab_layout.addTab(tab_layout.newTab().setText("All Dorms"));

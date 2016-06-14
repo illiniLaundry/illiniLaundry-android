@@ -12,6 +12,10 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar" />
+
     <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/main_content"
@@ -23,10 +27,6 @@
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-            <include
-                android:id="@+id/toolbar"
-                layout="@layout/toolbar" />
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/main_tab_layout"
