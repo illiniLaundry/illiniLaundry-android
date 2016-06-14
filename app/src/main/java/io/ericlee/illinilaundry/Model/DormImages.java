@@ -26,26 +26,26 @@ public class DormImages {
         images.put("FAR: Trelease", R.drawable.far);
         images.put("300 South Goodwin", R.drawable.lar);        // TODO:
         images.put("1107 West Green", R.drawable.lar);          // TODO:
-        images.put("Hopkins", R.drawable.lar);                  // TODO:
+        images.put("Hopkins", R.drawable.hopkins);
         images.put("ISR: Townsend", R.drawable.isrtownsend);
         images.put("ISR: Wardall", R.drawable.isr);
         images.put("LAR: Leonard", R.drawable.lar);
         images.put("LAR: Shelden", R.drawable.lar);
-        images.put("Nugent", R.drawable.lar);                   // TODO:
-        images.put("Nugent Rm 126", R.drawable.lar);            // TODO:
-        images.put("Orchard Downs North", R.drawable.lar);      // TODO:
-        images.put("Orchard Downs South", R.drawable.lar);      // TODO:
+        images.put("Nugent", R.drawable.nugent);
+        images.put("Nugent Rm 126", R.drawable.nugent);
+        images.put("Orchard Downs North", R.drawable.orcharddownsnorth);
+        images.put("Orchard Downs South", R.drawable.orcharddownssouth);
         images.put("PAR: Babcock", R.drawable.par);
         images.put("PAR: Blaisdell", R.drawable.par);
         images.put("PAR: Carr", R.drawable.par);
         images.put("PAR: Saunders", R.drawable.par);
-        images.put("Scott", R.drawable.lar);                    // TODO:
-        images.put("Sherman Short", R.drawable.lar);            // TODO:
-        images.put("Sherman Tall", R.drawable.lar);             // TODO:
-        images.put("Snyder", R.drawable.lar);                   // TODO:
-        images.put("TVD: Taft", R.drawable.lar);                // TODO:
-        images.put("TVD: Van Doren", R.drawable.lar);           // TODO:
-        images.put("Weston", R.drawable.lar);                   // TODO:
+        images.put("Scott", R.drawable.scott);
+        images.put("Sherman Short", R.drawable.sherman);
+        images.put("Sherman Tall", R.drawable.sherman);
+        images.put("Snyder", R.drawable.snyder);
+        images.put("TVD: Taft", R.drawable.tvd);
+        images.put("TVD: Van Doren", R.drawable.tvd);
+        images.put("Weston", R.drawable.weston);
     }
 
     public static DormImages getInstance() {
