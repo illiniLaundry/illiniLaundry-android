@@ -15,18 +15,19 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 import io.ericlee.illinilaundry.Adapters.ViewPagerAdapter;
+import io.ericlee.illinilaundry.Model.AppPreferences;
 import io.ericlee.illinilaundry.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static Context context;
+    private AppPreferences preferences;
+    private TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        preferences = AppPreferences.getInstance(this);
         setContentView(R.layout.activity_main);
-
-        context = this;
 
         // Setup Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -36,23 +37,29 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // Setup tabs
-        TabLayout tab_layout = (TabLayout) findViewById(R.id.main_tab_layout);
-        tab_layout.addTab(tab_layout.newTab().setText("All Dorms"));
-        tab_layout.addTab(tab_layout.newTab().setText("Bookmarked"));
+        tabLayout = (TabLayout) findViewById(R.id.main_tab_layout);
+        tabLayout.addTab(tabLayout.newTab().setText("All Dorms"));
+        tabLayout.addTab(tabLayout.newTab().setText("Bookmarked"));
 
-        final ViewPager view_pager = (ViewPager) findViewById(R.id.pager);
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         final ViewPagerAdapter adapter = new ViewPagerAdapter
-                (getSupportFragmentManager(), tab_layout.getTabCount());
+                (getSupportFragmentManager(), tabLayout.getTabCount());
 
-        view_pager.setAdapter(adapter);
+        viewPager.setAdapter(adapter);
 
-        view_pager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tab_layout));
+        if(preferences.hasBookmarks()) {
+            TabLayout.Tab bookmarksTab = tabLayout.getTabAt(1);
+            bookmarksTab.select();
+            viewPager.setCurrentItem(1);
+        }
 
-        tab_layout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                view_pager.setCurrentItem(tab.getPosition());
+                viewPager.setCurrentItem(tab.getPosition());
             }
 
             @Override
@@ -67,6 +74,17 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        // Have the back button go to "All" tab if "Bookmarks" tab is selected.
+        TabLayout.Tab firstTab = tabLayout.getTabAt(0);
+        if(firstTab.isSelected()) {
+            super.onBackPressed();
+        } else {
+            firstTab.select();
+        }
+    }
+
     // A method to find height of the status bar
     public int getStatusBarHeight() {
         int result = 0;
@@ -75,9 +93,5 @@ public class MainActivity extends AppCompatActivity {
             result = getResources().getDimensionPixelSize(resourceId);
         }
         return result;
-    }
-
-    public static Context getContext() {
-        return context;
     }
 }
