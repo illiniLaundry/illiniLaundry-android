@@ -63,9 +63,9 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.getContext(), DormActivity.class);
+                Intent intent = new Intent(v.getContext(), DormActivity.class);
                 intent.putExtra("Dorm", dorm);
-                MainActivity.getContext().startActivity(intent);
+                v.getContext().startActivity(intent);
             }
         });
 
