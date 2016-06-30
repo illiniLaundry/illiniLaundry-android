@@ -1,7 +1,6 @@
 package io.ericlee.illinilaundry.Activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,10 +31,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import io.ericlee.illinilaundry.Adapters.DormAdapter;
+import io.ericlee.illinilaundry.Model.AppPreferences;
 import io.ericlee.illinilaundry.Model.Dorm;
 import io.ericlee.illinilaundry.Model.DormImages;
 import io.ericlee.illinilaundry.Model.Machine;
 import io.ericlee.illinilaundry.R;
+import io.ericlee.illinilaundry.Tabs.FragmentBookmarks;
 
 public class DormActivity extends AppCompatActivity {
     private Dorm dorm;
@@ -52,8 +53,8 @@ public class DormActivity extends AppCompatActivity {
     private TextView availableWash;
     private TextView availableDry;
 
-    SharedPreferences settings;
-    Set<String> bookmarks;
+    private AppPreferences preferences;
+    private Set<String> bookmarks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +74,7 @@ public class DormActivity extends AppCompatActivity {
 
         mDataset = new ArrayList<>();
 
-        settings = getSharedPreferences("BOOKMARKS", 0);
+        preferences = AppPreferences.getInstance(getApplicationContext());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_dorm);
         setSupportActionBar(toolbar);
@@ -143,7 +144,7 @@ public class DormActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.bookmark, menu);
 
-        bookmarks = settings.getStringSet("bookmarks", new HashSet<String>());
+        bookmarks = preferences.getBookmarkedDorms();
 
         if(bookmarks.contains(dorm.getName())) {
             menu.getItem(0).setIcon(R.drawable.ic_star_yellow_24dp);
@@ -160,7 +161,7 @@ public class DormActivity extends AppCompatActivity {
         if (id == R.id.action_bookmark) {
             //TODO clean this code up...
             Set<String> newBookmarks = new HashSet<>(bookmarks);
-            bookmarks = settings.getStringSet("bookmarks", new HashSet<String>());
+            bookmarks = preferences.getBookmarkedDorms();
 
             if(!bookmarks.contains(dorm.getName())) {
                 newBookmarks.add(dorm.getName());
@@ -179,7 +180,8 @@ public class DormActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
             }
 
-            settings.edit().putStringSet("bookmarks", newBookmarks).commit();
+            preferences.saveBookmarks(newBookmarks);
+
             return true;
         }
 
