@@ -3,6 +3,7 @@ package io.ericlee.illinilaundry.Tabs;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -22,6 +24,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import io.ericlee.illinilaundry.Adapters.BookmarkAdapter;
+import io.ericlee.illinilaundry.Model.AppPreferences;
 import io.ericlee.illinilaundry.Model.Dorm;
 import io.ericlee.illinilaundry.R;
 
@@ -29,9 +32,9 @@ import io.ericlee.illinilaundry.R;
  * Created by Eric on 6/8/2016.
  */
 public class FragmentBookmarks extends Fragment {
-    private SharedPreferences sharedPreferences;
+    private AppPreferences preferences;
 
-    private ArrayList<Dorm> bookmarkedDorms;
+    public static ArrayList<Dorm> bookmarkedDorms;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -47,20 +50,10 @@ public class FragmentBookmarks extends Fragment {
 
     @Override
     public void onStart() {
-        if (bookmarkedDorms.isEmpty()) {
-            new SetData().execute();
-        }
 
-        super.onStart();
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_bookmarks, container, false);
-
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.bookmarkSwipeRefresh);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.bookmarkSwipeRefresh);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.bookmarkRecyclerView);
+        mRecyclerView = (RecyclerView) getView().findViewById(R.id.bookmarkRecyclerView);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
@@ -78,6 +71,22 @@ public class FragmentBookmarks extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setHasFixedSize(true);
 
+        if (bookmarkedDorms.isEmpty()) {
+            // Delay to allow everything to settle before running SetData()
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    new SetData().execute();
+                }
+            }, 500);
+        }
+
+        super.onStart();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_bookmarks, container, false);
         return view;
     }
 
@@ -101,6 +110,7 @@ public class FragmentBookmarks extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            Log.i("SetData", "RUN!");
             mSwipeRefreshLayout.post(new Runnable() {
                 @Override
                 public void run() {
@@ -111,11 +121,11 @@ public class FragmentBookmarks extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            sharedPreferences = getActivity().getSharedPreferences("BOOKMARKS", 0);
-            Set<String> bookmarks = sharedPreferences.getStringSet("bookmarks", new HashSet<String>());
+            preferences = AppPreferences.getInstance(getContext());
+            Set<String> bookmarks = preferences.getBookmarkedDorms();
             Iterator<String> iterator = bookmarks.iterator();
 
-            Log.i("temp", iterator.hasNext() + "");
+            Log.i("Has Bookmarks", iterator.hasNext() + "");
 
             if(!iterator.hasNext()) {
                 bookmarkedDorms.clear();
