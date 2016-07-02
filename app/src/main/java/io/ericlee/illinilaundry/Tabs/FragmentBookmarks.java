@@ -27,6 +27,7 @@ import java.util.Set;
 import io.ericlee.illinilaundry.Adapters.BookmarkAdapter;
 import io.ericlee.illinilaundry.Model.AppPreferences;
 import io.ericlee.illinilaundry.Model.Dorm;
+import io.ericlee.illinilaundry.Model.ItemOffsetDecoration;
 import io.ericlee.illinilaundry.R;
 
 /**
@@ -41,20 +42,26 @@ public class FragmentBookmarks extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
+    private ArrayList<Dorm> allDorms = FragmentAll.getDorms();
+
+    private boolean firstTimeRun;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
+        firstTimeRun = true;
         bookmarkedDorms = new ArrayList<>();
     }
 
     @Override
-    public void onStart() {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_bookmarks, container, false);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.bookmarkSwipeRefresh);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.bookmarkSwipeRefresh);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
-        mRecyclerView = (RecyclerView) getView().findViewById(R.id.bookmarkRecyclerView);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.bookmarkRecyclerView);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
@@ -69,6 +76,10 @@ public class FragmentBookmarks extends Fragment {
         mRecyclerView.setLayoutManager(glm);
         mAdapter = new BookmarkAdapter(bookmarkedDorms);
 
+        // Add spacing between cards.
+        ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(getContext(), R.dimen.item_offset);
+        mRecyclerView.addItemDecoration(itemDecoration);
+
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setHasFixedSize(true);
 
@@ -82,12 +93,6 @@ public class FragmentBookmarks extends Fragment {
             }, 500);
         }
 
-        super.onStart();
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_bookmarks, container, false);
         return view;
     }
 
@@ -135,15 +140,15 @@ public class FragmentBookmarks extends Fragment {
             while (iterator.hasNext()) {
                 String dormName = iterator.next();
 
-                ArrayList<Dorm> temp = FragmentAll.getDorms();
+                allDorms = FragmentAll.getDorms();
 
                 // TODO: We should find a faster way to do this because this will take O(n^m)
 
-                for (int i = 0; i < temp.size(); i++) {
-                    Dorm tempDorm = temp.get(i);
+                for (int i = 0; i < allDorms.size(); i++) {
+                    Dorm tempDorm = allDorms.get(i);
 
                     if (tempDorm.getName().equals(dormName) && !bookmarkedDorms.contains(tempDorm)) {
-                        bookmarkedDorms.add(temp.get(i));
+                        bookmarkedDorms.add(allDorms.get(i));
                     }
 
                     if(!bookmarks.contains(tempDorm.getName())) {
@@ -166,6 +171,14 @@ public class FragmentBookmarks extends Fragment {
                 bgImage.setVisibility(View.VISIBLE);
             } else {
                 bgImage.setVisibility(View.INVISIBLE);
+            }
+
+            if(firstTimeRun) {
+                firstTimeRun = false;
+            } else if (allDorms.isEmpty() && !firstTimeRun) {
+                Toast.makeText(getContext(), "Try refreshing the \"All Dorms\" tab first.",
+                        Toast.LENGTH_LONG).show();
+                Log.i("firsttimerun", firstTimeRun + "");
             }
 
             // Notify swipeRefreshLayout that the refresh has finished
