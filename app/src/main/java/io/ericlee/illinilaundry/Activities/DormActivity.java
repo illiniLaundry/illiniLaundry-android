@@ -181,8 +181,9 @@ public class DormActivity extends AppCompatActivity {
                 }
 
                 preferences.saveBookmarks(newBookmarks);
-
                 return true;
+            default:
+                // Do nothing. This is just in case something bad happens.
         }
 
         return super.onOptionsItemSelected(item);
