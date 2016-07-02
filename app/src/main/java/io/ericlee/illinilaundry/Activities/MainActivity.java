@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager.setAdapter(adapter);
 
-        if(preferences.getListString("bookmarks").isEmpty()) {
+        if(!preferences.getListString("bookmarkeddorms").isEmpty()) {
             TabLayout.Tab bookmarksTab = tabLayout.getTabAt(1);
             bookmarksTab.select();
             viewPager.setCurrentItem(1);
