@@ -9,7 +9,6 @@
     android:clickable="true"
     android:longClickable="true"
     android:foreground="?android:attr/selectableItemBackground"
-    card_view:cardUseCompatPadding="true"
     card_view:cardCornerRadius="2dp"
     card_view:cardElevation="2dp">
 
@@ -57,12 +56,12 @@
                         android:id="@+id/imageWasher"
                         android:layout_weight="1"
                         android:src="@drawable/washer"
-                        android:scaleType="fitStart"
+                        android:scaleType="fitCenter"
                         android:padding="4dp" />
 
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="1dp"
                         android:layout_height="match_parent"
                         android:id="@+id/txtWasher"
                         android:text="0"
@@ -72,7 +71,7 @@
                         android:textColor="@color/white" />
 
                     <TextView android:layout_width="0dp"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="1dp"
                         android:layout_height="fill_parent"
                         android:id="@+id/txtDrier"
                         android:text="0"
@@ -87,7 +86,7 @@
                         android:id="@+id/imageDrier"
                         android:layout_weight="1"
                         android:src="@drawable/dryer"
-                        android:scaleType="fitEnd"
+                        android:scaleType="fitCenter"
                         android:padding="4dp" />
             </LinearLayout>
         </LinearLayout>
