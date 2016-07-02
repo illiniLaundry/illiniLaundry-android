@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -88,7 +89,10 @@ public class DormActivity extends AppCompatActivity {
 
             // Set paddingTop of toolbar to height of status bar.
             // Fixes statusbar covers toolbar issue
-            mCollapsingToolbarLayout.setPadding(0, getStatusBarHeight(), 0, 0);
+            //mCollapsingToolbarLayout.setPadding(0, 0, 0, getStatusBarHeight());
+            //toolbar.setPadding(0, getStatusBarHeight(), 0, 0);
+            //ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
+            //params.setMargins(0, getStatusBarHeight(), 0, 0);
         }
 
         mCollapsingToolbarLayout.setTitleEnabled(true);

@@ -34,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/toolbar_height"
                 app:layout_collapseMode="pin"
-                android:fitsSystemWindows="true"
+
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
