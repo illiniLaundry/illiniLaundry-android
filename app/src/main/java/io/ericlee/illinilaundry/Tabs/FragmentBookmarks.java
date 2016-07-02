@@ -1,6 +1,5 @@
 package io.ericlee.illinilaundry.Tabs;
 
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,7 +20,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -39,7 +39,7 @@ public class FragmentBookmarks extends Fragment {
     public static ArrayList<Dorm> bookmarkedDorms;
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private BookmarkAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private ArrayList<Dorm> allDorms = FragmentAll.getDorms();
@@ -93,6 +93,35 @@ public class FragmentBookmarks extends Fragment {
             }, 500);
         }
 
+        // Extend the Callback class
+        ItemTouchHelper.Callback callback = new ItemTouchHelper.Callback() {
+
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                // Swap positions
+                Collections.swap(bookmarkedDorms, viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                // Notify the adapter
+                mAdapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                return true;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                mAdapter.onItemDismiss(viewHolder.getAdapterPosition());
+                Log.i("item Dismiss", "CALL2");
+            }
+
+            //defines the enabled move directions in each state (idle, swiping, dragging).
+            @Override
+            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG,
+                        ItemTouchHelper.DOWN | ItemTouchHelper.UP | ItemTouchHelper.START | ItemTouchHelper.END);
+            }
+        };
+
+        // Create an `ItemTouchHelper` and attach it to the `RecyclerView`
+        ItemTouchHelper ith = new ItemTouchHelper(callback);
+        ith.attachToRecyclerView(mRecyclerView);
+
         return view;
     }
 
@@ -133,7 +162,7 @@ public class FragmentBookmarks extends Fragment {
 
             Log.i("Has Bookmarks", iterator.hasNext() + "");
 
-            if(!iterator.hasNext()) {
+            if (!iterator.hasNext()) {
                 bookmarkedDorms.clear();
             }
 
@@ -151,7 +180,7 @@ public class FragmentBookmarks extends Fragment {
                         bookmarkedDorms.add(allDorms.get(i));
                     }
 
-                    if(!bookmarks.contains(tempDorm.getName())) {
+                    if (!bookmarks.contains(tempDorm.getName())) {
                         bookmarkedDorms.remove(tempDorm);
                     }
                 }
@@ -167,13 +196,13 @@ public class FragmentBookmarks extends Fragment {
 
             ImageView bgImage = (ImageView) getView().findViewById(R.id.backgroundIllini);
 
-            if(bookmarkedDorms.isEmpty()) {
+            if (bookmarkedDorms.isEmpty()) {
                 bgImage.setVisibility(View.VISIBLE);
             } else {
                 bgImage.setVisibility(View.INVISIBLE);
             }
 
-            if(firstTimeRun) {
+            if (firstTimeRun) {
                 firstTimeRun = false;
             } else if (allDorms.isEmpty() && !firstTimeRun) {
                 Toast.makeText(getContext(), "Try refreshing the \"All Dorms\" tab first.",

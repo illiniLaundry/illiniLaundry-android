@@ -6,6 +6,7 @@ package io.ericlee.illinilaundry.Adapters;
 
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import io.ericlee.illinilaundry.Activities.DormActivity;
-import io.ericlee.illinilaundry.Activities.MainActivity;
 import io.ericlee.illinilaundry.Model.Dorm;
 import io.ericlee.illinilaundry.Model.DormImages;
 import io.ericlee.illinilaundry.R;
@@ -83,5 +83,11 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
     @Override
     public int getItemCount() {
         return mDataset.size();
+    }
+
+    public void onItemDismiss(int position) {
+        Log.i("item Dismiss", "CALL");
+        mDataset.remove(position);
+        notifyItemRemoved(position);
     }
 }
