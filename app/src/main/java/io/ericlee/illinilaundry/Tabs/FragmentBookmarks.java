@@ -167,9 +167,9 @@ public class FragmentBookmarks extends Fragment {
 
             Log.i("Has Bookmarks", !bookmarks.isEmpty() + "");
 
-//            if (!iterator.hasNext()) {
-//                bookmarkedDorms.clear();
-//            }
+            if (bookmarks.isEmpty()) {
+                bookmarkedDorms.clear();
+            }
 
             allDorms = FragmentAll.getDorms();
 
