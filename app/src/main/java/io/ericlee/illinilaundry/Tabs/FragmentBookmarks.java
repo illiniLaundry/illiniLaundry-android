@@ -21,21 +21,18 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 
 import io.ericlee.illinilaundry.Adapters.BookmarkAdapter;
-import io.ericlee.illinilaundry.Model.AppPreferences;
 import io.ericlee.illinilaundry.Model.Dorm;
 import io.ericlee.illinilaundry.Model.ItemOffsetDecoration;
+import io.ericlee.illinilaundry.Model.TinyDB;
 import io.ericlee.illinilaundry.R;
 
 /**
  * Created by Eric on 6/8/2016.
  */
 public class FragmentBookmarks extends Fragment {
-    private AppPreferences preferences;
+    private TinyDB preferences;
 
     public static ArrayList<Dorm> bookmarkedDorms;
 
@@ -52,7 +49,7 @@ public class FragmentBookmarks extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        preferences = AppPreferences.getInstance(getContext());
+        preferences = TinyDB.getInstance(getContext());
         firstTimeRun = true;
         bookmarkedDorms = new ArrayList<>();
     }
@@ -99,8 +96,13 @@ public class FragmentBookmarks extends Fragment {
         ItemTouchHelper.Callback callback = new ItemTouchHelper.Callback() {
 
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                ArrayList<String> forSwappingPreferences = preferences.getListString("bookmarkeddorms");
+
                 // Swap positions
                 Collections.swap(bookmarkedDorms, viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                Collections.swap(forSwappingPreferences, viewHolder.getAdapterPosition(), target.getAdapterPosition());
+
+                preferences.putListString("bookmarkeddorms", forSwappingPreferences);
 
                 // Notify the adapter
                 mAdapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
@@ -160,30 +162,27 @@ public class FragmentBookmarks extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            preferences = AppPreferences.getInstance(getContext());
-            Set<String> bookmarks = preferences.getBookmarkedDorms();
-            Iterator<String> iterator = bookmarks.iterator();
+            preferences = TinyDB.getInstance(getContext());
+            ArrayList<String> bookmarks = preferences.getListString("bookmarkeddorms");
 
-            Log.i("Has Bookmarks", iterator.hasNext() + "");
+            Log.i("Has Bookmarks", !bookmarks.isEmpty() + "");
 
-            if (!iterator.hasNext()) {
-                bookmarkedDorms.clear();
-            }
+//            if (!iterator.hasNext()) {
+//                bookmarkedDorms.clear();
+//            }
 
             allDorms = FragmentAll.getDorms();
 
-            while (iterator.hasNext()) {
-                String dormName = iterator.next();
-
-
+            for(int i = 0; i < bookmarks.size(); i++) {
+                String dormName = bookmarks.get(i);
 
                 // TODO: We should find a faster way to do this because this will take O(n^m)
 
-                for (int i = 0; i < allDorms.size(); i++) {
-                    Dorm tempDorm = allDorms.get(i);
+                for (int j = 0; j < allDorms.size(); j++) {
+                    Dorm tempDorm = allDorms.get(j);
 
                     if (tempDorm.getName().equals(dormName) && !bookmarkedDorms.contains(tempDorm)) {
-                        bookmarkedDorms.add(allDorms.get(i));
+                        bookmarkedDorms.add(allDorms.get(j));
                     }
 
                     if (!bookmarks.contains(tempDorm.getName())) {

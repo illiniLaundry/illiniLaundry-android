@@ -4,9 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,7 +14,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,16 +25,13 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 import io.ericlee.illinilaundry.Adapters.DormAdapter;
-import io.ericlee.illinilaundry.Model.AppPreferences;
 import io.ericlee.illinilaundry.Model.Dorm;
 import io.ericlee.illinilaundry.Model.DormImages;
 import io.ericlee.illinilaundry.Model.Machine;
+import io.ericlee.illinilaundry.Model.TinyDB;
 import io.ericlee.illinilaundry.R;
-import io.ericlee.illinilaundry.Tabs.FragmentBookmarks;
 
 public class DormActivity extends AppCompatActivity {
     private Dorm dorm;
@@ -54,8 +48,8 @@ public class DormActivity extends AppCompatActivity {
     private TextView availableWash;
     private TextView availableDry;
 
-    private AppPreferences preferences;
-    private Set<String> bookmarks;
+    private TinyDB preferences;
+    private ArrayList<String> bookmarks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +69,7 @@ public class DormActivity extends AppCompatActivity {
 
         mDataset = new ArrayList<>();
 
-        preferences = AppPreferences.getInstance(getApplicationContext());
+        preferences = TinyDB.getInstance(getApplicationContext());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_dorm);
         setSupportActionBar(toolbar);
@@ -140,7 +134,7 @@ public class DormActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.bookmark, menu);
 
-        bookmarks = preferences.getBookmarkedDorms();
+        bookmarks = preferences.getListString("bookmarkeddorms");
 
         if(bookmarks.contains(dorm.getName())) {
             menu.getItem(0).setIcon(R.drawable.ic_star_yellow_24dp);
@@ -160,8 +154,8 @@ public class DormActivity extends AppCompatActivity {
                 return true;
             case R.id.action_bookmark:
                 // TODO: clean this code up...
-                Set<String> newBookmarks = new HashSet<>(bookmarks);
-                bookmarks = preferences.getBookmarkedDorms();
+                ArrayList<String> newBookmarks = new ArrayList<>(bookmarks);
+                bookmarks = preferences.getListString("bookmarkeddorms");
 
                 if(!bookmarks.contains(dorm.getName())) {
                     newBookmarks.add(dorm.getName());
@@ -180,7 +174,7 @@ public class DormActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
                 }
 
-                preferences.saveBookmarks(newBookmarks);
+                preferences.putListString("bookmarkeddorms", newBookmarks);
                 return true;
             default:
                 // Do nothing. This is just in case something bad happens.

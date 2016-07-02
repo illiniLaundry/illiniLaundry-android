@@ -1,32 +1,25 @@
 package io.ericlee.illinilaundry.Activities;
 
-import android.content.Context;
 import android.graphics.Color;
-import android.os.Build;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.WindowManager;
-import android.widget.LinearLayout;
 
 import io.ericlee.illinilaundry.Adapters.ViewPagerAdapter;
-import io.ericlee.illinilaundry.Model.AppPreferences;
+import io.ericlee.illinilaundry.Model.TinyDB;
 import io.ericlee.illinilaundry.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    private AppPreferences preferences;
+    private TinyDB preferences;
     private TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        preferences = AppPreferences.getInstance(this);
+        preferences = TinyDB.getInstance(this);
         setContentView(R.layout.activity_main);
 
         // Setup Toolbar
@@ -47,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager.setAdapter(adapter);
 
-        if(preferences.hasBookmarks()) {
+        if(preferences.getListString("bookmarks").isEmpty()) {
             TabLayout.Tab bookmarksTab = tabLayout.getTabAt(1);
             bookmarksTab.select();
             viewPager.setCurrentItem(1);
