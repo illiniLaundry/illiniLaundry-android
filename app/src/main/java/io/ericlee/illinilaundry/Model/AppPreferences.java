@@ -9,6 +9,8 @@ import java.util.Set;
 
 public class AppPreferences {
 
+    // TODO: Deprecated. Use TinyDB
+
     public static final String BOOKMARKED_DORMS = "bookmarks";
     public static final String HAS_BOOKMARKS = "hasbookmarks";
     private static final String APP_SHARED_PREFS = AppPreferences.class.getSimpleName();
