@@ -109,7 +109,7 @@ public class FragmentBookmarks extends Fragment {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                // Doesn't work for some reason. Maybe conflicting listeners?
+                // TODO: Doesn't work for some reason. Maybe conflicting listeners?
                 mAdapter.onItemDismiss(viewHolder.getAdapterPosition());
                 Log.i("item Dismiss", "CALL2");
             }
