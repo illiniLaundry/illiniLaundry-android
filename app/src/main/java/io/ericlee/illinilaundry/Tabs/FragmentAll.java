@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.jsoup.Jsoup;
@@ -122,6 +123,14 @@ public class FragmentAll extends Fragment {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             mAdapter.notifyDataSetChanged();
+
+            ImageView bgImage = (ImageView) getView().findViewById(R.id.backgroundIllini);
+
+            if(mDataset.isEmpty()) {
+                bgImage.setVisibility(View.VISIBLE);
+            } else {
+                bgImage.setVisibility(View.INVISIBLE);
+            }
 
             // Notify swipeRefreshLayout that the refresh has finished
             mSwipeRefreshLayout.setRefreshing(false);

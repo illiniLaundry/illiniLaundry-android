@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -157,8 +158,16 @@ public class FragmentBookmarks extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-
             mAdapter.notifyDataSetChanged();
+
+            ImageView bgImage = (ImageView) getView().findViewById(R.id.backgroundIllini);
+
+            if(bookmarkedDorms.isEmpty()) {
+                bgImage.setVisibility(View.VISIBLE);
+            } else {
+                bgImage.setVisibility(View.INVISIBLE);
+            }
+
             // Notify swipeRefreshLayout that the refresh has finished
             mSwipeRefreshLayout.post(new Runnable() {
                 @Override
