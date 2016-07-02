@@ -2,8 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_bookmark"
+        android:id="@+id/action_refresh"
         android:orderInCategory="100"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_refresh_white_24dp"
+        android:title="Refresh" />
+
+    <item
+        android:id="@+id/action_bookmark"
+        android:orderInCategory="50"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_collections_bookmark_white_24dp"
         android:title="Bookmark" />
