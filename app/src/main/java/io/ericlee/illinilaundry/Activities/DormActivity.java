@@ -82,17 +82,9 @@ public class DormActivity extends AppCompatActivity {
 
         // Check if the version of Android is Lollipop or higher
         if (Build.VERSION.SDK_INT >= 21) {
-
             // Set the status bar to dark-semi-transparentish
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-            // Set paddingTop of toolbar to height of status bar.
-            // Fixes statusbar covers toolbar issue
-            //mCollapsingToolbarLayout.setPadding(0, 0, 0, getStatusBarHeight());
-            //toolbar.setPadding(0, getStatusBarHeight(), 0, 0);
-            //ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
-            //params.setMargins(0, getStatusBarHeight(), 0, 0);
         }
 
         mCollapsingToolbarLayout.setTitleEnabled(true);
