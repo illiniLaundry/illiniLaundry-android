@@ -153,32 +153,36 @@ public class DormActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_bookmark) {
-            //TODO clean this code up...
-            Set<String> newBookmarks = new HashSet<>(bookmarks);
-            bookmarks = preferences.getBookmarkedDorms();
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+                mSwipeRefreshLayout.setRefreshing(true);
+                new SetData().execute();
+                return true;
+            case R.id.action_bookmark:
+                // TODO: clean this code up...
+                Set<String> newBookmarks = new HashSet<>(bookmarks);
+                bookmarks = preferences.getBookmarkedDorms();
 
-            if(!bookmarks.contains(dorm.getName())) {
-                newBookmarks.add(dorm.getName());
+                if(!bookmarks.contains(dorm.getName())) {
+                    newBookmarks.add(dorm.getName());
 
-                item.setIcon(R.drawable.ic_star_yellow_24dp);
+                    item.setIcon(R.drawable.ic_star_yellow_24dp);
 
-                Toast.makeText(this, dorm.getName() + " has been added to your bookmarks.",
-                        Toast.LENGTH_SHORT).show();
-            }
-            else {
-                newBookmarks.remove(dorm.getName());
+                    Toast.makeText(this, dorm.getName() + " has been added to your bookmarks.",
+                            Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    newBookmarks.remove(dorm.getName());
 
-                item.setIcon(R.drawable.ic_star_border_white_24dp);
+                    item.setIcon(R.drawable.ic_star_border_white_24dp);
 
-                Toast.makeText(this, dorm.getName() + " has been removed from your bookmarks.",
-                        Toast.LENGTH_SHORT).show();
-            }
+                    Toast.makeText(this, dorm.getName() + " has been removed from your bookmarks.",
+                            Toast.LENGTH_SHORT).show();
+                }
 
-            preferences.saveBookmarks(newBookmarks);
+                preferences.saveBookmarks(newBookmarks);
 
-            return true;
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
