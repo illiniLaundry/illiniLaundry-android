@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -51,6 +52,7 @@ public class FragmentBookmarks extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
+        preferences = AppPreferences.getInstance(getContext());
         firstTimeRun = true;
         bookmarkedDorms = new ArrayList<>();
     }
@@ -99,6 +101,7 @@ public class FragmentBookmarks extends Fragment {
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 // Swap positions
                 Collections.swap(bookmarkedDorms, viewHolder.getAdapterPosition(), target.getAdapterPosition());
+
                 // Notify the adapter
                 mAdapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
                 return true;
@@ -106,6 +109,7 @@ public class FragmentBookmarks extends Fragment {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                // Doesn't work for some reason. Maybe conflicting listeners?
                 mAdapter.onItemDismiss(viewHolder.getAdapterPosition());
                 Log.i("item Dismiss", "CALL2");
             }
@@ -166,10 +170,12 @@ public class FragmentBookmarks extends Fragment {
                 bookmarkedDorms.clear();
             }
 
+            allDorms = FragmentAll.getDorms();
+
             while (iterator.hasNext()) {
                 String dormName = iterator.next();
 
-                allDorms = FragmentAll.getDorms();
+
 
                 // TODO: We should find a faster way to do this because this will take O(n^m)
 
