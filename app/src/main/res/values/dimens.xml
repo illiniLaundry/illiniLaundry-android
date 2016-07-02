@@ -9,4 +9,6 @@
 
     <dimen name="toolbar_height">56dp</dimen>
     <dimen name="toolbar_tab_height">104dp</dimen>
+
+    <dimen name="item_offset">8dp</dimen>
 </resources>
