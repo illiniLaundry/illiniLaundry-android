@@ -1,7 +1,7 @@
 package io.ericlee.illinilaundry.Model;
 
 /*
- * Copyright 2014 KC Ochibili
+ * Copyright 2014 KC Ochibili Edited By dl-eric
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,9 +46,18 @@ public class TinyDB {
     private SharedPreferences preferences;
     private String DEFAULT_APP_IMAGEDATA_DIRECTORY;
     private String lastImagePath = "";
+    private static TinyDB instance;
 
-    public TinyDB(Context appContext) {
+    private TinyDB(Context appContext) {
         preferences = PreferenceManager.getDefaultSharedPreferences(appContext);
+    }
+
+    public static TinyDB getInstance(Context context) {
+        if(instance == null) {
+            instance = new TinyDB(context);
+        }
+
+        return instance;
     }
 
 
