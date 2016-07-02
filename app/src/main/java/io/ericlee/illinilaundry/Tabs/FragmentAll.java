@@ -27,12 +27,10 @@ import java.util.ArrayList;
 
 import io.ericlee.illinilaundry.Adapters.GridAdapter;
 import io.ericlee.illinilaundry.Model.Dorm;
+import io.ericlee.illinilaundry.Model.ItemOffsetDecoration;
 import io.ericlee.illinilaundry.R;
 
 public class FragmentAll extends Fragment {
-
-    //TODO: Get rid of Logs
-
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private static ArrayList<Dorm> mDataset;
@@ -41,9 +39,21 @@ public class FragmentAll extends Fragment {
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
-    public void onStart() {
-        mRecyclerView = (RecyclerView) getView().findViewById(R.id.recyclerView);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.swipeRefreshLayout);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        mDataset = new ArrayList<>();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_all, container, false);
+
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -63,25 +73,13 @@ public class FragmentAll extends Fragment {
         mRecyclerView.setLayoutManager(glm);
         mAdapter = new GridAdapter(mDataset);
 
+        // Add spacing between cards.
+        ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(getContext(), R.dimen.item_offset);
+        mRecyclerView.addItemDecoration(itemDecoration);
+
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setHasFixedSize(true);
-
-        super.onStart();
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-
-        mDataset = new ArrayList<>();
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_all, container, false);
+        return view;
     }
 
     @Override
