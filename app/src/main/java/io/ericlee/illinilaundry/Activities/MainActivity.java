@@ -31,8 +31,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Setup tabs
         tabLayout = (TabLayout) findViewById(R.id.main_tab_layout);
+        tabLayout.addTab(tabLayout.newTab().setText("Alarms"));
         tabLayout.addTab(tabLayout.newTab().setText("All Dorms"));
-        tabLayout.addTab(tabLayout.newTab().setText("Bookmarked"));
+        tabLayout.addTab(tabLayout.newTab().setText("My Dorms"));
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         final ViewPagerAdapter adapter = new ViewPagerAdapter
@@ -41,8 +42,12 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
 
         if(!preferences.getListString("bookmarkeddorms").isEmpty()) {
-            TabLayout.Tab bookmarksTab = tabLayout.getTabAt(1);
+            TabLayout.Tab bookmarksTab = tabLayout.getTabAt(2);
             bookmarksTab.select();
+            viewPager.setCurrentItem(2);
+        } else {
+            TabLayout.Tab allDormsTab = tabLayout.getTabAt(1);
+            allDormsTab.select();
             viewPager.setCurrentItem(1);
         }
 
