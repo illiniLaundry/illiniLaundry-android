@@ -7,50 +7,52 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
+        android:id="@+id/machineLayout"
         android:padding="10dp"
-        android:weightSum="19">
+        android:weightSum="19"
+        android:foreground="?android:attr/selectableItemBackground">
 
-    <TextView
-        android:id="@+id/textMachineNumber"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text="10W"
-        android:layout_weight="4"
-        android:textSize="30sp" />
+        <TextView
+            android:id="@+id/textMachineNumber"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="4"
+            android:gravity="center"
+            android:text="10W"
+            android:textSize="30sp" />
 
-    <TextView
-        android:id="@+id/textMachineType"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_weight="5"
-        android:text="Placeholderplaceholder placeholder" />
+        <TextView
+            android:id="@+id/textMachineType"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="5"
+            android:gravity="center"
+            android:text="Placeholderplaceholder placeholder" />
 
-    <TextView
-        android:id="@+id/textMachineStatus"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_weight="5"
-        android:text="New Text" />
+        <TextView
+            android:id="@+id/textMachineStatus"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="5"
+            android:gravity="center"
+            android:text="New Text" />
 
-    <TextView
-        android:id="@+id/textMachineTimeRemaining"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_weight="5"
-        android:text="New Text" />
+        <TextView
+            android:id="@+id/textMachineTimeRemaining"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="5"
+            android:gravity="center"
+            android:text="New Text" />
 
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/textColor"/>
+        android:background="@color/textColor" />
 </LinearLayout>

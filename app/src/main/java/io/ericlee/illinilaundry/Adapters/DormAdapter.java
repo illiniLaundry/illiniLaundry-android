@@ -1,12 +1,16 @@
 package io.ericlee.illinilaundry.Adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -20,12 +24,12 @@ import io.ericlee.illinilaundry.R;
 public class DormAdapter extends RecyclerView.Adapter<DormAdapter.ViewHolder> {
     private ArrayList<Machine> mDataset;
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView machineNumber;
         public TextView machineType;
         public TextView machineAvailable;
         public TextView machineTimeRemaining;
+        public LinearLayout layout;
 
         public ViewHolder(View v) {
             super(v);
@@ -33,6 +37,53 @@ public class DormAdapter extends RecyclerView.Adapter<DormAdapter.ViewHolder> {
             machineType = (TextView) v.findViewById(R.id.textMachineType);
             machineAvailable = (TextView) v.findViewById(R.id.textMachineStatus);
             machineTimeRemaining = (TextView) v.findViewById(R.id.textMachineTimeRemaining);
+            layout = (LinearLayout) v.findViewById(R.id.machineLayout);
+            layout.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Log.i("Click", "HIT!:" + machineNumber.getText());
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+            if(machineAvailable.getText().equals("Available")) {
+                builder.setTitle("Alarm")
+                        .setMessage("Do you want to create an alarm to let you know when this " +
+                                "machine is no longer available?");
+
+                // Add the buttons
+                builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User clicked OK button
+                    }
+                });
+                builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+            } else {
+                builder.setTitle("Alarm")
+                        .setMessage("The machine should be done in about " +
+                                machineTimeRemaining.getText() +
+                                ". Create an alarm for machine number "
+                                + machineNumber.getText() + "?");
+
+                // Add the buttons
+                builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User clicked OK button
+                    }
+                });
+                builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+            }
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
         }
     }
 
