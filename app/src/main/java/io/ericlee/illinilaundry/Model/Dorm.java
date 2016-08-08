@@ -12,6 +12,7 @@ public class Dorm implements Serializable {
     private int inWash;
     private int inDry;
     private String pageUrl;
+    private int imageResource;
 
     public Dorm(String name, String pageUrl, int wash, int dry, int inWash, int inDry) {
         this.name = name;
@@ -20,6 +21,7 @@ public class Dorm implements Serializable {
         this.inWash = inWash;
         this.inDry = inDry;
         this.pageUrl = pageUrl;
+        imageResource = DormImages.getInstance().getImages().get(name);
     }
 
     public String getName() {
@@ -69,4 +71,6 @@ public class Dorm implements Serializable {
     public void setPageUrl(String pageUrl) {
         this.pageUrl = pageUrl;
     }
+
+    public int getImageResource() { return imageResource; }
 }

@@ -69,14 +69,12 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
             }
         });
 
-        DormImages dormImages = DormImages.getInstance();
-
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.txtTitle.setText(dorm.getName());
         holder.txtWash.setText(dorm.getWash() + "");
         holder.txtDry.setText(dorm.getDry() + "");
-        holder.image.setImageResource(dormImages.getImages().get(dorm.getName()));
+        holder.image.setImageResource(dorm.getImageResource());
     }
 
     // Return the size of your dataset (invoked by the layout manager)
