@@ -55,7 +55,7 @@ public class DormActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         instance = this;
-        // TODO: overridePendingTransition(R.anim.slide_left, R.anim.slide_left_out);
+        overridePendingTransition(R.anim.slide_left, R.anim.slide_left_out);
         setContentView(R.layout.activity_dorm);
 
         availableWash = (TextView) findViewById(R.id.dormWasherAvailable);
