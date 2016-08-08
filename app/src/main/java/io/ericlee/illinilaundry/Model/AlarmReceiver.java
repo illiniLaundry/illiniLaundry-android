@@ -58,6 +58,8 @@ public class AlarmReceiver extends BroadcastReceiver {
             Intent intent = new Intent(context, AlarmReceiver.class);
             intent.putExtra("alarm", alarm);
             PendingIntent pi = PendingIntent.getBroadcast(context, alarmID, intent, 0);
+
+            // onReceive will be called every minute until canceled.
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 60, pi);
             Log.i("Alarms", "Sent to broadcast!");
 
