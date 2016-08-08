@@ -302,7 +302,7 @@ public class DormActivity extends AppCompatActivity {
                             temp.get(1),
                             temp.get(2),
                             temp.get(3),
-                            dorm.getName()));
+                            dorm));
                 }
             } else {
                 for (int i = 0; i < machineData.size(); i++) {
@@ -311,7 +311,7 @@ public class DormActivity extends AppCompatActivity {
                             temp.get(1),
                             temp.get(2),
                             temp.get(3),
-                            dorm.getName()));
+                            dorm));
                 }
             }
         }

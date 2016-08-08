@@ -25,7 +25,7 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/backgroundIllini"
+        android:id="@+id/backgroundIlliniBookmarks"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

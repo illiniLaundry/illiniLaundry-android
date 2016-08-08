@@ -16,7 +16,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import io.ericlee.illinilaundry.Model.Alarm;
 import io.ericlee.illinilaundry.Model.AlarmReceiver;
+import io.ericlee.illinilaundry.Model.Dorm;
 import io.ericlee.illinilaundry.Model.Machine;
 import io.ericlee.illinilaundry.Model.TinyDB;
 import io.ericlee.illinilaundry.R;
@@ -26,7 +28,8 @@ import io.ericlee.illinilaundry.R;
  */
 public class DormAdapter extends RecyclerView.Adapter<DormAdapter.ViewHolder> {
     private ArrayList<Machine> mDataset;
-    private String dormName;
+    private Dorm dorm;
+    private Machine machine;
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView machineNumber;
@@ -70,21 +73,51 @@ public class DormAdapter extends RecyclerView.Adapter<DormAdapter.ViewHolder> {
                 builder.setTitle("Alarm")
                         .setMessage("The machine should be done in about " +
                                 machineTimeRemaining.getText() +
-                                ". Create an alarm for machine number "
+                                ". Create an alarm for machine "
                                 + machineNumber.getText() + "?");
 
                 // Add the buttons
                 builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User clicked OK button
-                        int alarmID = (machineNumber.getText().toString() + dormName).hashCode();
+                        int alarmID = (dorm.getName() + machineNumber.getText().toString()).hashCode();
                         TinyDB preferences = TinyDB.getInstance(v.getContext());
-                        if (preferences.getListInt("alarmids").contains(alarmID)) {
-                            Toast.makeText(v.getContext(), "An alarm for this machine already exists!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            AlarmReceiver alarmReceiver = new AlarmReceiver();
-                            alarmReceiver.startAlarm(v.getContext(), machineNumber.getText().toString(), dormName);
-                            Log.i("Alarms", "Attempt to start alarm!");
+
+                        ArrayList<Object> temp = preferences.getListObject("alarms", Alarm.class);
+                        ArrayList<Alarm> alarms = new ArrayList<>();
+
+                        for(Object o : temp) {
+                            alarms.add((Alarm) o);
+                        }
+
+                        String str = machineTimeRemaining.getText().toString();
+                        // Attempt to extract digits
+                        str = str.replaceAll("\\D+", "");
+
+                        try {
+                            // Verify that this machine has a numerical time remaining.
+                            Integer.parseInt(str);
+
+                            Alarm alarm = new Alarm(machine, dorm);
+
+                            boolean found = false;
+
+                            for(Alarm a : alarms) {
+                                if(a.getHashcode() == alarm.getHashcode()) {
+                                    Toast.makeText(v.getContext(), "An alarm for this machine already exists!", Toast.LENGTH_SHORT).show();
+                                    found = true;
+                                }
+                            }
+
+                            if(!found) {
+                                AlarmReceiver alarmReceiver = new AlarmReceiver();
+                                alarmReceiver.startAlarm(v.getContext(), alarm);
+                                Log.i("Alarms", "Attempt to start alarm!");
+                            }
+                        } catch (NumberFormatException e) {
+                            e.printStackTrace();
+
+                            Toast.makeText(v.getContext(), "I'm sorry, Dave, I'm afraid I can't do that.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -134,7 +167,8 @@ public class DormAdapter extends RecyclerView.Adapter<DormAdapter.ViewHolder> {
         holder.machineNumber.setText(mDataset.get(position).getMachineNumber());
         holder.machineTimeRemaining.setText(mDataset.get(position).getMachineTimeRemaining());
 
-        dormName = mDataset.get(position).getMachineDorm();
+        dorm = mDataset.get(position).getDorm();
+        machine = mDataset.get(position);
     }
 
     @Override

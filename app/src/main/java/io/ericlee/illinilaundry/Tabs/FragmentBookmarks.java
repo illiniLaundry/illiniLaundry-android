@@ -39,6 +39,7 @@ public class FragmentBookmarks extends Fragment {
     private RecyclerView mRecyclerView;
     private BookmarkAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private ImageView bgImage;
 
     private ArrayList<Dorm> allDorms = FragmentAll.getDorms();
 
@@ -55,9 +56,24 @@ public class FragmentBookmarks extends Fragment {
     }
 
     @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (bookmarkedDorms.isEmpty()) {
+            // Delay to allow everything to settle before running SetData()
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    new SetData().execute();
+                }
+            }, 500);
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_bookmarks, container, false);
 
+        bgImage = (ImageView) view.findViewById(R.id.backgroundIlliniBookmarks);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.bookmarkSwipeRefresh);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.bookmarkRecyclerView);
@@ -81,16 +97,6 @@ public class FragmentBookmarks extends Fragment {
 
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setHasFixedSize(true);
-
-        if (bookmarkedDorms.isEmpty()) {
-            // Delay to allow everything to settle before running SetData()
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    new SetData().execute();
-                }
-            }, 500);
-        }
 
         // Extend the Callback class
         ItemTouchHelper.Callback callback = new ItemTouchHelper.Callback() {
@@ -198,8 +204,6 @@ public class FragmentBookmarks extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             mAdapter.notifyDataSetChanged();
-
-            ImageView bgImage = (ImageView) getView().findViewById(R.id.backgroundIllini);
 
             if (bookmarkedDorms.isEmpty()) {
                 bgImage.setVisibility(View.VISIBLE);

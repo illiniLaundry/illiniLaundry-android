@@ -1,27 +1,29 @@
 package io.ericlee.illinilaundry.Model;
 
+import java.io.Serializable;
+
 /**
  * Created by Eric on 6/9/2016.
  */
-public class Machine {
+public class Machine implements Serializable {
     private String machineNumber;
     private String machineType;
     private String machineStatus;
     private String machineTimeRemaining;
-    private String machineDorm;
+    private Dorm dorm;
 
     public Machine(String machineNumber, String machineType, String machineStatus,
-                   String machineTimeRemaining, String machineDorm) {
+                   String machineTimeRemaining, Dorm dorm) {
         this.machineNumber = machineNumber;
         this.machineType = machineType;
         this.machineStatus = machineStatus;
         this.machineTimeRemaining = machineTimeRemaining;
-        this.machineDorm = machineDorm;
+        this.dorm = dorm;
     }
 
     public String getMachineNumber() { return machineNumber; }
     public String getMachineType() { return machineType; }
     public String getMachineStatus() { return machineStatus; }
     public String getMachineTimeRemaining() { return machineTimeRemaining; }
-    public String getMachineDorm() { return machineDorm; }
+    public Dorm getDorm() { return dorm; }
 }
