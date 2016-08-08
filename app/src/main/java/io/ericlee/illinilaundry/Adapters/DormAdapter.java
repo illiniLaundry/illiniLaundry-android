@@ -12,10 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import io.ericlee.illinilaundry.Model.AlarmReceiver;
 import io.ericlee.illinilaundry.Model.Machine;
+import io.ericlee.illinilaundry.Model.TinyDB;
 import io.ericlee.illinilaundry.R;
 
 /**
@@ -23,6 +26,7 @@ import io.ericlee.illinilaundry.R;
  */
 public class DormAdapter extends RecyclerView.Adapter<DormAdapter.ViewHolder> {
     private ArrayList<Machine> mDataset;
+    private String dormName;
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView machineNumber;
@@ -42,11 +46,11 @@ public class DormAdapter extends RecyclerView.Adapter<DormAdapter.ViewHolder> {
         }
 
         @Override
-        public void onClick(View v) {
+        public void onClick(final View v) {
             Log.i("Click", "HIT!:" + machineNumber.getText());
 
             AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-            if(machineAvailable.getText().equals("Available")) {
+            if (machineAvailable.getText().equals("Available")) {
                 builder.setTitle("Alarm")
                         .setMessage("Do you want to create an alarm to let you know when this " +
                                 "machine is no longer available?");
@@ -73,6 +77,15 @@ public class DormAdapter extends RecyclerView.Adapter<DormAdapter.ViewHolder> {
                 builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User clicked OK button
+                        int alarmID = (machineNumber.getText().toString() + dormName).hashCode();
+                        TinyDB preferences = TinyDB.getInstance(v.getContext());
+                        if (preferences.getListInt("alarmids").contains(alarmID)) {
+                            Toast.makeText(v.getContext(), "An alarm for this machine already exists!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            AlarmReceiver alarmReceiver = new AlarmReceiver();
+                            alarmReceiver.startAlarm(v.getContext(), machineNumber.getText().toString(), dormName);
+                            Log.i("Alarms", "Attempt to start alarm!");
+                        }
                     }
                 });
                 builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -100,14 +113,14 @@ public class DormAdapter extends RecyclerView.Adapter<DormAdapter.ViewHolder> {
 
         Context context = holder.itemView.getContext();
 
-        if(mDataset.get(position).getMachineStatus().contains("In Use")) {
+        if (mDataset.get(position).getMachineStatus().contains("In Use")) {
             holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.softRed));
             machineNumber.setTextColor(ContextCompat.getColor(context, R.color.textColor));
             machineStatus.setTextColor(ContextCompat.getColor(context, R.color.textColor));
             machineTimeRemaining.setTextColor(ContextCompat.getColor(context, R.color.textColor));
             machineType.setTextColor(ContextCompat.getColor(context, R.color.textColor));
 
-        } else if(mDataset.get(position).getMachineStatus().equals("Available")) {
+        } else if (mDataset.get(position).getMachineStatus().equals("Available")) {
             //holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.softGreen));
             holder.itemView.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorPrimary));
             machineNumber.setTextColor(Color.WHITE);
@@ -120,6 +133,8 @@ public class DormAdapter extends RecyclerView.Adapter<DormAdapter.ViewHolder> {
         holder.machineType.setText(mDataset.get(position).getMachineType());
         holder.machineNumber.setText(mDataset.get(position).getMachineNumber());
         holder.machineTimeRemaining.setText(mDataset.get(position).getMachineTimeRemaining());
+
+        dormName = mDataset.get(position).getMachineDorm();
     }
 
     @Override

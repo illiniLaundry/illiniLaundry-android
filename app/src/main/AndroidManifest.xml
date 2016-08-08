@@ -3,6 +3,7 @@
     package="io.ericlee.illinilaundry">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name='android.permission.WAKE_LOCK'/>
 
     <application
         android:allowBackup="true"
@@ -25,7 +26,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.DormActivity"></activity>
+        <activity
+            android:name=".Activities.DormActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <receiver
+            android:name="io.ericlee.illinilaundry.Model.AlarmReceiver" />
     </application>
-
 </manifest>
