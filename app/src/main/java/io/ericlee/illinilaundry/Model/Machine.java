@@ -10,7 +10,8 @@ public class Machine {
     private String machineTimeRemaining;
     private String machineDorm;
 
-    public Machine(String machineNumber, String machineType, String machineStatus, String machineTimeRemaining, String machineDorm) {
+    public Machine(String machineNumber, String machineType, String machineStatus,
+                   String machineTimeRemaining, String machineDorm) {
         this.machineNumber = machineNumber;
         this.machineType = machineType;
         this.machineStatus = machineStatus;
