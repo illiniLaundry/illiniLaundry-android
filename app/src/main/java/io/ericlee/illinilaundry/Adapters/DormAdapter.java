@@ -80,7 +80,6 @@ public class DormAdapter extends RecyclerView.Adapter<DormAdapter.ViewHolder> {
                 builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User clicked OK button
-                        int alarmID = (dorm.getName() + machineNumber.getText().toString()).hashCode();
                         TinyDB preferences = TinyDB.getInstance(v.getContext());
 
                         ArrayList<Object> temp = preferences.getListObject("alarms", Alarm.class);
@@ -98,8 +97,13 @@ public class DormAdapter extends RecyclerView.Adapter<DormAdapter.ViewHolder> {
                             // Verify that this machine has a numerical time remaining.
                             Integer.parseInt(str);
 
-                            Alarm alarm = new Alarm(machine, dorm);
+                            Alarm alarm = new Alarm(new Machine(machineNumber.getText().toString(),
+                                    machineType.getText().toString(),
+                                    machineAvailable.getText().toString(),
+                                    machineTimeRemaining.getText().toString(), dorm));
 
+                            Log.i("Alarm Compare", alarm.getMachine().getMachineNumber());
+                            Log.i("Alarm Compare", machineNumber.getText().toString());
                             boolean found = false;
 
                             for(Alarm a : alarms) {
@@ -168,7 +172,6 @@ public class DormAdapter extends RecyclerView.Adapter<DormAdapter.ViewHolder> {
         holder.machineTimeRemaining.setText(mDataset.get(position).getMachineTimeRemaining());
 
         dorm = mDataset.get(position).getDorm();
-        machine = mDataset.get(position);
     }
 
     @Override

@@ -19,13 +19,13 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView image;
         private TextView alarmName;
-        private TextView alarmTimeRemaining;
+        //private TextView alarmTimeRemaining;
 
         public ViewHolder(View v) {
             super(v);
             image = (ImageView) v.findViewById(R.id.alarmImage);
             alarmName = (TextView) v.findViewById(R.id.alarmName);
-            alarmTimeRemaining = (TextView) v.findViewById(R.id.alarmTimeRemaining);
+            //alarmTimeRemaining = (TextView) v.findViewById(R.id.alarmTimeRemaining);
         }
     }
 
@@ -51,7 +51,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
         }
 
         holder.alarmName.setText(alarm.getAlarmName());
-        holder.alarmTimeRemaining.setText("Time Remaining: " + alarm.getMachine().getMachineTimeRemaining() + " min");
+        //holder.alarmTimeRemaining.setText("Time Remaining: " + alarm.getMachine().getMachineTimeRemaining());
     }
 
     public void onItemDismiss(int position) {

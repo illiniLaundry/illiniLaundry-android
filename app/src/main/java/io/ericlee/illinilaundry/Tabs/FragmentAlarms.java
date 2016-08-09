@@ -17,7 +17,10 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,16 +37,29 @@ import io.ericlee.illinilaundry.R;
  * Created by Eric on 7/6/2016.
  */
 public class FragmentAlarms extends Fragment {
+    private static FragmentAlarms instance;
     private TinyDB preferences;
     private ArrayList<Alarm> mAlarms;
     private RecyclerView mRecyclerView;
     private AlarmAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private TextView timeRemaining;
+
+    public static FragmentAlarms getInstance() { return instance; }
+
+    public void updateTimeRemaining(String timeRemaining) {
+        if(!(this.timeRemaining == null)) {
+            this.timeRemaining.setText(timeRemaining);
+        } else {
+            this.timeRemaining = (TextView) getView().findViewById(R.id.alarmTimeRemaining);
+        }
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        instance = this;
 
         preferences = TinyDB.getInstance(getContext());
         mAlarms = new ArrayList<>();
@@ -52,6 +68,7 @@ public class FragmentAlarms extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         if (mAlarms.isEmpty()) {
             // Delay to allow everything to settle before running SetData()
             new Handler().postDelayed(new Runnable() {
@@ -68,6 +85,7 @@ public class FragmentAlarms extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_alarms, container, false);
 
+        timeRemaining = (TextView) view.findViewById(R.id.alarmTimeRemaining);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.alarmSwipeRefreshLayout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.alarmsRecyclerView);
