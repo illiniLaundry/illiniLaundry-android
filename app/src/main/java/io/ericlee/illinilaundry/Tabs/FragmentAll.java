@@ -209,12 +209,24 @@ public class FragmentAll extends Fragment {
 
                     ArrayList<String> dormData = laundryData.get(i);
                     Log.i("dormData", dormData.toString());
-                    mDataset.add(new Dorm(dormData.get(0),
-                            dormData.get(1),
-                            Integer.parseInt(dormData.get(2)),
-                            Integer.parseInt(dormData.get(3)),
-                            Integer.parseInt(dormData.get(4)),
-                            Integer.parseInt(dormData.get(5))));
+
+                    try {
+                        mDataset.add(new Dorm(dormData.get(0),
+                                dormData.get(1),
+                                Integer.parseInt(dormData.get(2)),
+                                Integer.parseInt(dormData.get(3)),
+                                Integer.parseInt(dormData.get(4)),
+                                Integer.parseInt(dormData.get(5))));
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+
+                        mDataset.add(new Dorm(dormData.get(0),
+                                dormData.get(1),
+                                -1,
+                                -1,
+                                -1,
+                                -1));
+                    }
                 }
             } else {
                 for (int i = 0; i < laundryData.size(); i++) {

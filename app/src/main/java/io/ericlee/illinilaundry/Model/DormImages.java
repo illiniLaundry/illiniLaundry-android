@@ -45,6 +45,7 @@ public class DormImages {
         images.put("Snyder", R.drawable.snyder);
         images.put("TVD: Taft", R.drawable.tvd);
         images.put("TVD: Van Doren", R.drawable.tvd);
+        images.put("Wassaja Room 1109", R.drawable.wassaja);
         images.put("Weston", R.drawable.weston);
     }
 
