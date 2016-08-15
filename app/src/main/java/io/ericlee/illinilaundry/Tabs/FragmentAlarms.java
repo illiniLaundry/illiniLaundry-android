@@ -37,6 +37,7 @@ import io.ericlee.illinilaundry.R;
  * Created by Eric on 7/6/2016.
  */
 public class FragmentAlarms extends Fragment {
+    //TODO: MEMORY LEAK
     private static FragmentAlarms instance;
     private TinyDB preferences;
     private ArrayList<Alarm> mAlarms;
