@@ -47,14 +47,6 @@ public class FragmentAlarms extends Fragment {
 
     public static FragmentAlarms getInstance() { return instance; }
 
-    public void updateTimeRemaining(String timeRemaining) {
-        if(!(this.timeRemaining == null)) {
-            this.timeRemaining.setText(timeRemaining);
-        } else {
-            this.timeRemaining = (TextView) getView().findViewById(R.id.alarmTimeRemaining);
-        }
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +77,6 @@ public class FragmentAlarms extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_alarms, container, false);
 
-        timeRemaining = (TextView) view.findViewById(R.id.alarmTimeRemaining);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.alarmSwipeRefreshLayout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.alarmsRecyclerView);
