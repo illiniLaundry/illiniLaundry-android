@@ -1,5 +1,6 @@
 package io.ericlee.illinilaundry.Tabs;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,6 +31,7 @@ import io.ericlee.illinilaundry.Adapters.BookmarkAdapter;
 import io.ericlee.illinilaundry.Model.Alarm;
 import io.ericlee.illinilaundry.Model.Dorm;
 import io.ericlee.illinilaundry.Model.ItemOffsetDecoration;
+import io.ericlee.illinilaundry.Model.MachineParser;
 import io.ericlee.illinilaundry.Model.TinyDB;
 import io.ericlee.illinilaundry.R;
 
@@ -37,22 +39,16 @@ import io.ericlee.illinilaundry.R;
  * Created by Eric on 7/6/2016.
  */
 public class FragmentAlarms extends Fragment {
-    //TODO: MEMORY LEAK
-    private static FragmentAlarms instance;
     private TinyDB preferences;
     private ArrayList<Alarm> mAlarms;
     private RecyclerView mRecyclerView;
     private AlarmAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private TextView timeRemaining;
-
-    public static FragmentAlarms getInstance() { return instance; }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        instance = this;
 
         preferences = TinyDB.getInstance(getContext());
         mAlarms = new ArrayList<>();
@@ -67,7 +63,7 @@ public class FragmentAlarms extends Fragment {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    new FragmentAlarms.SetData().execute();
+                    parse();
                 }
             }, 500);
         }
@@ -87,7 +83,10 @@ public class FragmentAlarms extends Fragment {
             @Override
             public void onRefresh() {
                 mSwipeRefreshLayout.setRefreshing(true);
-                new FragmentAlarms.SetData().execute();
+
+                parse();
+
+                mSwipeRefreshLayout.setRefreshing(false);
             }
         });
 
@@ -146,53 +145,33 @@ public class FragmentAlarms extends Fragment {
         inflater.inflate(R.menu.refresh, menu);
     }
 
-    public class SetData extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            Log.i("AlarmSetData", "RUN!");
-            mSwipeRefreshLayout.post(new Runnable() {
-                @Override
-                public void run() {
-                    mSwipeRefreshLayout.setRefreshing(true);
-                }
-            });
+    private void parse() {
+        preferences = TinyDB.getInstance(getContext());
+
+        ArrayList<Object> temp = preferences.getListObject("alarms", Alarm.class);
+        mAlarms.clear();
+        for(Object o: temp) {
+            mAlarms.add((Alarm)o);
+        }
+        for(int i = 0; i < mAlarms.size(); i++) {
+            new MachineParser(mAlarms.get(i).getDorm(), mAlarms.get(i).getMachine(), mAdapter).execute();
         }
 
-        @Override
-        protected Void doInBackground(Void... params) {
-            preferences = TinyDB.getInstance(getContext());
+        ImageView bgImage = (ImageView) getView().findViewById(R.id.backgroundIlliniAlarms);
 
-            ArrayList<Object> temp = preferences.getListObject("alarms", Alarm.class);
-            mAlarms.clear();
+        if (mAlarms.isEmpty()) {
+            bgImage.setVisibility(View.VISIBLE);
+        } else {
+            bgImage.setVisibility(View.INVISIBLE);
+        }
 
-            for(Object o : temp) {
-                mAlarms.add((Alarm)o);
+        temp.clear();
+        for(Alarm a: mAlarms) {
+            if(!a.getMachine().getMachineStatus().contains("Available")) {
+                temp.add(a);
             }
-
-            return null;
         }
 
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            mAdapter.notifyDataSetChanged();
-
-            ImageView bgImage = (ImageView) getView().findViewById(R.id.backgroundIlliniAlarms);
-
-            if (mAlarms.isEmpty()) {
-                bgImage.setVisibility(View.VISIBLE);
-            } else {
-                bgImage.setVisibility(View.INVISIBLE);
-            }
-
-            // Notify swipeRefreshLayout that the refresh has finished
-            mSwipeRefreshLayout.post(new Runnable() {
-                @Override
-                public void run() {
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
-            });
-        }
+        preferences.putListObject("alarms", temp);
     }
 }

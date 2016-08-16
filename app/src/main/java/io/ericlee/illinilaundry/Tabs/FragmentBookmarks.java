@@ -25,6 +25,7 @@ import java.util.Collections;
 import io.ericlee.illinilaundry.Adapters.BookmarkAdapter;
 import io.ericlee.illinilaundry.Model.Dorm;
 import io.ericlee.illinilaundry.Model.ItemOffsetDecoration;
+import io.ericlee.illinilaundry.Model.MainParser;
 import io.ericlee.illinilaundry.Model.TinyDB;
 import io.ericlee.illinilaundry.R;
 
@@ -41,7 +42,7 @@ public class FragmentBookmarks extends Fragment {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private ImageView bgImage;
 
-    private ArrayList<Dorm> allDorms = FragmentAll.getDorms();
+    private ArrayList<Dorm> allDorms;
 
     private boolean firstTimeRun;
 
@@ -49,6 +50,9 @@ public class FragmentBookmarks extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        //TODO: GETT RID OF THIS
+        allDorms = MainParser.getInstance().getDorms();
 
         preferences = TinyDB.getInstance(getContext());
         firstTimeRun = true;
@@ -177,7 +181,7 @@ public class FragmentBookmarks extends Fragment {
                 bookmarkedDorms.clear();
             }
 
-            allDorms = FragmentAll.getDorms();
+            MainParser.getInstance().getDorms();
 
             for(int i = 0; i < bookmarks.size(); i++) {
                 String dormName = bookmarks.get(i);

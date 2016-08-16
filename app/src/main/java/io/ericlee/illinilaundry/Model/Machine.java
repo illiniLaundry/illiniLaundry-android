@@ -26,4 +26,6 @@ public class Machine implements Serializable {
     public String getMachineStatus() { return machineStatus; }
     public String getMachineTimeRemaining() { return machineTimeRemaining; }
     public Dorm getDorm() { return dorm; }
+    public void setMachineStatus(String status) { machineStatus = status; }
+    public void setMachineTimeRemaining(String timeRemaining) { machineTimeRemaining = timeRemaining; }
 }

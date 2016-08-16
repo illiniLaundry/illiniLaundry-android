@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import io.ericlee.illinilaundry.R;
-import io.ericlee.illinilaundry.Tabs.FragmentAlarms;
 
 public class AlarmReceiver extends BroadcastReceiver {
     private TinyDB preferences;
@@ -41,37 +40,39 @@ public class AlarmReceiver extends BroadcastReceiver {
         Bundle bundle = intent.getExtras();
         Alarm alarm = (Alarm) bundle.getSerializable("alarm");
 
-        try {
-            Document illini = Jsoup.connect(alarm.getDorm().getPageUrl()).get();
+        if(!alarm.getMachine().getMachineStatus().contains("Available")) {
+            try {
+                Document illini = Jsoup.connect(alarm.getDorm().getPageUrl()).get();
 
-            // Parse general information
-            Element table = illini.select("tbody").last();
-            Elements rows = table.select("tr");
+                // Parse general information
+                Element table = illini.select("tbody").last();
+                Elements rows = table.select("tr");
 
-            //TODO: case where the machine number is e.g L3
-            int indexForMachineNumber = Integer.parseInt(alarm.getMachine().getMachineNumber());
-            // check for announcement
-            Element firstRow = rows.get(0);
-            Elements firstRowCols = firstRow.select("td");
+                //TODO: case where the machine number is e.g L3
+                int indexForMachineNumber = Integer.parseInt(alarm.getMachine().getMachineNumber());
+                // check for announcement
+                Element firstRow = rows.get(0);
+                Elements firstRowCols = firstRow.select("td");
 
-            if (firstRowCols.size() == 3) {
-                indexForMachineNumber++;
+                if (firstRowCols.size() == 3) {
+                    indexForMachineNumber++;
+                }
+                Log.i("Index for machine num", indexForMachineNumber + "");
+                Element row = rows.get(indexForMachineNumber);
+                Elements cols = row.select("td");
+
+                String updatedAvailability = cols.get(4).text();
+                Log.i("Updated Availability", updatedAvailability);
+
+                if (updatedAvailability.contains("Available")) {
+                    pushNotification(context, alarm);
+                } else {
+                    //TODO: Stretch goal: updateView(cols.get(5).text());
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            Log.i("Index for machine num", indexForMachineNumber + "");
-            Element row = rows.get(indexForMachineNumber);
-            Elements cols = row.select("td");
-
-            String updatedAvailability = cols.get(4).text();
-            Log.i("Updated Availability", updatedAvailability);
-
-            if(updatedAvailability.contains("Available")) {
-                pushNotification(context, alarm);
-            } else {
-                //TODO: Stretch goal: updateView(cols.get(5).text());
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
         wl.release();

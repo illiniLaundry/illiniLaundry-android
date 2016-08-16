@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import io.ericlee.illinilaundry.Model.Alarm;
+import io.ericlee.illinilaundry.Model.MachineParser;
 import io.ericlee.illinilaundry.R;
 
 public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> {
@@ -19,13 +20,13 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView image;
         private TextView alarmName;
-        //private TextView alarmTimeRemaining;
+        private TextView alarmTimeRemaining;
 
         public ViewHolder(View v) {
             super(v);
             image = (ImageView) v.findViewById(R.id.alarmImage);
             alarmName = (TextView) v.findViewById(R.id.alarmName);
-            //alarmTimeRemaining = (TextView) v.findViewById(R.id.alarmTimeRemaining);
+            alarmTimeRemaining = (TextView) v.findViewById(R.id.alarmTimeRemaining);
         }
     }
 
@@ -44,6 +45,14 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Alarm alarm = mDataset.get(position);
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MachineParser machineParser = new MachineParser(alarm.getDorm(), alarm.getMachine());
+                machineParser.update((TextView)v.findViewById(R.id.alarmTimeRemaining));
+            }
+        });
+
         if(alarm.getMachine().getMachineType().contains("Washer")) {
             holder.image.setImageResource(R.drawable.bigwasher);
         } else {
@@ -51,7 +60,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
         }
 
         holder.alarmName.setText(alarm.getAlarmName());
-        //holder.alarmTimeRemaining.setText("Time Remaining: " + alarm.getMachine().getMachineTimeRemaining());
+        holder.alarmTimeRemaining.setText(alarm.getMachine().getMachineTimeRemaining());
     }
 
     public void onItemDismiss(int position) {
