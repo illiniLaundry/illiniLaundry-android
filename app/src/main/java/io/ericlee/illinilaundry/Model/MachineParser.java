@@ -1,5 +1,6 @@
 package io.ericlee.illinilaundry.Model;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.TextViewCompat;
@@ -14,35 +15,30 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import io.ericlee.illinilaundry.Adapters.AlarmAdapter;
+import io.ericlee.illinilaundry.R;
 
 /**
  * Created by Eric on 8/15/2016.
  */
 
 public class MachineParser extends AsyncTask<Void, Void, Boolean> {
-    private Dorm mDorm;
-    private Machine machine;
     private String timeRemaining;
-    private TextView tvTimeRemaining;
+    private AlarmAdapter.ViewHolder mHolder;
     private String updatedAvailability;
     private AlarmAdapter mAdapter;
+    private ArrayList<Alarm> mDataset;
+    private Alarm mAlarm;
+    private Context mContext;
 
-    public MachineParser(Dorm dorm, Machine machine) {
-        mDorm = dorm;
-        this.machine = machine;
-    }
-
-    public MachineParser(Dorm dorm, Machine machine, AlarmAdapter adapter) {
-        mDorm = dorm;
-        this.machine = machine;
+    public MachineParser(Alarm alarm, AlarmAdapter adapter, ArrayList<Alarm> mDataset, AlarmAdapter.ViewHolder holder, Context context) {
+        mAlarm = alarm;
         mAdapter = adapter;
-    }
-
-    public void update(TextView timeRemaining) {
-        tvTimeRemaining = timeRemaining;
-        execute();
+        this.mDataset = mDataset;
+        mHolder = holder;
+        mContext = context;
     }
 
     @Override
@@ -53,7 +49,7 @@ public class MachineParser extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected Boolean doInBackground(Void... params) {
         try {
-            Document illini = Jsoup.connect(mDorm.getPageUrl()).get();
+            Document illini = Jsoup.connect(mAlarm.getDorm().getPageUrl()).get();
 
             // Parse general information
             Element table = illini.select("tbody").last();
@@ -61,7 +57,7 @@ public class MachineParser extends AsyncTask<Void, Void, Boolean> {
 
             String machineNumber;
             try {
-                machineNumber = machine.getMachineNumber().replaceAll("\\D+", "");
+                machineNumber = mAlarm.getMachine().getMachineNumber().replaceAll("\\D+", "");
             } catch (NumberFormatException e) {
                 e.printStackTrace();
                 return false;
@@ -83,9 +79,21 @@ public class MachineParser extends AsyncTask<Void, Void, Boolean> {
             updatedAvailability = cols.get(4).text();
             Log.i("Updated Availability", updatedAvailability);
             timeRemaining = cols.get(5).text();
-            machine.setMachineStatus(updatedAvailability);
-            machine.setMachineTimeRemaining(timeRemaining);
+            mAlarm.getMachine().setMachineStatus(updatedAvailability);
+            mAlarm.getMachine().setMachineTimeRemaining(timeRemaining);
 
+            if(updatedAvailability.contains("Available")) {
+                mDataset.remove(mAlarm);
+            }
+
+            ArrayList<Object> newAlarmsAsObjects = new ArrayList<>(mDataset.size());
+
+            for(Alarm a : mDataset) {
+                newAlarmsAsObjects.add(a);
+            }
+
+            TinyDB preferences = TinyDB.getInstance(mContext);
+            preferences.putListObject("alarms", newAlarmsAsObjects);
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -105,12 +113,11 @@ public class MachineParser extends AsyncTask<Void, Void, Boolean> {
 
         try {
             if (!result) {
-                Toast.makeText(tvTimeRemaining.getContext(),
+                Toast.makeText(mHolder.itemView.getContext(),
                         "I'm sorry, Dave, I'm afraid I can't do that.", Toast.LENGTH_SHORT).show();
-            } else if (updatedAvailability.contains("Available")) {
-                //TODO: Handle removing of the alarm
             } else {
-                tvTimeRemaining.setText(timeRemaining);
+                TextView tv = (TextView) mHolder.itemView.findViewById(R.id.textMachineTimeRemaining);
+                tv.setText(timeRemaining);
             }
         } catch (NullPointerException e) {
             // All good

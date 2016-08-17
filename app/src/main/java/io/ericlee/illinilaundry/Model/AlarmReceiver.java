@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
@@ -26,7 +27,6 @@ import io.ericlee.illinilaundry.R;
 
 public class AlarmReceiver extends BroadcastReceiver {
     private TinyDB preferences;
-    private ArrayList<Alarm> alarms;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -40,40 +40,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         Bundle bundle = intent.getExtras();
         Alarm alarm = (Alarm) bundle.getSerializable("alarm");
 
-        if(!alarm.getMachine().getMachineStatus().contains("Available")) {
-            try {
-                Document illini = Jsoup.connect(alarm.getDorm().getPageUrl()).get();
-
-                // Parse general information
-                Element table = illini.select("tbody").last();
-                Elements rows = table.select("tr");
-
-                //TODO: case where the machine number is e.g L3
-                int indexForMachineNumber = Integer.parseInt(alarm.getMachine().getMachineNumber());
-                // check for announcement
-                Element firstRow = rows.get(0);
-                Elements firstRowCols = firstRow.select("td");
-
-                if (firstRowCols.size() == 3) {
-                    indexForMachineNumber++;
-                }
-                Log.i("Index for machine num", indexForMachineNumber + "");
-                Element row = rows.get(indexForMachineNumber);
-                Elements cols = row.select("td");
-
-                String updatedAvailability = cols.get(4).text();
-                Log.i("Updated Availability", updatedAvailability);
-
-                if (updatedAvailability.contains("Available")) {
-                    pushNotification(context, alarm);
-                } else {
-                    //TODO: Stretch goal: updateView(cols.get(5).text());
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        new RefreshData(bundle, alarm).execute();
 
         wl.release();
     }
@@ -81,7 +48,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void startAlarm(Context context, Alarm alarm) {
         preferences = TinyDB.getInstance(context);
         ArrayList<Object> temp = preferences.getListObject("alarms", Alarm.class);
-        alarms = new ArrayList<>();
+        ArrayList<Alarm> alarms = new ArrayList<>();
 
         for (Object o : temp) {
             alarms.add((Alarm) o);
@@ -153,8 +120,62 @@ public class AlarmReceiver extends BroadcastReceiver {
         cancelAlarm(context, alarm);
     }
 
-    //TODO: Stretch goal: update view to reflect updated time remaining
-//    private void updateView(String timeRemaining) {
-//        FragmentAlarms.getInstance().updateTimeRemaining(timeRemaining);
-//    }
+    public class RefreshData extends AsyncTask<Void, Void, Void> {
+        private Bundle bundle;
+        private Alarm alarm;
+
+        public RefreshData(Bundle bundle, Alarm alarm) {
+            this.bundle = bundle;
+            this.alarm = alarm;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            if (!alarm.getMachine().getMachineStatus().contains("Available")) {
+                try {
+                    Document illini = Jsoup.connect(alarm.getDorm().getPageUrl()).get();
+
+                    // Parse general information
+                    Element table = illini.select("tbody").last();
+                    Elements rows = table.select("tr");
+
+                    //TODO: case where the machine number is e.g L3
+                    try {
+                        int indexForMachineNumber = Integer.parseInt(alarm.getMachine().getMachineNumber());
+
+                        // check for announcement
+                        Element firstRow = rows.get(0);
+                        Elements firstRowCols = firstRow.select("td");
+
+                        if (firstRowCols.size() == 3) {
+                            indexForMachineNumber++;
+                        }
+                        Log.i("Index for machine num", indexForMachineNumber + "");
+                        Element row = rows.get(indexForMachineNumber);
+                        Elements cols = row.select("td");
+
+                        String updatedAvailability = cols.get(4).text();
+                        Log.i("Updated Availability", updatedAvailability);
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                        // Remove faulty machine that gave us trouble
+                        ArrayList<Object> temp = preferences.getListObject("alarms", Alarm.class);
+                        ArrayList<Object> newAlarmsAsObjects = new ArrayList<>(temp.size() - 1);
+
+                        for (Object o : temp) {
+                            Alarm a = (Alarm) o;
+                            if (a.getHashcode() != alarm.getHashcode()) {
+                                newAlarmsAsObjects.add(o);
+                            }
+                        }
+
+                        preferences.putListObject("alarms", newAlarmsAsObjects);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+    }
 }

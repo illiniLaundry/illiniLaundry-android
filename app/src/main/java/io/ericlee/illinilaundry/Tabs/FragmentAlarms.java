@@ -52,21 +52,17 @@ public class FragmentAlarms extends Fragment {
 
         preferences = TinyDB.getInstance(getContext());
         mAlarms = new ArrayList<>();
+
+        ArrayList<Object> alarmsAsObjects = preferences.getListObject("alarms", Alarm.class);
+
+        for (Object o : alarmsAsObjects) {
+            mAlarms.add((Alarm) o);
+        }
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        if (mAlarms.isEmpty()) {
-            // Delay to allow everything to settle before running SetData()
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    parse();
-                }
-            }, 500);
-        }
     }
 
     @Nullable
@@ -84,7 +80,7 @@ public class FragmentAlarms extends Fragment {
             public void onRefresh() {
                 mSwipeRefreshLayout.setRefreshing(true);
 
-                parse();
+                parse((ImageView) getView().findViewById(R.id.backgroundIlliniAlarms));
 
                 mSwipeRefreshLayout.setRefreshing(false);
             }
@@ -137,6 +133,7 @@ public class FragmentAlarms extends Fragment {
         ItemTouchHelper ith = new ItemTouchHelper(callback);
         ith.attachToRecyclerView(mRecyclerView);
 
+        parse((ImageView) view.findViewById(R.id.backgroundIlliniAlarms));
         return view;
     }
 
@@ -145,19 +142,13 @@ public class FragmentAlarms extends Fragment {
         inflater.inflate(R.menu.refresh, menu);
     }
 
-    private void parse() {
+    private void parse(ImageView bgImage) {
         preferences = TinyDB.getInstance(getContext());
-
         ArrayList<Object> temp = preferences.getListObject("alarms", Alarm.class);
         mAlarms.clear();
-        for(Object o: temp) {
-            mAlarms.add((Alarm)o);
+        for (Object o : temp) {
+            mAlarms.add((Alarm) o);
         }
-        for(int i = 0; i < mAlarms.size(); i++) {
-            new MachineParser(mAlarms.get(i).getDorm(), mAlarms.get(i).getMachine(), mAdapter).execute();
-        }
-
-        ImageView bgImage = (ImageView) getView().findViewById(R.id.backgroundIlliniAlarms);
 
         if (mAlarms.isEmpty()) {
             bgImage.setVisibility(View.VISIBLE);
@@ -166,12 +157,13 @@ public class FragmentAlarms extends Fragment {
         }
 
         temp.clear();
-        for(Alarm a: mAlarms) {
-            if(!a.getMachine().getMachineStatus().contains("Available")) {
+        for (Alarm a : mAlarms) {
+            if (!a.getMachine().getMachineStatus().contains("Available")) {
                 temp.add(a);
             }
         }
 
         preferences.putListObject("alarms", temp);
+        mAdapter.notifyDataSetChanged();
     }
 }

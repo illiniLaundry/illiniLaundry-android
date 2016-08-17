@@ -1,5 +1,6 @@
 package io.ericlee.illinilaundry.Adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,8 @@ import io.ericlee.illinilaundry.R;
 
 public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> {
     private ArrayList<Alarm> mDataset;
+    private AlarmAdapter alarmAdapter = this;
+    private Context context;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView image;
@@ -37,19 +40,19 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_alarms, parent, false);
-
+        context = parent.getContext();
         return new AlarmAdapter.ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         final Alarm alarm = mDataset.get(position);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MachineParser machineParser = new MachineParser(alarm.getDorm(), alarm.getMachine());
-                machineParser.update((TextView)v.findViewById(R.id.alarmTimeRemaining));
+                MachineParser machineParser = new MachineParser(alarm, alarmAdapter, mDataset, holder, context);
+                machineParser.execute();
             }
         });
 
