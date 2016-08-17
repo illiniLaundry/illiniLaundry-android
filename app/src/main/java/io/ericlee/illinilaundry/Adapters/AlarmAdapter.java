@@ -11,18 +11,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Objects;
 
 import io.ericlee.illinilaundry.Model.Alarm;
-import io.ericlee.illinilaundry.Model.MachineParser;
 import io.ericlee.illinilaundry.Model.TinyDB;
 import io.ericlee.illinilaundry.R;
 
 public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> {
     private ArrayList<Alarm> mDataset;
-    private AlarmAdapter alarmAdapter = this;
     private Context context;
 
     public class ViewHolder extends RecyclerView.ViewHolder {

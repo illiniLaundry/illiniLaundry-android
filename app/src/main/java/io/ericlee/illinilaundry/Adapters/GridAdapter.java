@@ -15,9 +15,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import io.ericlee.illinilaundry.Activities.DormActivity;
-import io.ericlee.illinilaundry.Activities.MainActivity;
 import io.ericlee.illinilaundry.Model.Dorm;
-import io.ericlee.illinilaundry.Model.DormImages;
 import io.ericlee.illinilaundry.R;
 
 public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {

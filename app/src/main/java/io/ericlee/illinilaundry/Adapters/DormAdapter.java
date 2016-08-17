@@ -29,7 +29,6 @@ import io.ericlee.illinilaundry.R;
 public class DormAdapter extends RecyclerView.Adapter<DormAdapter.ViewHolder> {
     private ArrayList<Machine> mDataset;
     private Dorm dorm;
-    private Machine machine;
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView machineNumber;
