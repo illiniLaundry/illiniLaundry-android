@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -78,11 +79,8 @@ public class FragmentAlarms extends Fragment {
 
             @Override
             public void onRefresh() {
-                mSwipeRefreshLayout.setRefreshing(true);
-
+                Log.i("Refresh Alarms", "Hit!");
                 parse((ImageView) getView().findViewById(R.id.backgroundIlliniAlarms));
-
-                mSwipeRefreshLayout.setRefreshing(false);
             }
         });
 
@@ -142,6 +140,18 @@ public class FragmentAlarms extends Fragment {
         inflater.inflate(R.menu.refresh, menu);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+                parse((ImageView) getView().findViewById(R.id.backgroundIlliniAlarms));
+                Log.i("Refresh Button", "HIT!");
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     private void parse(ImageView bgImage) {
         preferences = TinyDB.getInstance(getContext());
         ArrayList<Object> temp = preferences.getListObject("alarms", Alarm.class);
@@ -156,14 +166,8 @@ public class FragmentAlarms extends Fragment {
             bgImage.setVisibility(View.INVISIBLE);
         }
 
-        temp.clear();
-        for (Alarm a : mAlarms) {
-            if (!a.getMachine().getMachineStatus().contains("Available")) {
-                temp.add(a);
-            }
-        }
-
-        preferences.putListObject("alarms", temp);
-        mAdapter.notifyDataSetChanged();
+        MachineParser parser = new MachineParser(mAdapter, mAlarms, getContext());
+        parser.setRefreshLayout(mSwipeRefreshLayout);
+        parser.execute();
     }
 }

@@ -54,21 +54,21 @@ public class DormAdapter extends RecyclerView.Adapter<DormAdapter.ViewHolder> {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
             if (machineAvailable.getText().equals("Available")) {
-                builder.setTitle("Alarm")
-                        .setMessage("Do you want to create an alarm to let you know when this " +
-                                "machine is no longer available?");
-
-                // Add the buttons
-                builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // User clicked OK button
-                    }
-                });
-                builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // User cancelled the dialog
-                    }
-                });
+//                builder.setTitle("Alarm")
+//                        .setMessage("Do you want to create an alarm to let you know when this " +
+//                                "machine is no longer available?");
+//
+//                // Add the buttons
+//                builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        // User clicked OK button
+//                    }
+//                });
+//                builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        // User cancelled the dialog
+//                    }
+//                });
             } else {
                 builder.setTitle("Alarm")
                         .setMessage("The machine should be done in about " +
@@ -130,10 +130,15 @@ public class DormAdapter extends RecyclerView.Adapter<DormAdapter.ViewHolder> {
                         // User cancelled the dialog
                     }
                 });
+
+                // TODO: Temporaryily have this bit here since we don't have the other option
+                // TODO: of clicking Available machines
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
 
-            AlertDialog dialog = builder.create();
-            dialog.show();
+//            AlertDialog dialog = builder.create();
+//            dialog.show();
         }
     }
 

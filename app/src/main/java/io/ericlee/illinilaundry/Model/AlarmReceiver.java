@@ -40,7 +40,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         Bundle bundle = intent.getExtras();
         Alarm alarm = (Alarm) bundle.getSerializable("alarm");
 
-        new RefreshData(bundle, alarm).execute();
+        new RefreshData(bundle, alarm, context).execute();
 
         wl.release();
     }
@@ -123,10 +123,12 @@ public class AlarmReceiver extends BroadcastReceiver {
     public class RefreshData extends AsyncTask<Void, Void, Void> {
         private Bundle bundle;
         private Alarm alarm;
+        private Context context;
 
-        public RefreshData(Bundle bundle, Alarm alarm) {
+        public RefreshData(Bundle bundle, Alarm alarm, Context context) {
             this.bundle = bundle;
             this.alarm = alarm;
+            this.context = context;
         }
 
         @Override
@@ -156,6 +158,11 @@ public class AlarmReceiver extends BroadcastReceiver {
 
                         String updatedAvailability = cols.get(4).text();
                         Log.i("Updated Availability", updatedAvailability);
+
+                        if(updatedAvailability.contains("Available")) {
+                            pushNotification(context, alarm);
+                        }
+
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                         // Remove faulty machine that gave us trouble
