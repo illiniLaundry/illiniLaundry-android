@@ -51,7 +51,6 @@ public class FragmentBookmarks extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        //TODO: GETT RID OF THIS
         allDorms = MainParser.getInstance().getDorms();
 
         preferences = TinyDB.getInstance(getContext());
