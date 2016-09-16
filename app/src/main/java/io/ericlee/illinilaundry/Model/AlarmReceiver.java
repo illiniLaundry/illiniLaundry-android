@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.TextView;
@@ -41,6 +42,11 @@ public class AlarmReceiver extends BroadcastReceiver {
         Alarm alarm = (Alarm) bundle.getSerializable("alarm");
 
         new RefreshData(bundle, alarm, context).execute();
+
+        // Vibrate the phone
+        Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        long[] pattern = {0, 300, 200, 300, 200, 300, 200};
+        vibrator.vibrate(pattern, -1);
 
         wl.release();
     }
