@@ -28,5 +28,5 @@ dependencies {
     // jsoup HTML parser library @ http://jsoup.org/
     compile 'org.jsoup:jsoup:1.9.2'
     // GSON for TinyDB
-    compile 'com.google.code.gson:gson:2.4'
+    compile 'com.google.code.gson:gson:2.8.0'
 }
