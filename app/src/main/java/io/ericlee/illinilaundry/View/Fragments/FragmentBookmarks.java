@@ -119,6 +119,8 @@ public class FragmentBookmarks extends Fragment {
         // Create an `ItemTouchHelper` and attach it to the `RecyclerView`
         ItemTouchHelper ith = new ItemTouchHelper(callback);
         ith.attachToRecyclerView(mRecyclerView);
+
+        new SetData().execute();
     }
 
     @Override
@@ -146,7 +148,12 @@ public class FragmentBookmarks extends Fragment {
     public class SetData extends AsyncTask<Void, Void, ArrayList<Dorm>> {
         @Override
         protected void onPreExecute() {
-            mSwipeRefreshLayout.setRefreshing(true);
+            mSwipeRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    mSwipeRefreshLayout.setRefreshing(true);
+                }
+            });
         }
 
         @Override

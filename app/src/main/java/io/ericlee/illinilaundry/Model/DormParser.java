@@ -38,9 +38,10 @@ public class DormParser {
     }
 
     public ArrayList<Dorm> getData() throws IOException {
-        JsonArray jsonRooms = new JsonParser().parse(getJSON())
-                .getAsJsonObject().getAsJsonObject("location")
-                .getAsJsonArray("rooms");
+        String jsonString = getJSON();
+
+        JsonObject json = new JsonParser().parse(jsonString).getAsJsonObject();
+        JsonArray jsonRooms = json.getAsJsonObject("location").getAsJsonArray("rooms");
 
         Type type = new TypeToken<ArrayList<Dorm>>(){}.getType();
         ArrayList<Dorm> parsedDorms = new Gson().fromJson(jsonRooms, type);
