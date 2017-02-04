@@ -181,8 +181,8 @@ public class FragmentBookmarks extends Fragment {
                 }
 
                 return bookmarkedDorms;
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                //e.printStackTrace();
             }
 
             return null;
@@ -190,7 +190,12 @@ public class FragmentBookmarks extends Fragment {
 
         @Override
         protected void onPostExecute(ArrayList<Dorm> dorms) {
-            mAdapter.setItems(dorms);
+            if (dorms != null) {
+                mAdapter.setItems(dorms);
+            } else {
+                Toast.makeText(getContext(), "Sorry. Something went wrong. Please try again later.", Toast.LENGTH_SHORT).show();
+            }
+
             if (bookmarkedDorms.isEmpty()) {
                 bgImage.setVisibility(View.VISIBLE);
             } else {

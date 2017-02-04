@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.net.SocketException;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -117,7 +118,7 @@ public class FragmentAll extends Fragment {
             try {
                 ArrayList<Dorm> dorms = DormParser.getInstance().getData();
                 return dorms;
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 return null;
             }
@@ -128,6 +129,8 @@ public class FragmentAll extends Fragment {
             if (dorms != null) {
                 mAdapter.setItems(dorms);
                 bgImage.setVisibility(View.INVISIBLE);
+            } else {
+                Toast.makeText(getContext(), "Something went wrong. Please try again later.", Toast.LENGTH_SHORT).show();
             }
 
             swipeRefreshLayout.setRefreshing(false);

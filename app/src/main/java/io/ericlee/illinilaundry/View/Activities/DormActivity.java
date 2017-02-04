@@ -201,8 +201,8 @@ public class DormActivity extends AppCompatActivity {
                         return d;
                     }
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                // e.printStackTrace();
             }
             return null;
         }
@@ -211,6 +211,8 @@ public class DormActivity extends AppCompatActivity {
         protected void onPostExecute(Dorm d) {
             if (d != null) {
                 mAdapter.setItems(Arrays.asList(d.getMachines()));
+            } else {
+                Toast.makeText(getApplicationContext(), "Something went wrong. Please try again later.", Toast.LENGTH_SHORT).show();
             }
 
             mSwipeRefreshLayout.setRefreshing(false);
