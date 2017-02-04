@@ -133,7 +133,6 @@ public class DormActivity extends AppCompatActivity {
                 new SetData().execute();
                 return true;
             case R.id.action_bookmark:
-                // TODO: clean this code up...
                 bookmarks = preferences.getListString("bookmarkeddorms");
                 ArrayList<String> newBookmarks = new ArrayList<>(bookmarks);
 
@@ -196,6 +195,7 @@ public class DormActivity extends AppCompatActivity {
             try {
                 ArrayList<Dorm> dorms = DormParser.getInstance().getData();
 
+                // Find what dorm we have.
                 for (Dorm d : dorms) {
                     if (d.getName().equals(dorm.getName())) {
                         return d;
@@ -203,14 +203,16 @@ public class DormActivity extends AppCompatActivity {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                // TODO: Handle Error
             }
             return null;
         }
 
         @Override
         protected void onPostExecute(Dorm d) {
-            mAdapter.setItems(Arrays.asList(d.getMachines()));
+            if (d != null) {
+                mAdapter.setItems(Arrays.asList(d.getMachines()));
+            }
+
             mSwipeRefreshLayout.setRefreshing(false);
         }
     }
