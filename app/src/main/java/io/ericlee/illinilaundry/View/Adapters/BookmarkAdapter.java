@@ -80,9 +80,18 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bindin
     }
 
     public void onItemDismiss(int position) {
-        Log.i("item Dismiss", "CALL");
         mDataset.remove(position);
         notifyItemRemoved(position);
+    }
+
+    public void remove(String name) {
+        for (int i = 0; i < mDataset.size(); i++) {
+            if (mDataset.get(i).getName().equals(name)) {
+                onItemDismiss(i);
+
+                return;
+            }
+        }
     }
 
     private void setFadeInAnimation(View view) {
