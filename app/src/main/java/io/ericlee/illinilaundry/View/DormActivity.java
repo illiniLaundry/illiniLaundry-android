@@ -1,4 +1,4 @@
-package io.ericlee.illinilaundry.Activities;
+package io.ericlee.illinilaundry.View;
 
 import android.content.Intent;
 import android.os.AsyncTask;

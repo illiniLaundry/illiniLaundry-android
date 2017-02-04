@@ -24,7 +24,7 @@ import java.util.Collections;
 
 import io.ericlee.illinilaundry.Adapters.BookmarkAdapter;
 import io.ericlee.illinilaundry.Model.Dorm;
-import io.ericlee.illinilaundry.Model.ItemOffsetDecoration;
+import io.ericlee.illinilaundry.View.ItemOffsetDecoration;
 import io.ericlee.illinilaundry.Model.MainParser;
 import io.ericlee.illinilaundry.Model.TinyDB;
 import io.ericlee.illinilaundry.R;

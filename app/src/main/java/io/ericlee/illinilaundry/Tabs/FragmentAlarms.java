@@ -1,14 +1,10 @@
 package io.ericlee.illinilaundry.Tabs;
 
-import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
@@ -19,19 +15,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 import io.ericlee.illinilaundry.Adapters.AlarmAdapter;
-import io.ericlee.illinilaundry.Adapters.BookmarkAdapter;
 import io.ericlee.illinilaundry.Model.Alarm;
-import io.ericlee.illinilaundry.Model.Dorm;
-import io.ericlee.illinilaundry.Model.ItemOffsetDecoration;
+import io.ericlee.illinilaundry.View.ItemOffsetDecoration;
 import io.ericlee.illinilaundry.Model.MachineParser;
 import io.ericlee.illinilaundry.Model.TinyDB;
 import io.ericlee.illinilaundry.R;

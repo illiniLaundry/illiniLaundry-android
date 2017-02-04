@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import io.ericlee.illinilaundry.Activities.DormActivity;
+import io.ericlee.illinilaundry.View.DormActivity;
 import io.ericlee.illinilaundry.Model.Dorm;
 import io.ericlee.illinilaundry.R;
 

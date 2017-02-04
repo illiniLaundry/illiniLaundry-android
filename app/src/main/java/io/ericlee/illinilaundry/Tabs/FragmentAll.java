@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import io.ericlee.illinilaundry.Adapters.GridAdapter;
-import io.ericlee.illinilaundry.Model.ItemOffsetDecoration;
+import io.ericlee.illinilaundry.View.ItemOffsetDecoration;
 import io.ericlee.illinilaundry.Model.MainParser;
 import io.ericlee.illinilaundry.R;
 
