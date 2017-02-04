@@ -40,13 +40,13 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager.setAdapter(adapter);
 
-        if(!preferences.getListString("bookmarkeddorms").isEmpty()) {
-            TabLayout.Tab bookmarksTab = tabLayout.getTabAt(0);
-            bookmarksTab.select();
+        if(preferences.getListString("bookmarkeddorms").isEmpty()) {
+            TabLayout.Tab allDormsTab = tabLayout.getTabAt(0);
+            allDormsTab.select();
             viewPager.setCurrentItem(0);
         } else {
-            TabLayout.Tab allDormsTab = tabLayout.getTabAt(1);
-            allDormsTab.select();
+            TabLayout.Tab bookmarksTab = tabLayout.getTabAt(1);
+            bookmarksTab.select();
             viewPager.setCurrentItem(1);
         }
 
