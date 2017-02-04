@@ -1,4 +1,4 @@
-package io.ericlee.illinilaundry.Model;
+package io.ericlee.illinilaundry.View;
 
 import android.content.Context;
 import android.graphics.Rect;

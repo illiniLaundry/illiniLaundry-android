@@ -1,93 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/card_view"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="0dp"
-    android:clickable="true"
-    android:longClickable="true"
-    android:foreground="?android:attr/selectableItemBackground"
-    card_view:cardCornerRadius="2dp"
-    card_view:cardElevation="2dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="io.ericlee.illinilaundry.ViewModel.DormViewModel" />
+    </data>
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="0dp"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:longClickable="true"
+        android:onClick="@{viewModel.onClick}"
+        card_view:cardCornerRadius="2dp"
+        card_view:cardElevation="2dp">
 
         <LinearLayout
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="0dp"
-            android:background="@color/colorAccent">
+            android:background="@color/colorAccent"
+            android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="0dp"
                 android:adjustViewBounds="true"
                 android:background="#d3d3d3"
-                android:minWidth="150dp"
                 android:minHeight="75dp"
-                android:src="@drawable/isr"
-                android:id="@+id/image"
-                android:scaleType="fitXY" />
+                android:minWidth="150dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/isr" />
 
-            <TextView android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <TextView
                 android:id="@+id/txtTitle"
-                android:text="placeholder"
-                android:textSize="12sp"
-                android:textColor="@color/white"
-                android:gravity="center_horizontal"
-                android:singleLine="true" />
-
-            <LinearLayout
-                android:baselineAligned="false"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:orientation="horizontal"
-                android:weightSum="4">
+                android:maxLines="1"
+                android:text="@{viewModel.name}"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:layout_height="28dp"
+                android:textAlignment="center"
+                android:gravity="center" />
 
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:id="@+id/imageWasher"
-                        android:layout_weight="1"
-                        android:src="@drawable/washer"
-                        android:scaleType="fitCenter"
-                        android:padding="4dp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_marginTop="1dp"
-                        android:layout_height="match_parent"
-                        android:id="@+id/txtWasher"
-                        android:text="0"
-                        android:textSize="12sp"
-                        android:layout_weight="1"
-                        android:gravity="start|center"
-                        android:textColor="@color/white" />
-
-                    <TextView android:layout_width="0dp"
-                        android:layout_marginTop="1dp"
-                        android:layout_height="fill_parent"
-                        android:id="@+id/txtDrier"
-                        android:text="0"
-                        android:textSize="12sp"
-                        android:layout_weight="1"
-                        android:gravity="center|end"
-                        android:textColor="@color/white" />
-
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:id="@+id/imageDrier"
-                        android:layout_weight="1"
-                        android:src="@drawable/dryer"
-                        android:scaleType="fitCenter"
-                        android:padding="4dp" />
-            </LinearLayout>
         </LinearLayout>
-</android.support.v7.widget.CardView>
+    </android.support.v7.widget.CardView>
+</layout>

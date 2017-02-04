@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name='android.permission.WAKE_LOCK'/>
     <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
 
     <application
         android:allowBackup="true"
@@ -13,11 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Activities.MainActivity"
+            android:name=".View.Activities.MainActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activities.InitActivity"
+            android:name=".View.Activities.InitActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
@@ -28,10 +29,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.DormActivity"
+            android:name=".View.Activities.DormActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
-        <receiver
-            android:name="io.ericlee.illinilaundry.Model.AlarmReceiver" />
     </application>
 </manifest>

@@ -1,58 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="io.ericlee.illinilaundry.ViewModel.MachineViewModel" />
+    </data>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
         android:id="@+id/machineLayout"
-        android:padding="10dp"
-        android:weightSum="19"
-        android:foreground="?android:attr/selectableItemBackground">
-
-        <TextView
-            android:id="@+id/textMachineNumber"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="4"
-            android:gravity="center"
-            android:text="10W"
-            android:textSize="30sp" />
-
-        <TextView
-            android:id="@+id/textMachineType"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_weight="5"
-            android:gravity="center"
-            android:text="Placeholderplaceholder placeholder" />
-
-        <TextView
-            android:id="@+id/textMachineStatus"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_weight="5"
-            android:gravity="center"
-            android:text="New Text" />
-
-        <TextView
-            android:id="@+id/textMachineTimeRemaining"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_weight="5"
-            android:gravity="center"
-            android:text="New Text" />
-
-    </LinearLayout>
-
-    <View
+        android:background="@{viewModel.busy ? @drawable/softRedDrawable : @drawable/softGreenDrawable}"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/textColor" />
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:onClick="@{viewModel.setAlarm}">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:padding="10dp"
+            android:weightSum="19">
+
+            <TextView
+                android:id="@+id/textMachineNumber"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:text="@{viewModel.name}"
+                android:textSize="30sp" />
+
+            <TextView
+                android:id="@+id/textMachineType"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="5"
+                android:gravity="center"
+                android:text="@{viewModel.description}" />
+
+            <TextView
+                android:id="@+id/textMachineStatus"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="5"
+                android:gravity="center"
+                android:text="@{viewModel.status}" />
+
+            <TextView
+                android:id="@+id/textMachineTimeRemaining"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="5"
+                android:gravity="center"
+                android:text="@{viewModel.timeRemaining}" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/textColor" />
+    </LinearLayout>
+</layout>

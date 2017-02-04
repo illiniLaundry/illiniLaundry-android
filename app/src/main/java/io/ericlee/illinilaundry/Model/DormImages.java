@@ -14,8 +14,6 @@ public class DormImages {
     private DormImages() {
         images = new Hashtable<>(30);
 
-        // TODO: Get all the dorm pictures!
-
         images.put("Allen", R.drawable.allen);
         images.put("Barton-Lundgren", R.drawable.bartonlundgren);
         images.put("Bousfield Rm 103", R.drawable.bousfield);

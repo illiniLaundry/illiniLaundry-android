@@ -1,4 +1,4 @@
-package io.ericlee.illinilaundry.Activities;
+package io.ericlee.illinilaundry.View.Activities;
 
 import android.graphics.Color;
 import android.support.design.widget.TabLayout;
@@ -7,8 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
-import io.ericlee.illinilaundry.Adapters.ViewPagerAdapter;
-import io.ericlee.illinilaundry.Model.TinyDB;
+import io.ericlee.illinilaundry.View.Adapters.ViewPagerAdapter;
+import io.ericlee.illinilaundry.Utils.TinyDB;
 import io.ericlee.illinilaundry.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Setup tabs
         tabLayout = (TabLayout) findViewById(R.id.main_tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Alarms"));
         tabLayout.addTab(tabLayout.newTab().setText("All Dorms"));
         tabLayout.addTab(tabLayout.newTab().setText("My Dorms"));
 
@@ -41,13 +40,13 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager.setAdapter(adapter);
 
-        if(!preferences.getListString("bookmarkeddorms").isEmpty()) {
-            TabLayout.Tab bookmarksTab = tabLayout.getTabAt(2);
-            bookmarksTab.select();
-            viewPager.setCurrentItem(2);
-        } else {
-            TabLayout.Tab allDormsTab = tabLayout.getTabAt(1);
+        if(preferences.getListString("bookmarkeddorms").isEmpty()) {
+            TabLayout.Tab allDormsTab = tabLayout.getTabAt(0);
             allDormsTab.select();
+            viewPager.setCurrentItem(0);
+        } else {
+            TabLayout.Tab bookmarksTab = tabLayout.getTabAt(1);
+            bookmarksTab.select();
             viewPager.setCurrentItem(1);
         }
 
@@ -81,15 +80,5 @@ public class MainActivity extends AppCompatActivity {
         } else {
             firstTab.select();
         }
-    }
-
-    // A method to find height of the status bar
-    public int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
     }
 }

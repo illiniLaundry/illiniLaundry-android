@@ -1,92 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/card_view"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:clickable="true"
-    android:longClickable="true"
-    android:foreground="?android:attr/selectableItemBackground"
-    card_view:cardCornerRadius="2dp"
-    card_view:cardElevation="2dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <data>
+        <variable
+            name="viewModel"
+            type="io.ericlee.illinilaundry.ViewModel.DormViewModel" />
+    </data>
+
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="0dp"
-        android:background="@color/colorAccent">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="140dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="0dp"
-            android:adjustViewBounds="true"
-            android:background="#d3d3d3"
-            android:minWidth="150dp"
-            android:minHeight="75dp"
-            android:src="@drawable/isr"
-            android:id="@+id/image"
-            android:scaleType="centerCrop" />
-
-        <TextView android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/txtTitle"
-            android:text="placeholder"
-            android:textSize="18sp"
-            android:textColor="@color/white"
-            android:gravity="center_horizontal"
-            android:singleLine="true" />
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:longClickable="true"
+        android:onClick="@{viewModel.onClick}"
+        card_view:cardCornerRadius="2dp"
+        card_view:cardElevation="2dp">
 
         <LinearLayout
-            android:baselineAligned="false"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginBottom="4dp"
-            android:orientation="horizontal"
-            android:weightSum="4">
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
+            android:background="@color/colorAccent"
+            android:orientation="vertical">
 
             <ImageView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageWasher"
-                android:layout_weight="1"
-                android:src="@drawable/washer"
-                android:scaleType="fitCenter"
-                android:padding="4dp" />
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="0dp"
+                android:adjustViewBounds="true"
+                android:background="#d3d3d3"
+                android:minHeight="75dp"
+                android:minWidth="150dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/isr" />
 
-            <TextView android:layout_width="0dp"
-                android:layout_marginTop="2dp"
-                android:layout_height="match_parent"
-                android:id="@+id/txtWasher"
-                android:text="0"
+            <TextView
+                android:id="@+id/txtTitle"
+                android:layout_width="match_parent"
+                android:maxLines="1"
+                android:text="@{viewModel.name}"
+                android:textColor="@color/white"
                 android:textSize="18sp"
-                android:layout_weight="1"
-                android:gravity="start|center"
-                android:textColor="@color/white" />
-
-            <TextView android:layout_width="0dp"
-                android:layout_marginTop="2dp"
-                android:layout_height="match_parent"
-                android:id="@+id/txtDrier"
-                android:text="0"
-                android:textSize="18sp"
-                android:layout_weight="1"
-                android:gravity="center|end"
-                android:textColor="@color/white" />
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageDrier"
-                android:layout_weight="1"
-                android:src="@drawable/dryer"
-                android:padding="4dp" />
+                android:layout_height="40dp"
+                android:gravity="center" />
 
         </LinearLayout>
-
-    </LinearLayout>
-
-</android.support.v7.widget.CardView>
+    </android.support.v7.widget.CardView>
+</layout>
