@@ -2,21 +2,16 @@ package io.ericlee.illinilaundry.Model;
 
 import android.databinding.BindingAdapter;
 
+import java.io.Serializable;
+
 /**
  * Dorm object for GSON
  *
  * @author dl-eric
  */
-public class Dorm {
+public class Dorm implements Serializable {
     private String name;
     private Machine[] machines;
-    private int imageResource;
-
-    public Dorm(String name, Machine[] machines) {
-        this.name = name;
-        this.machines = machines;
-        imageResource = DormImages.getInstance().getImages().get(name);
-    }
 
     public String getName() { return name; }
 

@@ -1,20 +1,19 @@
 package io.ericlee.illinilaundry.ViewModel;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.BaseObservable;
-import android.databinding.BindingAdapter;
 import android.view.View;
-import android.widget.ImageView;
 
 import io.ericlee.illinilaundry.Model.Dorm;
 import io.ericlee.illinilaundry.Model.DormImages;
+import io.ericlee.illinilaundry.View.Activities.DormActivity;
 
 /**
  * @author dl-eric
  */
 
 public class DormViewModel extends BaseObservable {
-
     private Context context;
     private Dorm dorm;
 
@@ -38,8 +37,14 @@ public class DormViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                launchDormActivity();
             }
         };
+    }
+
+    private void launchDormActivity() {
+        Intent intent = new Intent(context, DormActivity.class);
+        intent.putExtra("Dorm", dorm);
+        context.startActivity(intent);
     }
 }

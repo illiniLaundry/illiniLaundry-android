@@ -41,9 +41,9 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
 
         if(!preferences.getListString("bookmarkeddorms").isEmpty()) {
-            TabLayout.Tab bookmarksTab = tabLayout.getTabAt(2);
+            TabLayout.Tab bookmarksTab = tabLayout.getTabAt(0);
             bookmarksTab.select();
-            viewPager.setCurrentItem(2);
+            viewPager.setCurrentItem(0);
         } else {
             TabLayout.Tab allDormsTab = tabLayout.getTabAt(1);
             allDormsTab.select();
@@ -80,15 +80,5 @@ public class MainActivity extends AppCompatActivity {
         } else {
             firstTab.select();
         }
-    }
-
-    // A method to find height of the status bar
-    public int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
     }
 }

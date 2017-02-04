@@ -13,4 +13,7 @@
     <color name="red">#E50000</color>
 
     <color name="textColor">#8a000000</color>
+
+    <drawable name="softRedDrawable">#ec644b</drawable>
+    <drawable name="softGreenDrawable">#87d37c</drawable>
 </resources>

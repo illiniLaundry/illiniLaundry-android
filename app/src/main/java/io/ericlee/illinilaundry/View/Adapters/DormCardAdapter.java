@@ -53,8 +53,15 @@ public class DormCardAdapter extends RecyclerView.Adapter<DormCardAdapter.Bindin
     }
 
     public void setItems(List<Dorm> dorms) {
-        mDorms = dorms;
-        notifyDataSetChanged();
+        if (mDorms.size() != dorms.size()) {
+            mDorms = dorms;
+            notifyDataSetChanged();
+        } else {
+            mDorms = dorms;
+            for (int i = 0; i < mDorms.size(); i++) {
+                notifyItemChanged(i);
+            }
+        }
     }
 
     public static class BindingHolder extends RecyclerView.ViewHolder {

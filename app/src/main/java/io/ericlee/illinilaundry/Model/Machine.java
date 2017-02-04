@@ -1,5 +1,6 @@
 package io.ericlee.illinilaundry.Model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -7,7 +8,7 @@ import java.util.Date;
  *
  * @author dl-eric
  */
-public class Machine {
+public class Machine implements Serializable {
     private String label;
     private String description;
     private String status;

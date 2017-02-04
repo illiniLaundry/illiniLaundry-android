@@ -26,6 +26,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Map;
 
 import com.google.gson.Gson;
@@ -58,6 +59,22 @@ public class TinyDB {
         }
 
         return instance;
+    }
+
+    public void putSet(String key, HashSet<String> mset) {
+        SharedPreferences.Editor editor = preferences.edit();
+        String[] mystringlist = mset.toArray(new String[mset.size()]);
+        // the comma like character used below is not a comma it is the SINGLE
+        // LOW-9 QUOTATION MARK unicode 201A and unicode 2017 they are used for
+        // separating the items in the list
+        editor.putString(key, TextUtils.join("‚‗‚", mystringlist));
+        editor.apply();
+    }
+
+    public HashSet<String> getSet(String key) {
+        String[] mylist = TextUtils
+                .split(preferences.getString(key, ""), "‚‗‚");
+        return new HashSet<>(Arrays.asList(mylist));
     }
 
 

@@ -1,6 +1,7 @@
 package io.ericlee.illinilaundry.View.Activities;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,28 +19,33 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.ericlee.illinilaundry.Model.Dorm;
 import io.ericlee.illinilaundry.Model.DormImages;
+import io.ericlee.illinilaundry.Model.DormParser;
 import io.ericlee.illinilaundry.Model.Machine;
 import io.ericlee.illinilaundry.Utils.TinyDB;
 import io.ericlee.illinilaundry.R;
+import io.ericlee.illinilaundry.View.Adapters.MachineAdapter;
 
 public class DormActivity extends AppCompatActivity {
     private Dorm dorm;
-    private String statusAnnouncement;
 
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private MachineAdapter mAdapter;
     private ArrayList<Machine> mDataset;
 
-    private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private DormActivity instance;
-
-    private TextView availableWash;
-    private TextView availableDry;
+    @BindView(R.id.dormRecyclerView) RecyclerView mRecyclerView;
+    @BindView(R.id.dormSwipeRefresh) SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.dormWasherAvailable) TextView availableWash;
+    @BindView(R.id.dormDryerAvailable) TextView availableDry;
+    @BindView(R.id.dorm_collapsing_toolbar) CollapsingToolbarLayout mCollapsingToolbarLayout;
 
     private TinyDB preferences;
     private ArrayList<String> bookmarks;
@@ -46,13 +53,9 @@ public class DormActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        instance = this;
         overridePendingTransition(R.anim.slide_left, R.anim.slide_left_out);
         setContentView(R.layout.activity_dorm);
-
-        availableWash = (TextView) findViewById(R.id.dormWasherAvailable);
-        availableDry = (TextView) findViewById(R.id.dormDryerAvailable);
-        CollapsingToolbarLayout mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.dorm_collapsing_toolbar);
+        ButterKnife.bind(this);
 
         Intent intent = getIntent();
         dorm = (Dorm) intent.getSerializableExtra("Dorm");
@@ -87,32 +90,25 @@ public class DormActivity extends AppCompatActivity {
         ImageView image = (ImageView) findViewById(R.id.imageDorm);
         image.setImageResource(DormImages.getInstance().getImages().get(dorm.getName()));
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.dormRecyclerView);
 
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        //mAdapter = new DormAdapter(mDataset);
+        mAdapter = new MachineAdapter(mDataset, this);
 
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setHasFixedSize(true);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.dormSwipeRefresh);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
-
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new SetData().execute();
+            }
+        });
 
         if (mDataset.isEmpty()) {
-            //new SetData().execute();
+            new SetData().execute();
         }
-    }
-
-    // A method to find height of the status bar
-    public int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
     }
 
     @Override
@@ -134,13 +130,12 @@ public class DormActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                //mSwipeRefreshLayout.setRefreshing(true);
-                //new SetData().execute();
+                new SetData().execute();
                 return true;
             case R.id.action_bookmark:
                 // TODO: clean this code up...
-                ArrayList<String> newBookmarks = new ArrayList<>(bookmarks);
                 bookmarks = preferences.getListString("bookmarkeddorms");
+                ArrayList<String> newBookmarks = new ArrayList<>(bookmarks);
 
                 if(!bookmarks.contains(dorm.getName())) {
                     newBookmarks.add(dorm.getName());
@@ -149,8 +144,7 @@ public class DormActivity extends AppCompatActivity {
 
                     Toast.makeText(this, dorm.getName() + " has been added to your bookmarks.",
                             Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
                     newBookmarks.remove(dorm.getName());
 
                     item.setIcon(R.drawable.ic_star_border_white_24dp);
@@ -169,8 +163,56 @@ public class DormActivity extends AppCompatActivity {
     }
 
     private void setAvailabilityText() {
-        //availableDry.setText("Dryers Available: " + dorm.getDry());
-        //availableWash.setText("Washers Available: " + dorm.getWash());
+        int freeDriers = 0;
+        int freeWashers = 0;
+
+        for(Machine m : dorm.getMachines()) {
+            if (m.getDescription().contains("Washer") && m.getStatus().equals("Available")) {
+                freeWashers++;
+            }
+
+            if (!m.getDescription().contains("Washer") && m.getStatus().equals("Available")) {
+                freeDriers++;
+            }
+        }
+
+        availableDry.setText("Dryers Available: " + freeDriers);
+        availableWash.setText("Washers Available: " + freeWashers);
+    }
+
+    class SetData extends AsyncTask<Void, Void, Dorm> {
+        @Override
+        protected void onPreExecute() {
+            mSwipeRefreshLayout.setRefreshing(true);
+        }
+
+        @Override
+        protected void onCancelled() {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+
+        @Override
+        protected Dorm doInBackground(Void... voids) {
+            try {
+                ArrayList<Dorm> dorms = DormParser.getInstance().getData();
+
+                for (Dorm d : dorms) {
+                    if (d.getName().equals(dorm.getName())) {
+                        return d;
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                // TODO: Handle Error
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Dorm d) {
+            mAdapter.setItems(Arrays.asList(d.getMachines()));
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 }
 

@@ -16,6 +16,7 @@
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
         android:longClickable="true"
+        android:onClick="@{viewModel.onClick}"
         card_view:cardCornerRadius="2dp"
         card_view:cardElevation="2dp">
 

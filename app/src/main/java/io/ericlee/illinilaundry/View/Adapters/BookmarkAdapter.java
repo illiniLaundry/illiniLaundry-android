@@ -4,79 +4,68 @@ package io.ericlee.illinilaundry.View.Adapters;
  * Created by Eric on 11/10/2015.
  */
 
+import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.ericlee.illinilaundry.View.Activities.DormActivity;
 import io.ericlee.illinilaundry.Model.Dorm;
 import io.ericlee.illinilaundry.Model.DormImages;
 import io.ericlee.illinilaundry.R;
+import io.ericlee.illinilaundry.ViewModel.DormViewModel;
+import io.ericlee.illinilaundry.databinding.CardDormsBinding;
+import io.ericlee.illinilaundry.databinding.CardDormsBookmarkBinding;
 
-public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHolder> {
+public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.BindingHolder> {
     private ArrayList<Dorm> mDataset;
+    private Context mContext;
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
-        public ImageView image;
-        public TextView txtTitle;
-        public TextView txtWash;
-        public TextView txtDry;
 
-        public ViewHolder(View v) {
-            super(v);
-            image = (ImageView) v.findViewById(R.id.image);
-            txtTitle = (TextView) v.findViewById(R.id.txtTitle);
-            txtWash = (TextView) v.findViewById(R.id.txtWasher);
-            txtDry = (TextView) v.findViewById(R.id.txtDrier);
+    public static class BindingHolder extends RecyclerView.ViewHolder {
+        private CardDormsBookmarkBinding binding;
+
+        public BindingHolder(CardDormsBookmarkBinding binding) {
+            super(binding.cardView);
+            this.binding = binding;
         }
     }
 
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public BookmarkAdapter(ArrayList<Dorm> myDataset) {
+    public BookmarkAdapter(Context context, ArrayList<Dorm> myDataset) {
+        mContext = context;
         mDataset = myDataset;
     }
 
-    // Create new views (invoked by the layout manager)
-    @Override
-    public BookmarkAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // create a new view
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_dorms_bookmark, parent, false);
 
-        return new ViewHolder(v);
+    @Override
+    public BindingHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        CardDormsBookmarkBinding postBinding = DataBindingUtil.inflate(
+                LayoutInflater.from(parent.getContext()),
+                R.layout.card_dorms_bookmark,
+                parent,
+                false);
+        return new BookmarkAdapter.BindingHolder(postBinding);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
+    private BindingHolder holder;
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
-        final Dorm dorm = mDataset.get(position);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), DormActivity.class);
-                //intent.putExtra("Dorm", dorm);
-                v.getContext().startActivity(intent);
-            }
-        });
+    public void onBindViewHolder(BindingHolder holder, final int position) {
+        CardDormsBookmarkBinding postBinding = holder.binding;
+        postBinding.setViewModel(new DormViewModel(mContext, mDataset.get(position)));
+        //postBinding.image.setImageResource(postBinding.getViewModel().getImageResource());
 
-        DormImages dormImages = DormImages.getInstance();
-
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
-        holder.txtTitle.setText(dorm.getName());
-        //holder.txtWash.setText(dorm.getWash() + "");
-        //holder.txtDry.setText(dorm.getDry() + "");
-        holder.image.setImageResource(dormImages.getImages().get(dorm.getName()));
+        this.holder = holder;
+        setFadeInAnimation(holder.itemView);
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -85,9 +74,20 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
         return mDataset.size();
     }
 
+    public void setItems(ArrayList<Dorm> dorms) {
+        mDataset = dorms;
+        notifyDataSetChanged();
+    }
+
     public void onItemDismiss(int position) {
         Log.i("item Dismiss", "CALL");
         mDataset.remove(position);
         notifyItemRemoved(position);
+    }
+
+    private void setFadeInAnimation(View view) {
+        AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
+        anim.setDuration(300);
+        view.startAnimation(anim);
     }
 }

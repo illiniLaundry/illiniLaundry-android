@@ -18,8 +18,6 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,14 +30,21 @@ import io.ericlee.illinilaundry.R;
 public class FragmentAll extends Fragment {
     private DormCardAdapter mAdapter;
 
-    @BindView(R.id.backgroundIllini) ImageView bgImage;
-    @BindView(R.id.recyclerView) RecyclerView mRecyclerView;
-    @BindView(R.id.swipeRefreshLayout) SwipeRefreshLayout swipeRefreshLayout;
+    private ArrayList<Dorm> mDorms;
+
+    @BindView(R.id.backgroundIllini)
+    ImageView bgImage;
+    @BindView(R.id.recyclerView)
+    RecyclerView mRecyclerView;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        mDorms = new ArrayList<>();
     }
 
     @Override
@@ -62,7 +67,7 @@ public class FragmentAll extends Fragment {
         GridLayoutManager glm = new GridLayoutManager(this.getContext(), 3);
         mRecyclerView.setLayoutManager(glm);
 
-        mAdapter = new DormCardAdapter(new ArrayList<Dorm>(0), getContext());
+        mAdapter = new DormCardAdapter(mDorms, getContext());
         mRecyclerView.setAdapter(mAdapter);
 
         // Add spacing between cards.
@@ -107,7 +112,7 @@ public class FragmentAll extends Fragment {
             try {
                 ArrayList<Dorm> dorms = DormParser.getInstance().getData();
                 return dorms;
-            } catch(IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
                 // TODO: Handle Error
             }
@@ -116,11 +121,8 @@ public class FragmentAll extends Fragment {
 
         @Override
         protected void onPostExecute(ArrayList<Dorm> dorms) {
-            if (dorms != null) {
-                mAdapter.setItems(dorms);
-                bgImage.setVisibility(View.INVISIBLE);
-            }
-
+            mAdapter.setItems(dorms);
+            bgImage.setVisibility(View.INVISIBLE);
             swipeRefreshLayout.setRefreshing(false);
         }
     }
