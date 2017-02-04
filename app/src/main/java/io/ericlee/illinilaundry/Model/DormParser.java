@@ -40,6 +40,8 @@ public class DormParser {
     public ArrayList<Dorm> getData() throws IOException {
         String jsonString = getJSON();
 
+        Log.i("JSON", jsonString);
+
         JsonObject json = new JsonParser().parse(jsonString).getAsJsonObject();
         JsonArray jsonRooms = json.getAsJsonObject("location").getAsJsonArray("rooms");
 

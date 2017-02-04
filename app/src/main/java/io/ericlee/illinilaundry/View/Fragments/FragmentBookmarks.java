@@ -103,12 +103,10 @@ public class FragmentBookmarks extends Fragment {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                // TODO: Doesn't work for some reason. Maybe conflicting listeners?
-                mAdapter.onItemDismiss(viewHolder.getAdapterPosition());
-                Log.i("item Dismiss", "CALL2");
+                // Empty
             }
 
-            //defines the enabled move directions in each state (idle, swiping, dragging).
+            // Defines the enabled move directions in each state (idle, swiping, dragging).
             @Override
             public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
                 return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG,

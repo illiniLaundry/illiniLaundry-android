@@ -119,15 +119,17 @@ public class FragmentAll extends Fragment {
                 return dorms;
             } catch (IOException e) {
                 e.printStackTrace();
-                // TODO: Handle Error
+                return null;
             }
-            return null;
         }
 
         @Override
         protected void onPostExecute(ArrayList<Dorm> dorms) {
-            mAdapter.setItems(dorms);
-            bgImage.setVisibility(View.INVISIBLE);
+            if (dorms != null) {
+                mAdapter.setItems(dorms);
+                bgImage.setVisibility(View.INVISIBLE);
+            }
+
             swipeRefreshLayout.setRefreshing(false);
         }
     }
