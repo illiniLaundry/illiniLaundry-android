@@ -1,4 +1,4 @@
-package io.ericlee.illinilaundry.View;
+package io.ericlee.illinilaundry.View.Activities;
 
 import android.graphics.Color;
 import android.support.design.widget.TabLayout;
@@ -7,8 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
-import io.ericlee.illinilaundry.Adapters.ViewPagerAdapter;
-import io.ericlee.illinilaundry.Model.TinyDB;
+import io.ericlee.illinilaundry.View.Adapters.ViewPagerAdapter;
+import io.ericlee.illinilaundry.Utils.TinyDB;
 import io.ericlee.illinilaundry.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Setup tabs
         tabLayout = (TabLayout) findViewById(R.id.main_tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Alarms"));
         tabLayout.addTab(tabLayout.newTab().setText("All Dorms"));
         tabLayout.addTab(tabLayout.newTab().setText("My Dorms"));
 

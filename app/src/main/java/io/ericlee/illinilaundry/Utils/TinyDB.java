@@ -1,4 +1,4 @@
-package io.ericlee.illinilaundry.Model;
+package io.ericlee.illinilaundry.Utils;
 
 /*
  * Copyright 2014 KC Ochibili Edited By dl-eric

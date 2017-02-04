@@ -13,11 +13,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".View.MainActivity"
+            android:name=".View.Activities.MainActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".View.InitActivity"
+            android:name=".View.Activities.InitActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
@@ -28,10 +28,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".View.DormActivity"
+            android:name=".View.Activities.DormActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
-        <receiver
-            android:name="io.ericlee.illinilaundry.Model.AlarmReceiver" />
     </application>
 </manifest>

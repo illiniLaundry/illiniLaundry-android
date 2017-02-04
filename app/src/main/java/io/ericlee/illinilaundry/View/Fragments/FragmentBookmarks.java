@@ -1,4 +1,4 @@
-package io.ericlee.illinilaundry.Tabs;
+package io.ericlee.illinilaundry.View.Fragments;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,11 +22,10 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import io.ericlee.illinilaundry.Adapters.BookmarkAdapter;
+import io.ericlee.illinilaundry.View.Adapters.BookmarkAdapter;
 import io.ericlee.illinilaundry.Model.Dorm;
 import io.ericlee.illinilaundry.View.ItemOffsetDecoration;
-import io.ericlee.illinilaundry.Model.MainParser;
-import io.ericlee.illinilaundry.Model.TinyDB;
+import io.ericlee.illinilaundry.Utils.TinyDB;
 import io.ericlee.illinilaundry.R;
 
 /**
@@ -51,7 +50,7 @@ public class FragmentBookmarks extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        allDorms = MainParser.getInstance().getDorms();
+        //allDorms = MainParser.getInstance().getDorms();
 
         preferences = TinyDB.getInstance(getContext());
         firstTimeRun = true;
@@ -180,7 +179,7 @@ public class FragmentBookmarks extends Fragment {
                 bookmarkedDorms.clear();
             }
 
-            MainParser.getInstance().getDorms();
+            //MainParser.getInstance().getDorms();
 
             for(int i = 0; i < bookmarks.size(); i++) {
                 String dormName = bookmarks.get(i);

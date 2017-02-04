@@ -1,5 +1,7 @@
 package io.ericlee.illinilaundry.Model;
 
+import android.databinding.BindingAdapter;
+
 /**
  * Dorm object for GSON
  *
@@ -10,11 +12,11 @@ public class Dorm {
     private Machine[] machines;
     private int imageResource;
 
-    public Dorm() {
+    public Dorm(String name, Machine[] machines) {
+        this.name = name;
+        this.machines = machines;
         imageResource = DormImages.getInstance().getImages().get(name);
     }
-
-    public int getImageResource() { return imageResource; }
 
     public String getName() { return name; }
 

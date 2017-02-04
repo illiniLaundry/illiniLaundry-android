@@ -1,4 +1,4 @@
-package io.ericlee.illinilaundry.Adapters;
+package io.ericlee.illinilaundry.View.Adapters;
 
 /**
  * Created by Eric on 11/10/2015.
@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import io.ericlee.illinilaundry.View.DormActivity;
+import io.ericlee.illinilaundry.View.Activities.DormActivity;
 import io.ericlee.illinilaundry.Model.Dorm;
 import io.ericlee.illinilaundry.Model.DormImages;
 import io.ericlee.illinilaundry.R;
@@ -64,7 +64,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), DormActivity.class);
-                intent.putExtra("Dorm", dorm);
+                //intent.putExtra("Dorm", dorm);
                 v.getContext().startActivity(intent);
             }
         });
@@ -74,8 +74,8 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.txtTitle.setText(dorm.getName());
-        holder.txtWash.setText(dorm.getWash() + "");
-        holder.txtDry.setText(dorm.getDry() + "");
+        //holder.txtWash.setText(dorm.getWash() + "");
+        //holder.txtDry.setText(dorm.getDry() + "");
         holder.image.setImageResource(dormImages.getImages().get(dorm.getName()));
     }
 

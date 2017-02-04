@@ -1,17 +1,19 @@
-package io.ericlee.illinilaundry.Adapters;
+package io.ericlee.illinilaundry.View.Adapters;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.ericlee.illinilaundry.Model.Dorm;
 import io.ericlee.illinilaundry.R;
 import io.ericlee.illinilaundry.ViewModel.DormViewModel;
+import io.ericlee.illinilaundry.databinding.CardDormsBinding;
 
 /**
  * @author dl-eric
@@ -21,14 +23,14 @@ public class DormCardAdapter extends RecyclerView.Adapter<DormCardAdapter.Bindin
     private List<Dorm> mDorms;
     private Context mContext;
 
-    public DormCardAdapter(Context context) {
+    public DormCardAdapter(List<Dorm> dorms, Context context) {
         mContext = context;
-        mDorms = new ArrayList<>();
+        mDorms = dorms;
     }
 
     @Override
     public BindingHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ItemPostBinding postBinding = DataBindingUtil.inflate(
+        CardDormsBinding postBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.getContext()),
                 R.layout.card_dorms,
                 parent,
@@ -38,8 +40,11 @@ public class DormCardAdapter extends RecyclerView.Adapter<DormCardAdapter.Bindin
 
     @Override
     public void onBindViewHolder(BindingHolder holder, int position) {
-        ItemPostBinding postBinding = holder.binding;
+        CardDormsBinding postBinding = holder.binding;
         postBinding.setViewModel(new DormViewModel(mContext, mDorms.get(position)));
+        postBinding.image.setImageResource(postBinding.getViewModel().getImageResource());
+
+        setFadeAnimation(holder.itemView);
     }
 
     @Override
@@ -53,11 +58,17 @@ public class DormCardAdapter extends RecyclerView.Adapter<DormCardAdapter.Bindin
     }
 
     public static class BindingHolder extends RecyclerView.ViewHolder {
-        private ItemPostBinding binding;
+        private CardDormsBinding binding;
 
-        public BindingHolder(ItemPostBinding binding) {
+        public BindingHolder(CardDormsBinding binding) {
             super(binding.cardView);
             this.binding = binding;
         }
+    }
+
+    private void setFadeAnimation(View view) {
+        AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
+        anim.setDuration(300);
+        view.startAnimation(anim);
     }
 }

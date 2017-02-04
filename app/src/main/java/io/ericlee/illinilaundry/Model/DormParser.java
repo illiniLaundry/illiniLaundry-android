@@ -1,7 +1,12 @@
 package io.ericlee.illinilaundry.Model;
 
+import android.os.NetworkOnMainThreadException;
+import android.util.Log;
+
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
@@ -11,6 +16,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 /**
  * Parses Dorms from JSON.
@@ -18,30 +24,30 @@ import java.net.URL;
  * @author dl-eric
  */
 
-public class MachineParser {
+public class DormParser {
     private final String JSON_URL = "http://23.23.147.128/homes/mydata/urba7723";
 
-    private static MachineParser instance;
+    private static DormParser instance;
 
-    public static MachineParser getInstance() {
+    public static DormParser getInstance() {
         if (instance == null) {
-            instance = new MachineParser();
+            instance = new DormParser();
         }
 
         return instance;
     }
 
-    public Machine[] getData() throws IOException {
-        JsonParser jp = new JsonParser();
-        JsonElement json = jp.parse(getJSON());
-        JsonElement jsonDorms = json.getAsJsonObject().getAsJsonArray("rooms");
+    public ArrayList<Dorm> getData() throws IOException {
+        JsonArray jsonRooms = new JsonParser().parse(getJSON())
+                .getAsJsonObject().getAsJsonObject("location")
+                .getAsJsonArray("rooms");
 
-        Type listType = new TypeToken<Machine[]>() {}.getType();
-
-        return new Gson().fromJson(jsonDorms, listType);
+        Type type = new TypeToken<ArrayList<Dorm>>(){}.getType();
+        ArrayList<Dorm> parsedDorms = new Gson().fromJson(jsonRooms, type);
+        return parsedDorms;
     }
 
-    private String getJSON() throws IOException {
+    private String getJSON() throws IOException, NetworkOnMainThreadException {
         URL api = new URL(JSON_URL);;
         StringBuffer jsonResponse = new StringBuffer();
 
