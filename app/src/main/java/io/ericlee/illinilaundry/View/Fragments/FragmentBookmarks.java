@@ -164,8 +164,6 @@ public class FragmentBookmarks extends Fragment {
             preferences = TinyDB.getInstance(getContext());
             ArrayList<String> bookmarks = preferences.getListString("bookmarkeddorms");
 
-            Log.i("Has Bookmarks", !bookmarks.isEmpty() + "");
-
             bookmarkedDorms.clear();
             ArrayList<Dorm> allDorms;
 
