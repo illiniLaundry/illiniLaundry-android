@@ -1,6 +1,8 @@
 package io.ericlee.illinilaundry.ViewModel;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.provider.AlarmClock;
 import android.view.View;
@@ -50,21 +52,43 @@ public class MachineViewModel {
             return new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    GregorianCalendar currentTime = new GregorianCalendar();
+                    StringBuilder message = new StringBuilder();
+                    message.append("Do you want to create an alarm for ");
+                    message.append(getDescription());
+                    message.append(" : ");
+                    message.append(getName());
+                    message.append("?");
 
-                    int minutesUntilReady = Integer.parseInt(machine.getTimeRemaining().split(" ")[0]);
-                    currentTime.setTimeInMillis(currentTime.getTimeInMillis()
-                            + TimeUnit.MINUTES.toMillis(minutesUntilReady));
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle("Alarm Creation");
+                    builder.setMessage(message);
+                    builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            launchAlarm();
+                        }
+                    });
+                    builder.setNegativeButton(android.R.string.no, null);
 
-                    Intent i = new Intent(AlarmClock.ACTION_SET_ALARM);
-                    i.putExtra(AlarmClock.EXTRA_MESSAGE, getName() + " : " + getDescription());
-                    i.putExtra(AlarmClock.EXTRA_HOUR, currentTime.get(Calendar.HOUR));
-                    i.putExtra(AlarmClock.EXTRA_MINUTES, currentTime.get(Calendar.MINUTE));
-                    context.startActivity(i);
+                    builder.show();
                 }
             };
         }
 
         return null;
+    }
+
+    private void launchAlarm() {
+        GregorianCalendar currentTime = new GregorianCalendar();
+
+        int minutesUntilReady = Integer.parseInt(machine.getTimeRemaining().split(" ")[0]);
+        currentTime.setTimeInMillis(currentTime.getTimeInMillis()
+                + TimeUnit.MINUTES.toMillis(minutesUntilReady));
+
+        Intent i = new Intent(AlarmClock.ACTION_SET_ALARM);
+        i.putExtra(AlarmClock.EXTRA_MESSAGE, getDescription() + " : " + getName());
+        i.putExtra(AlarmClock.EXTRA_HOUR, currentTime.get(Calendar.HOUR));
+        i.putExtra(AlarmClock.EXTRA_MINUTES, currentTime.get(Calendar.MINUTE));
+        context.startActivity(i);
     }
 }
