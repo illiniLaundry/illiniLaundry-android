@@ -5,6 +5,11 @@ import android.content.Intent;
 import android.provider.AlarmClock;
 import android.view.View;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.concurrent.TimeUnit;
+
 import io.ericlee.illinilaundry.Model.Machine;
 
 /**
@@ -45,9 +50,16 @@ public class MachineViewModel {
             return new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    GregorianCalendar currentTime = new GregorianCalendar();
+
+                    int minutesUntilReady = Integer.parseInt(machine.getTimeRemaining().split(" ")[0]);
+                    currentTime.setTimeInMillis(currentTime.getTimeInMillis()
+                            + TimeUnit.MINUTES.toMillis(minutesUntilReady));
+
                     Intent i = new Intent(AlarmClock.ACTION_SET_ALARM);
                     i.putExtra(AlarmClock.EXTRA_MESSAGE, getName() + " : " + getDescription());
-                    i.putExtra(AlarmClock.EXTRA_MINUTES, Integer.parseInt(machine.getTimeRemaining().split(" ")[0]));
+                    i.putExtra(AlarmClock.EXTRA_HOUR, currentTime.get(Calendar.HOUR));
+                    i.putExtra(AlarmClock.EXTRA_MINUTES, currentTime.get(Calendar.MINUTE));
                     context.startActivity(i);
                 }
             };
