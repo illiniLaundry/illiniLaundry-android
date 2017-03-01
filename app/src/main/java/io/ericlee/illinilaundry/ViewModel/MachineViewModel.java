@@ -87,8 +87,9 @@ public class MachineViewModel {
 
         Intent i = new Intent(AlarmClock.ACTION_SET_ALARM);
         i.putExtra(AlarmClock.EXTRA_MESSAGE, getDescription() + " : " + getName());
-        i.putExtra(AlarmClock.EXTRA_HOUR, currentTime.get(Calendar.HOUR));
+        i.putExtra(AlarmClock.EXTRA_HOUR, currentTime.get(Calendar.HOUR_OF_DAY));
         i.putExtra(AlarmClock.EXTRA_MINUTES, currentTime.get(Calendar.MINUTE));
+
         context.startActivity(i);
     }
 }
