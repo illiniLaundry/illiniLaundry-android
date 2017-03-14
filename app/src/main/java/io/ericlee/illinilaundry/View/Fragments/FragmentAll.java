@@ -53,7 +53,13 @@ public class FragmentAll extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        swipeRefreshLayout.setEnabled(false);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new SetData().execute();
+            }
+        });
 
         GridLayoutManager glm = new GridLayoutManager(this.getContext(), 3);
         mRecyclerView.setLayoutManager(glm);
@@ -69,6 +75,21 @@ public class FragmentAll extends Fragment {
 
         // Populate Dorms
         new SetData().execute();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.refresh, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+                new SetData().execute();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private class SetData extends AsyncTask<Void, Void, ArrayList<Dorm>> {
