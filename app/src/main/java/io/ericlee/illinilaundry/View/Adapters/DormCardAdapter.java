@@ -3,6 +3,7 @@ package io.ericlee.illinilaundry.View.Adapters;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,9 +56,11 @@ public class DormCardAdapter extends RecyclerView.Adapter<DormCardAdapter.Bindin
             mDorms = dorms;
             notifyDataSetChanged();
         } else {
-            mDorms = dorms;
             for (int i = 0; i < mDorms.size(); i++) {
-                notifyItemChanged(i);
+                if (!mDorms.get(i).equals(dorms.get(i))) {
+                    mDorms.set(i, dorms.get(i));
+                    notifyItemChanged(i);
+                }
             }
         }
     }

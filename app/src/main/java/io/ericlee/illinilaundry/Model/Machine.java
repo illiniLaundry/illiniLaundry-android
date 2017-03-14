@@ -14,6 +14,14 @@ public class Machine implements Serializable {
     private String status;
     private String timeRemaining;
 
+    @Override
+    public boolean equals(Object obj) {
+        return label.equals(((Machine) obj).getLabel())
+                && description.equals(((Machine) obj).getDescription())
+                && status.equals(((Machine) obj).getStatus())
+                && timeRemaining.equals(((Machine) obj).getTimeRemaining());
+    }
+
     public String getStatus() {
         return status;
     }

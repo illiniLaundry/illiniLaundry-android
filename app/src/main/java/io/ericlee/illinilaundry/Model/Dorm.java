@@ -21,4 +21,12 @@ public class Dorm implements Serializable {
 
     public void setMachines(Machine[] machines) { this.machines = machines;}
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Dorm)) {
+            return false;
+        }
+
+        return name.equals(((Dorm) obj).getName());
+    }
 }

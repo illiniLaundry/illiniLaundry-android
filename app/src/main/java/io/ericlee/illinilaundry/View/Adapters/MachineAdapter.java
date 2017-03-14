@@ -54,9 +54,11 @@ public class MachineAdapter extends RecyclerView.Adapter<MachineAdapter.BindingH
             mMachines = machines;
             notifyDataSetChanged();
         } else {
-            mMachines = machines;
             for (int i = 0; i < mMachines.size(); i++) {
-                notifyItemChanged(i);
+                if (!mMachines.get(i).equals(machines.get(i))) {
+                    mMachines.set(i, machines.get(i));
+                    notifyItemChanged(i);
+                }
             }
         }
     }
