@@ -43,8 +43,6 @@ public class DormCardAdapter extends RecyclerView.Adapter<DormCardAdapter.Bindin
         CardDormsBinding postBinding = holder.binding;
         postBinding.setViewModel(new DormViewModel(mContext, mDorms.get(position)));
         postBinding.image.setImageResource(postBinding.getViewModel().getImageResource());
-
-        setFadeAnimation(holder.itemView);
     }
 
     @Override
@@ -71,11 +69,5 @@ public class DormCardAdapter extends RecyclerView.Adapter<DormCardAdapter.Bindin
             super(binding.cardView);
             this.binding = binding;
         }
-    }
-
-    private void setFadeAnimation(View view) {
-        AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
-        anim.setDuration(300);
-        view.startAnimation(anim);
     }
 }
