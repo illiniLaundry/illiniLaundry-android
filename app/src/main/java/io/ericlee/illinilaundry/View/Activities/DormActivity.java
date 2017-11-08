@@ -22,12 +22,13 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.ericlee.illinilaundry.Model.Dorm;
-import io.ericlee.illinilaundry.Model.DormImages;
+import io.ericlee.illinilaundry.Model.DormInformation;
 import io.ericlee.illinilaundry.Model.DormParser;
 import io.ericlee.illinilaundry.Model.Machine;
 import io.ericlee.illinilaundry.Utils.TinyDB;
@@ -60,9 +61,10 @@ public class DormActivity extends AppCompatActivity {
         Intent intent = getIntent();
         dorm = (Dorm) intent.getSerializableExtra("Dorm");
 
-        setAvailabilityText();
-
         mDataset = new ArrayList<>();
+        if (dorm.getMachines() != null) {
+            Collections.addAll(mDataset, dorm.getMachines());
+        }
 
         preferences = TinyDB.getInstance(getApplicationContext());
 
@@ -88,8 +90,7 @@ public class DormActivity extends AppCompatActivity {
         });
 
         ImageView image = (ImageView) findViewById(R.id.imageDorm);
-        image.setImageResource(DormImages.getInstance().getImages().get(dorm.getName()));
-
+        image.setImageResource(DormInformation.getInstance().getImages().get(dorm.getName()));
 
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
@@ -166,11 +167,13 @@ public class DormActivity extends AppCompatActivity {
         int freeWashers = 0;
 
         for(Machine m : dorm.getMachines()) {
-            if (m.getDescription().contains("Washer") && m.getStatus().equals("Available")) {
+            if (m.getType().contains("WASHER") && (m.getStatus().equals("Available")
+                    || m.getTimeRemaining().contains("door still closed"))) {
                 freeWashers++;
             }
 
-            if (!m.getDescription().contains("Washer") && m.getStatus().equals("Available")) {
+            if (!m.getType().contains("WASHER") && m.getStatus().equals("Available")
+                    || m.getTimeRemaining().contains("door still closed")) {
                 freeDriers++;
             }
         }
@@ -193,14 +196,8 @@ public class DormActivity extends AppCompatActivity {
         @Override
         protected Dorm doInBackground(Void... voids) {
             try {
-                ArrayList<Dorm> dorms = DormParser.getInstance().getData();
-
-                // Find what dorm we have.
-                for (Dorm d : dorms) {
-                    if (d.getName().equals(dorm.getName())) {
-                        return d;
-                    }
-                }
+                Dorm d = DormParser.getInstance().getDormData(dorm.getID());
+                return d;
             } catch (Exception e) {
                 // e.printStackTrace();
             }
@@ -211,6 +208,8 @@ public class DormActivity extends AppCompatActivity {
         protected void onPostExecute(Dorm d) {
             if (d != null) {
                 mAdapter.setItems(Arrays.asList(d.getMachines()));
+                dorm = d;
+                setAvailabilityText();
             } else {
                 Toast.makeText(getApplicationContext(), "Something went wrong. Please try again later.", Toast.LENGTH_SHORT).show();
             }

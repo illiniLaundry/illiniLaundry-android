@@ -21,7 +21,7 @@ import java.util.List;
 
 import io.ericlee.illinilaundry.View.Activities.DormActivity;
 import io.ericlee.illinilaundry.Model.Dorm;
-import io.ericlee.illinilaundry.Model.DormImages;
+import io.ericlee.illinilaundry.Model.DormInformation;
 import io.ericlee.illinilaundry.R;
 import io.ericlee.illinilaundry.ViewModel.DormViewModel;
 import io.ericlee.illinilaundry.databinding.CardDormsBinding;
@@ -62,7 +62,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bindin
     public void onBindViewHolder(BindingHolder holder, final int position) {
         CardDormsBookmarkBinding postBinding = holder.binding;
         postBinding.setViewModel(new DormViewModel(mContext, mDataset.get(position)));
-        //postBinding.image.setImageResource(postBinding.getViewModel().getImageResource());
+        postBinding.image.setImageResource(postBinding.getViewModel().getImageResource());
 
         this.holder = holder;
         setFadeInAnimation(holder.itemView);
