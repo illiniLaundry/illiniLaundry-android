@@ -1,31 +1,56 @@
 package io.ericlee.illinilaundry.Model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
- * Created by Eric on 6/9/2016.
+ * Machine object for GSON.
+ *
+ * @author dl-eric
  */
 public class Machine implements Serializable {
-    private String machineNumber;
-    private String machineType;
-    private String machineStatus;
-    private String machineTimeRemaining;
-    private Dorm dorm;
+    private String label;
+    private String description;
+    private String status;
+    private String timeRemaining;
 
-    public Machine(String machineNumber, String machineType, String machineStatus,
-                   String machineTimeRemaining, Dorm dorm) {
-        this.machineNumber = machineNumber;
-        this.machineType = machineType;
-        this.machineStatus = machineStatus;
-        this.machineTimeRemaining = machineTimeRemaining;
-        this.dorm = dorm;
+    @Override
+    public boolean equals(Object obj) {
+        return label.equals(((Machine) obj).getLabel())
+                && description.equals(((Machine) obj).getDescription())
+                && status.equals(((Machine) obj).getStatus())
+                && timeRemaining.equals(((Machine) obj).getTimeRemaining());
     }
 
-    public String getMachineNumber() { return machineNumber; }
-    public String getMachineType() { return machineType; }
-    public String getMachineStatus() { return machineStatus; }
-    public String getMachineTimeRemaining() { return machineTimeRemaining; }
-    public Dorm getDorm() { return dorm; }
-    public void setMachineStatus(String status) { machineStatus = status; }
-    public void setMachineTimeRemaining(String timeRemaining) { machineTimeRemaining = timeRemaining; }
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getTimeRemaining() {
+        return timeRemaining;
+    }
+
+    public void setTimeRemaining(String timeRemaining) {
+        this.timeRemaining = timeRemaining;
+    }
 }

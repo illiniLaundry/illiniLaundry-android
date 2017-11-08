@@ -1,5 +1,6 @@
-package io.ericlee.illinilaundry.Tabs;
+package io.ericlee.illinilaundry.View.Fragments;
 
+import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,14 +20,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 
-import io.ericlee.illinilaundry.Adapters.BookmarkAdapter;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import io.ericlee.illinilaundry.Model.DormParser;
+import io.ericlee.illinilaundry.View.Adapters.BookmarkAdapter;
 import io.ericlee.illinilaundry.Model.Dorm;
-import io.ericlee.illinilaundry.Model.ItemOffsetDecoration;
-import io.ericlee.illinilaundry.Model.MainParser;
-import io.ericlee.illinilaundry.Model.TinyDB;
+import io.ericlee.illinilaundry.View.ItemOffsetDecoration;
+import io.ericlee.illinilaundry.Utils.TinyDB;
 import io.ericlee.illinilaundry.R;
 
 /**
@@ -37,62 +42,40 @@ public class FragmentBookmarks extends Fragment {
 
     public static ArrayList<Dorm> bookmarkedDorms;
 
-    private RecyclerView mRecyclerView;
+    @BindView(R.id.bookmarkRecyclerView)
+    RecyclerView mRecyclerView;
+    @BindView(R.id.bookmarkSwipeRefresh)
+    SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.backgroundIlliniBookmarks)
+    ImageView bgImage;
+
     private BookmarkAdapter mAdapter;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private ImageView bgImage;
 
-    private ArrayList<Dorm> allDorms;
-
-    private boolean firstTimeRun;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        allDorms = MainParser.getInstance().getDorms();
-
         preferences = TinyDB.getInstance(getContext());
-        firstTimeRun = true;
         bookmarkedDorms = new ArrayList<>();
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        if (bookmarkedDorms.isEmpty()) {
-            // Delay to allow everything to settle before running SetData()
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    new SetData().execute();
-                }
-            }, 500);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_bookmarks, container, false);
-
-        bgImage = (ImageView) view.findViewById(R.id.backgroundIlliniBookmarks);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.bookmarkSwipeRefresh);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.bookmarkRecyclerView);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
             @Override
             public void onRefresh() {
-                mSwipeRefreshLayout.setRefreshing(true);
                 new SetData().execute();
             }
         });
 
-        LinearLayoutManager glm = new LinearLayoutManager(this.getContext());
+        LinearLayoutManager glm = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(glm);
-        mAdapter = new BookmarkAdapter(bookmarkedDorms);
+        mAdapter = new BookmarkAdapter(getContext(), bookmarkedDorms);
 
         // Add spacing between cards.
         ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(getContext(), R.dimen.item_offset);
@@ -120,12 +103,10 @@ public class FragmentBookmarks extends Fragment {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                // TODO: Doesn't work for some reason. Maybe conflicting listeners?
-                mAdapter.onItemDismiss(viewHolder.getAdapterPosition());
-                Log.i("item Dismiss", "CALL2");
+                // Empty
             }
 
-            //defines the enabled move directions in each state (idle, swiping, dragging).
+            // Defines the enabled move directions in each state (idle, swiping, dragging).
             @Override
             public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
                 return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG,
@@ -137,6 +118,13 @@ public class FragmentBookmarks extends Fragment {
         ItemTouchHelper ith = new ItemTouchHelper(callback);
         ith.attachToRecyclerView(mRecyclerView);
 
+        new SetData().execute();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_bookmarks, container, false);
+        ButterKnife.bind(this, view);
         return view;
     }
 
@@ -149,18 +137,15 @@ public class FragmentBookmarks extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                mSwipeRefreshLayout.setRefreshing(true);
                 new SetData().execute();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public class SetData extends AsyncTask<Void, Void, Void> {
+    public class SetData extends AsyncTask<Void, Void, ArrayList<Dorm>> {
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
-            Log.i("SetData", "RUN!");
             mSwipeRefreshLayout.post(new Runnable() {
                 @Override
                 public void run() {
@@ -170,43 +155,44 @@ public class FragmentBookmarks extends Fragment {
         }
 
         @Override
-        protected Void doInBackground(Void... params) {
+        protected void onCancelled() {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+
+        @Override
+        protected ArrayList<Dorm> doInBackground(Void... params) {
             preferences = TinyDB.getInstance(getContext());
             ArrayList<String> bookmarks = preferences.getListString("bookmarkeddorms");
 
-            Log.i("Has Bookmarks", !bookmarks.isEmpty() + "");
+            bookmarkedDorms.clear();
+            ArrayList<Dorm> allDorms;
 
-            if (bookmarks.isEmpty()) {
-                bookmarkedDorms.clear();
-            }
+            try {
+                allDorms = DormParser.getInstance().getData();
 
-            MainParser.getInstance().getDorms();
+                for (int i = 0; i < allDorms.size(); i++) {
+                    Dorm dorm = allDorms.get(i);
 
-            for(int i = 0; i < bookmarks.size(); i++) {
-                String dormName = bookmarks.get(i);
-
-                // TODO: We should find a faster way to do this because this will take O(n^m)
-
-                for (int j = 0; j < allDorms.size(); j++) {
-                    Dorm tempDorm = allDorms.get(j);
-
-                    if (tempDorm.getName().equals(dormName) && !bookmarkedDorms.contains(tempDorm)) {
-                        bookmarkedDorms.add(allDorms.get(j));
-                    }
-
-                    if (!bookmarks.contains(tempDorm.getName())) {
-                        bookmarkedDorms.remove(tempDorm);
+                    if (bookmarks.contains(dorm.getName())) {
+                        bookmarkedDorms.add(dorm);
                     }
                 }
+
+                return bookmarkedDorms;
+            } catch (Exception e) {
+                //e.printStackTrace();
             }
 
             return null;
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            mAdapter.notifyDataSetChanged();
+        protected void onPostExecute(ArrayList<Dorm> dorms) {
+            if (dorms != null) {
+                mAdapter.setItems(dorms);
+            } else {
+                Toast.makeText(getContext(), "Sorry. Something went wrong. Please try again later.", Toast.LENGTH_SHORT).show();
+            }
 
             if (bookmarkedDorms.isEmpty()) {
                 bgImage.setVisibility(View.VISIBLE);
@@ -214,21 +200,7 @@ public class FragmentBookmarks extends Fragment {
                 bgImage.setVisibility(View.INVISIBLE);
             }
 
-            if (firstTimeRun) {
-                firstTimeRun = false;
-            } else if (allDorms.isEmpty() && !firstTimeRun) {
-                Toast.makeText(getContext(), "Try refreshing the \"All Dorms\" tab first.",
-                        Toast.LENGTH_LONG).show();
-                Log.i("firsttimerun", firstTimeRun + "");
-            }
-
-            // Notify swipeRefreshLayout that the refresh has finished
-            mSwipeRefreshLayout.post(new Runnable() {
-                @Override
-                public void run() {
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
-            });
+            mSwipeRefreshLayout.setRefreshing(false);
         }
     }
 }

@@ -1,4 +1,4 @@
-package io.ericlee.illinilaundry.Activities;
+package io.ericlee.illinilaundry.View.Activities;
 
 import android.content.Intent;
 import android.os.Handler;
