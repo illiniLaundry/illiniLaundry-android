@@ -3,10 +3,11 @@ package io.ericlee.illinilaundry.ViewModel;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.BaseObservable;
+import android.util.Log;
 import android.view.View;
 
 import io.ericlee.illinilaundry.Model.Dorm;
-import io.ericlee.illinilaundry.Model.DormImages;
+import io.ericlee.illinilaundry.Model.DormInformation;
 import io.ericlee.illinilaundry.View.Activities.DormActivity;
 
 /**
@@ -22,7 +23,7 @@ public class DormViewModel extends BaseObservable {
     public DormViewModel(Context context, Dorm dorm) {
         this.context = context;
         this.dorm = dorm;
-        imageResource = DormImages.getInstance().getImages().get(dorm.getName());
+        imageResource = DormInformation.getInstance().getImages().get(dorm.getName());
     }
 
     public String getName() {
