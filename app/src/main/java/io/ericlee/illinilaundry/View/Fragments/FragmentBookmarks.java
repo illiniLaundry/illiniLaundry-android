@@ -63,11 +63,13 @@ public class FragmentBookmarks extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_bookmarks, container, false);
+        ButterKnife.bind(this, view);
+        Log.d("OnCreateView", "Called!");
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-
             @Override
             public void onRefresh() {
                 new SetData().execute();
@@ -76,6 +78,7 @@ public class FragmentBookmarks extends Fragment {
 
         LinearLayoutManager glm = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(glm);
+
         mAdapter = new BookmarkAdapter(getContext(), bookmarkedDorms);
 
         // Add spacing between cards.
@@ -119,14 +122,20 @@ public class FragmentBookmarks extends Fragment {
         ItemTouchHelper ith = new ItemTouchHelper(callback);
         ith.attachToRecyclerView(mRecyclerView);
 
-        new SetData().execute();
+        return view;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_bookmarks, container, false);
-        ButterKnife.bind(this, view);
-        return view;
+    public void onResume() {
+        super.onResume();
+
+        // Delay the SetData call because there's a bug if we don't when we create the fragment for the first time
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                new SetData().execute();
+            }
+        }, 100);
     }
 
     @Override
@@ -181,6 +190,7 @@ public class FragmentBookmarks extends Fragment {
         protected void onPostExecute(ArrayList<Dorm> dorms) {
             if (dorms != null) {
                 mAdapter.setItems(dorms);
+                mAdapter.notifyDataSetChanged();
             } else {
                 Toast.makeText(getContext(), "Sorry. Something went wrong. Please try again later.", Toast.LENGTH_SHORT).show();
             }

@@ -62,7 +62,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bindin
     public void onBindViewHolder(BindingHolder holder, final int position) {
         CardDormsBookmarkBinding postBinding = holder.binding;
         postBinding.setViewModel(new DormViewModel(mContext, mDataset.get(position)));
-        //postBinding.image.setImageResource(postBinding.getViewModel().getImageResource());
+        postBinding.image.setImageResource(postBinding.getViewModel().getImageResource());
 
         this.holder = holder;
         setFadeInAnimation(holder.itemView);
