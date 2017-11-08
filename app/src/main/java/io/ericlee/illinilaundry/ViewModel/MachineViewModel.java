@@ -32,29 +32,39 @@ public class MachineViewModel {
     }
 
     public String getStatus() {
+        if (machine.isOutOfService()) {
+            return "Broken";
+        }
+
+        if (machine.getTimeRemaining().contains("door still closed")) {
+            return "Idle";
+        }
+
         return machine.getStatus();
     }
 
-    public String getDescription() {
-        return machine.getDescription();
+    public String getType() {
+        return machine.getType();
     }
 
     public String getTimeRemaining() {
-        return machine.getTimeRemaining().equals("0") ? "" : machine.getTimeRemaining();
+        if (machine.isOutOfService()) { return ""; }
+        return machine.getTimeRemaining().equals("available") ? "" : machine.getTimeRemaining();
     }
 
     public boolean getBusy() {
-        return !machine.getStatus().contains("Available");
+        return getStatus().equals("In Use") || machine.isOutOfService();
     }
 
     public View.OnClickListener setAlarm() {
-        if (machine.getStatus().contains("In Use") && !machine.getTimeRemaining().contains("Unknown")) {
+        if (machine.getStatus().contains("In Use") && !machine.isOutOfService()
+                && !machine.getTimeRemaining().contains("door still closed")) {
             return new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     StringBuilder message = new StringBuilder();
                     message.append("Do you want to create an alarm for ");
-                    message.append(getDescription());
+                    message.append(getType());
                     message.append(" : ");
                     message.append(getName());
                     message.append("?");
@@ -81,12 +91,12 @@ public class MachineViewModel {
     private void launchAlarm() {
         GregorianCalendar currentTime = new GregorianCalendar();
 
-        int minutesUntilReady = Integer.parseInt(machine.getTimeRemaining().split(" ")[0]);
+        int minutesUntilReady = Integer.parseInt(machine.getTimeRemaining().split(" ")[3]);
         currentTime.setTimeInMillis(currentTime.getTimeInMillis()
                 + TimeUnit.MINUTES.toMillis(minutesUntilReady));
 
         Intent i = new Intent(AlarmClock.ACTION_SET_ALARM);
-        i.putExtra(AlarmClock.EXTRA_MESSAGE, getDescription() + " : " + getName());
+        i.putExtra(AlarmClock.EXTRA_MESSAGE, getType() + " : " + getName());
         i.putExtra(AlarmClock.EXTRA_HOUR, currentTime.get(Calendar.HOUR_OF_DAY));
         i.putExtra(AlarmClock.EXTRA_MINUTES, currentTime.get(Calendar.MINUTE));
 

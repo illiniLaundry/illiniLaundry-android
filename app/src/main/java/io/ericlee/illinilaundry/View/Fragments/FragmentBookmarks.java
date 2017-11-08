@@ -27,6 +27,7 @@ import java.util.HashSet;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.ericlee.illinilaundry.Model.DormInformation;
 import io.ericlee.illinilaundry.Model.DormParser;
 import io.ericlee.illinilaundry.View.Adapters.BookmarkAdapter;
 import io.ericlee.illinilaundry.Model.Dorm;
@@ -165,25 +166,15 @@ public class FragmentBookmarks extends Fragment {
             ArrayList<String> bookmarks = preferences.getListString("bookmarkeddorms");
 
             bookmarkedDorms.clear();
-            ArrayList<Dorm> allDorms;
+            for (String bookmark : bookmarks) {
+                Dorm d = new Dorm();
+                d.setName(bookmark);
+                d.setID(DormInformation.getInstance().getIDs().get(bookmark));
 
-            try {
-                allDorms = DormParser.getInstance().getData();
-
-                for (int i = 0; i < allDorms.size(); i++) {
-                    Dorm dorm = allDorms.get(i);
-
-                    if (bookmarks.contains(dorm.getName())) {
-                        bookmarkedDorms.add(dorm);
-                    }
-                }
-
-                return bookmarkedDorms;
-            } catch (Exception e) {
-                //e.printStackTrace();
+                bookmarkedDorms.add(d);
             }
 
-            return null;
+            return bookmarkedDorms;
         }
 
         @Override
