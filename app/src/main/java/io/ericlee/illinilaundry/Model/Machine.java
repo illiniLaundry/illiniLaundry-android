@@ -13,6 +13,7 @@ public class Machine implements Serializable {
     private String description;
     private String status;
     private String timeRemaining;
+    private boolean isOutOfService;
 
     @Override
     public boolean equals(Object obj) {
@@ -21,6 +22,10 @@ public class Machine implements Serializable {
                 && status.equals(((Machine) obj).getStatus())
                 && timeRemaining.equals(((Machine) obj).getTimeRemaining());
     }
+
+    public boolean isOutOfService() { return isOutOfService; }
+
+    public void setIsOutOfService(boolean status) { this.isOutOfService = status; }
 
     public String getStatus() {
         return status;

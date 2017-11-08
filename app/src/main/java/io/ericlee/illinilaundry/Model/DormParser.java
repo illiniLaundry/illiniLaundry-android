@@ -25,7 +25,7 @@ import java.util.ArrayList;
  */
 
 public class DormParser {
-    private final String JSON_URL = "http://23.23.147.128/homes/mydata/urba7723";
+    private final String URL = "http://api.laundryview.com/room/?api_key=" + API.key;
 
     private static DormParser instance;
 
@@ -50,7 +50,7 @@ public class DormParser {
         return parsedDorms;
     }
 
-    private String getJSON() throws IOException, NetworkOnMainThreadException {
+    private String getXML() throws IOException, NetworkOnMainThreadException {
         URL api = new URL(JSON_URL);;
         StringBuffer jsonResponse = new StringBuffer();
 
