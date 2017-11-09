@@ -9,8 +9,8 @@ public class DormInformation {
 
     private static DormInformation instance;
 
-    private Dictionary<String, Integer> images;
-    private Dictionary<String, String> ids;
+    private Hashtable<String, Integer> images;
+    private Hashtable<String, String> ids;
 
     private DormInformation() {
         images = new Hashtable<>(32);
@@ -92,6 +92,6 @@ public class DormInformation {
         return instance;
     }
 
-    public Dictionary<String, Integer> getImages() { return images; }
-    public Dictionary<String, String> getIDs() { return ids; }
+    public Hashtable<String, Integer> getImages() { return images; }
+    public Hashtable<String, String> getIDs() { return ids; }
 }
