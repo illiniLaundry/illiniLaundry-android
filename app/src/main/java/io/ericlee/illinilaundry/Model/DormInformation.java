@@ -41,7 +41,7 @@ public class DormInformation {
         images.put("PAR, SAUNDERS ROOM 23", R.drawable.par);
         images.put("SCOTT, ROOM 170", R.drawable.scott);
         images.put("SHERMAN, 13 STORY ROOM 52", R.drawable.sherman);
-        images.put("SHERMAN, 5 STORY  ROOM 29", R.drawable.sherman);
+        images.put("SHERMAN, 5 STORY ROOM 29", R.drawable.sherman);
         images.put("SNYDER, ROOM 182", R.drawable.snyder);
         images.put("TVD, TAFT ROOM 13", R.drawable.tvd);
         images.put("TVD, VAN DOREN ROOM 13", R.drawable.tvd);
@@ -76,7 +76,7 @@ public class DormInformation {
         ids.put("PAR, SAUNDERS ROOM 23", "589877008");
         ids.put("SCOTT, ROOM 170", "589877009");
         ids.put("SHERMAN, 13 STORY ROOM 52", "589877052");
-        ids.put("SHERMAN, 5 STORY  ROOM 29", "589877051");
+        ids.put("SHERMAN, 5 STORY ROOM 29", "589877051");
         ids.put("SNYDER, ROOM 182", "589877015");
         ids.put("TVD, TAFT ROOM 13", "589877002");
         ids.put("TVD, VAN DOREN ROOM 13", "589877058");
