@@ -8,8 +8,8 @@ android {
         applicationId "io.ericlee.illinilaundry"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 12
-        versionName "1.14"
+        versionCode 14
+        versionName "1.16"
     }
 
     buildTypes {

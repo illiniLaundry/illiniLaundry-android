@@ -180,7 +180,7 @@ public class FragmentBookmarks extends Fragment {
                 String bookmark = bookmarks.get(i);
                 // Check if our bookmark is a valid dorm.
                 // Note: We do this because update 1.12 has new names for dorms due to new API
-                if (DormInformation.getInstance().getIDs().contains(bookmark)) {
+                if (DormInformation.getInstance().getIDs().containsKey(bookmark)) {
                     Dorm d = new Dorm();
                     d.setName(bookmark);
                     d.setID(DormInformation.getInstance().getIDs().get(bookmark));
