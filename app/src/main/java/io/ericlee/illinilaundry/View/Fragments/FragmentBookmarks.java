@@ -176,7 +176,8 @@ public class FragmentBookmarks extends Fragment {
             int originalSize = bookmarks.size();
 
             bookmarkedDorms.clear();
-            for (String bookmark : bookmarks) {
+            for (int i = 0; i < bookmarks.size(); i++) {
+                String bookmark = bookmarks.get(i);
                 // Check if our bookmark is a valid dorm.
                 // Note: We do this because update 1.12 has new names for dorms due to new API
                 if (DormInformation.getInstance().getIDs().contains(bookmark)) {
@@ -187,6 +188,7 @@ public class FragmentBookmarks extends Fragment {
                 } else {
                     // Remove invalid bookmarks
                     bookmarks.remove(bookmark);
+                    i--;
                 }
             }
 
